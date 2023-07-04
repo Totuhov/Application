@@ -1,0 +1,36 @@
+﻿@model List<PreviewPortfolioViewModel>
+
+<div class="row">
+    <div class="col-2 d-flex align-items-center">
+        <a asp-action="Index" class="btn btn-dark">Back</a>
+    </div>
+    <div class="col-10">
+        <h1 class="text-center">Result</h1>
+    </div>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var profile in Model)
+        {
+        <tr>
+            <td>
+                <img src="data:@profile.ProfileImage.ContentType;base64,@profile.ProfileImage.ImageData" alt="Image" asp-append-version="true" width="50px" height="50px">
+               
+            </td>
+            <td>
+                <p>@profile.UserName</p>
+            </td>
+            <td>
+                <a asp-action="Details" asp-controller="Portfolio" asp-route-id="@profile.UserName" class="btn btn-outline-dark float-end">View portfolio</a>
+            </td>
+        </tr>
+        }
+        </tbody>
+</table>

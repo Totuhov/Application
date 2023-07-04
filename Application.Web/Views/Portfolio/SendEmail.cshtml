@@ -1,0 +1,49 @@
+﻿@model ContactFormViewModel
+
+@{
+    ViewData["Title"] = "Send";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="text-center">Contact</h1>
+
+    <h4 class="text-center">Write youre message and we will contact you!</h4>
+<hr />
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <form asp-action="SendEmail" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="SenderName" class="control-label">Name</label>
+                <input asp-for="SenderName" class="form-control" />
+                <span asp-validation-for="SenderName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SenderEmail" class="control-label">Your email</label>
+                <input asp-for="SenderEmail" class="form-control" />
+                <span asp-validation-for="SenderEmail" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Text" class="control-label">Text</label>
+                <textarea asp-for="Text" rows="15" class="form-control" ></textarea>
+                <span asp-validation-for="Text" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="hidden" asp-for="@Model.RecieverUserName" />
+                <input type="hidden" asp-for="@Model.RecieverEmail" name="recieverEmail" />
+            </div>
+            <div class="row mt-5">
+                <div class="col-6 d-flex align-items-center justify-content-start">
+                    <a asp-controller="Portfolio" asp-action="Details" asp-route-id="@Model.RecieverUserName" class="btn btn-dark mb-2 shadow-none">Back</a>
+                </div>
+                <div class="col-6 d-flex align-items-center justify-content-end">
+                    <input class="btn btn-dark mb-2 shadow-none w-75" type="submit" value="Send" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

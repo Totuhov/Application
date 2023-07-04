@@ -1,0 +1,32 @@
+﻿
+namespace Application.Data.Models;
+
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+
+public class Article
+{
+    [Key]
+    public string Id { get; set; } = Guid.NewGuid().ToString();
+
+    [Required]
+    public string Title { get; set; } = null!;
+
+    [Required]
+    public DateTime CreatedOn { get; set; } = DateTime.Now;
+
+    [Required]
+    public DateTime EditedOn { get; set; }
+
+    [Required]
+    public string Content { get; set; } = null!;
+
+    [Required]
+    public string ApplicationUserId { get; set; } = null!;
+
+    [ForeignKey(nameof(ApplicationUserId))]
+    public virtual ApplicationUser ApplicationUser { get; set; } = null!;
+
+    [Required]
+    public bool IsDeleted { get; set; } = false;
+}

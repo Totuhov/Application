@@ -1,0 +1,39 @@
+﻿@model AllProjectsViewModel
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success" role="alert">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+<div class="container d-flex flex-column align-items-center h-auto">
+    <div class="container mt-5 mb-2 text-center ">
+        <h1>@Model.UserName's Projects</h1>
+    </div>
+    @foreach (var item in Model.Projects)
+    {
+        <div class="col card flex-column align-items-center border-0">
+            <h3 class="card-title">@item.Name</h3>
+            <div class="card-body" style="height: 300px;">
+                <img decoding="async" src="data:@item.Image.ContentType;base64,@item.Image.ImageData" asp-append-version="true" style="height: 100%" alt="...">
+            </div>
+            <div class="w-100">
+                <h5 class="text-center">
+                    @item.Description
+                </h5>
+            </div>
+        </div>
+        @if (@User?.Identity?.Name == Model.UserName)
+        {
+            <div class="mb-3 d-flex justify-content-center w-100">
+                <a asp-controller="Project" asp-action="ChangeImage" asp-route-id="@item.Id" class="btn btn-outline-dark">Change Image</a>
+                <a asp-controller="Project" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-dark">Edit</a>
+                <a asp-controller="Project" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-dark">Delete</a>
+            </div>
+        }
+    }
+    <div class="container col-6">
+        <a asp-controller="Portfolio" asp-action="Details" asp-route-id="@Model.UserName" class=" btn btn-dark m-2">Back</a>
+    </div>
+</div>

@@ -1,0 +1,50 @@
+﻿@using Application.Data.Models
+@using Microsoft.AspNetCore.Identity;
+@model AllArticlesViewModel
+
+<div class="container d-flex flex-column align-items-center justify-content-center h-auto">
+    <div class="container mt-5 mb-2 text-center">
+        <h1>Blog</h1>
+    </div>
+    <div class="col d-flex flex-column align-items-center justify-content-center">
+        @foreach (var item in Model.Articles)
+        {
+            <div class="col-6 card border-0 border-bottom">
+                <div class="card-body">
+                    <h5 class="card-title">@item.Title</h5>
+                    <p class="card-text">@(item.Content.Substring(0, 149))...</p>
+                    <p class="card-text"><small class="text-body-secondary"> Edited on: @(item.EditedOn.ToString("dd-MMM-yyyy"))</small></p>
+                    <a asp-controller="Blog" asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-light m-2">Continue reading</a>
+                    @if (User?.Identity?.Name == Model.UserName)
+                    {
+                        <a asp-controller="Blog" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-dark">Edit Content</a>
+                        @*<a asp-controller="Blog" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-dark m-2">Delete</a>*@
+                        <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                            Delete
+                        </button>
+                        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Delete Post</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Are You Sure? Deleted Contents Can not be recovered!
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        <a asp-controller="Blog" asp-action="Delete" asp-route-id="@item.Id" type="button" class="btn btn-danger">Delete</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+        <div class="container col-6">
+            <a asp-controller="Portfolio" asp-action="Details" asp-route-id="@Model.UserName" class=" btn btn-dark m-2">Back</a>
+        </div>
+    </div>
+</div>

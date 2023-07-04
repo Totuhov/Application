@@ -1,0 +1,44 @@
+﻿@model CreateArticleViewModel
+
+@{
+    ViewData["Title"] = "New Post";
+}
+@{
+    Model.EditedOn = DateTime.Now;
+}
+
+<div class="row d-flex align-items-center justify-content-center mt-5">
+    <div class="col-6 border rounded">
+        <h1 class="text-center">@ViewData["Title"]</h1>
+        <section class="mb-2 mt-1">
+            <form asp-action="Create" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>  
+                <input asp-for="@Model.ApplicationUserId" type="hidden" class="form-control" />
+                <div class="mb-3 col-6 w-100">
+                    <label asp-for="Title" class="control-label"></label>
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                <div class="mb-3 col-6 w-100">
+                    <label asp-for="Content" class="control-label"></label>
+                    <textarea asp-for="Content" class="form-control" rows="10" aria-required="true"></textarea>
+                    <span asp-validation-for="Content" class="text-danger"></span>
+                </div>
+                <div class="row mt-5">
+                    <div class="col-4">
+                        <a asp-controller="Portfolio" asp-action="Index" class=" btn btn-dark mb-2">Back</a>
+                    </div>
+                    <div class="col-8 d-flex align-items-center justify-content-end">
+                        <input type="submit" value="Create" class="btn btn-dark col-6" />
+                    </div>
+                </div>
+            </form>
+        </section>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

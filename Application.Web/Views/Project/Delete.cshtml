@@ -1,0 +1,45 @@
+﻿@model ProjectViewModel
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1 class="text-center">@ViewData["Title"]</h1>
+
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <h3 class="text-center">@Model.Name</h3>
+        <div class="d-flex justify-content-center">
+            
+            <img decoding="async" src="data:@Model.Image.ContentType;base64,@Model.Image.ImageData" asp-append-version="true" width="250px" height="250px" />
+        </div>
+        <form asp-action="Delete" method="post">
+           @* <input type="hidden" asp-for="ImageId" />*@
+            <div class="row mt-5">
+                <div class="col-6 d-flex align-items-center justify-content-end">
+                    <a asp-action="All" asp-route-id="@User?.Identity?.Name" class="btn btn-dark mb-2 shadow-none">Back</a>
+                </div>
+                <div class="col-6 d-flex align-items-center justify-content-start">
+                    <button type="button" class="btn btn-danger mb-2 shadow-none0" data-bs-toggle="modal" data-bs-target="#exampleModal">Delete</button>
+                </div>
+            </div>
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Confirm</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Do you realy want to delete this project?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <input type="submit" value="Delete" class="btn btn-danger" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

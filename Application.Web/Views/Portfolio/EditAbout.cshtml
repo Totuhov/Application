@@ -1,0 +1,27 @@
+﻿@model EditAboutPortfolioViewModelViewModel
+
+@{
+    ViewData["Title"] = "About";
+}
+
+<h1 class="text-center">@ViewData["Title"]</h1>
+
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+    <form  asp-action="EditAbout" method="post">
+        <div class="mb-3 col-6 w-100">
+            @*<label asp-for="@Model.About" class="form-label-add-edit mb-2 fw-bold">About</label>*@
+            <textarea asp-for="@Model.About" class="form-control" rows="15" aria-required="true"></textarea>
+            <span asp-validation-for="@Model.About" class="text-danger"></span>
+        </div>
+        <div class="row mt-5">
+            <div class="col-6 d-flex align-items-center justify-content-start">
+                <a asp-controller="Portfolio" asp-action="Index" class="btn btn-dark mb-2 shadow-none">Back</a>
+            </div>
+            <div class="col-6 d-flex align-items-center justify-content-end">
+                <input class="btn btn-dark mb-2 shadow-none w-75" type="submit" value="Save" />
+            </div>
+        </div>
+    </form>
+</div>
+</div>

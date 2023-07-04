@@ -1,0 +1,53 @@
+﻿
+@model List<ImageViewModel>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success" role="alert">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+<h1 class="text-center">Images</h1>
+
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="row mt-5">
+            <div class="col-6 d-flex align-items-center justify-content-start">
+                <a asp-controller="Portfolio" asp-action="Details" asp-route-id="@User?.Identity?.Name" class="btn btn-dark mb-2 shadow-none">Back</a>
+            </div>
+            <div class="col-6 d-flex align-items-center justify-content-end">
+                <a asp-action="Create" class="btn btn-dark mb-2 shadow-none">Upload New Image</a>
+            </div>
+        </div>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Preview</th>
+                    <th>Options</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var image in Model)
+                {
+                    <tr>
+                        <td>
+                            <img src="data:@image.ContentType;base64,@image.ImageData" alt="Image" asp-append-version="true" width="50px" height="50px">
+                        </td>
+                        <td>
+                            <a asp-action="Delete" asp-route-id="@image.ImageId" class="btn btn-danger m-1">Delete</a>
+                            <a asp-action="UseAsProfile" asp-route-id="@image.ImageId" class="btn btn-outline-dark m-1">Use As Profile Image</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_NotificationsPartial");
+    }
+}
