@@ -1,4 +1,4 @@
-#Portfolio Creator
+# Portfolio Creator
 
 Hello!
 This is my project with which I try to show what I have learned so far in web application development with c# at the Softuni academy!
@@ -8,10 +8,10 @@ This is my project with which I try to show what I have learned so far in web ap
 - [License](#license)
 - [Contact](#contact)
 
-##Description
+## Description
 
-##Features
+## Features
 
-##License
+## License
 
-##Contact
+## Contact
