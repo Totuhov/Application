@@ -43,31 +43,5 @@ public class MessageService : IMessageService
             Console.WriteLine(ex.ToString());
         }      
     }
-
-    public void SendMessageSmtp()
-    {
-        // Compose a message
-        MimeMessage mail = new MimeMessage();
-        mail.From.Add(new MailboxAddress("Excited Admin", "postmaster@sandboxfd890ce84ecb4f5f9b26cc13db3578b4.mailgun.org"));
-        mail.To.Add(new MailboxAddress("Excited User", "petya.totuhova@gmail.com"));
-        mail.Subject = "Hello";
-        mail.Body = new TextPart("plain")
-        {
-            Text = @"Testing some Mailgun awesomesauce!",
-        };
-
-        // Send it!
-        using (var client = new MailKit.Net.Smtp.SmtpClient())
-        {
-            // XXX - Should this be a little different?
-            client.ServerCertificateValidationCallback = (s, c, h, e) => true;
-
-            client.Connect("smtp.mailgun.org", 587, false);
-            client.AuthenticationMechanisms.Remove("XOAUTH2");
-            client.Authenticate("postmaster@sandboxfd890ce84ecb4f5f9b26cc13db3578b4.mailgun.org", "a205d3cc2e1789a5f0318f7d44493925-6d8d428c-fe8368de");
-
-            client.Send(mail);
-            client.Disconnect(true);
-        }
-    }
+    
 }
