@@ -20,35 +20,20 @@
             <h2 class="text-center">@Model.Description</h2>
         </div>
     </div>
-    @*<div class="justify-content-center d-flex">
-    <div class="row col-6">
-    <div class="col-3 justify-content-center d-flex">
-    <a href="https://www.facebook.com/"><img src="/images/icons/icons8-facebook-48.png" class="d-block w-100" alt="..."></a>
-    </div>
-    <div class="col-3 justify-content-center d-flex">
-    <a href="https://twitter.com/"><img src="/images/icons/icons8-twitter-48.png" class="d-block w-100" alt="..."></a>
-    </div>
-    <div class="col-3 justify-content-center d-flex">
-    <a href="https://www.linkedin.com"><img src="/images/icons/icons8-linkedin-48.png" class="d-block w-100" alt="..."></a>
-    </div>
-    <div class="col-3 justify-content-center d-flex">
-    <a href="https://www.instagram.com/"><img src="/images/icons/icons8-instagram-48.png" class="d-block w-100" alt="..."></a>
-    </div>
-    </div>*@
     @if (User?.Identity?.Name == Model.UserName)
     {
         <div class="justify-content-center d-flex">
             <a asp-controller="Portfolio" asp-action="EditDescription" asp-route-id="@User?.Identity?.Name" class="btn btn-outline-dark">Edit Description</a>
         </div>
     }
-    <div class="justify-content-center d-flex border-bottom mb-3">
+    <div class="justify-content-center d-flex border-top mt-3">
         <h1 class="display-4">About</h1>
     </div>
     <div class="justify-content-center d-flex">
         <div class="row col-10">
-            <div class="col-md-5 justify-content-center d-flex">
-                <div class="justify-content-center d-flex w-50">
-                    <img decoding="async" src="data:@Model.ProfileImage.ContentType;base64,@Model.ProfileImage.ImageData" asp-append-version="true" class="rounded-circle img-fluid w-100" />
+            <div class="col-8 col-md-5 my-auto mx-auto">
+                <div class="d-flex w-75 mx-auto">
+                    <img decoding="async" src="data:@Model.ProfileImage.ContentType;base64,@Model.ProfileImage.ImageData" asp-append-version="true" class="rounded-circle mx-auto" style="object-fit: cover;width: 20vw;height: 20vw;" />
                 </div>
             </div>
             <div class="col-md-7 justify-content-center d-flex">
@@ -68,7 +53,7 @@
             }
         </div>
     </div>
-    <div class="justify-content-center d-flex border-bottom mb-3">
+    <div class="justify-content-center d-flex border-top mt-3">
         <h1 class="display-4">Portfolio</h1>
     </div>
     @if (Model.Projects.Count() == 0)
@@ -82,25 +67,15 @@
     }
     else
     {
-        <div class="w-100 justify-content-center d-flex">
-            <div id="carouselExample" class="carousel slide w-75">
-                <div class="carousel-inner">
-
+        <div class="justify-content-center col-10 col-lg-9 border  mx-auto">
+            <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner rounded-3">
                     <div class="carousel-item active">
-                        <div>
-                            <h3 class="text-center">@Model.Projects.First().Name</h3>
-                        </div>
-                        <img decoding="async" id="" src="data:@Model.Projects.First().Image.ContentType;base64,@Model.Projects.First().Image.ImageData" asp-append-version="true" class="d-block w-100" style="max-height: 500px; " alt="...">
+                        <img decoding="async" id="" src="data:@Model.Projects.First().Image.ContentType;base64,@Model.Projects.First().Image.ImageData" asp-append-version="true" style="object-fit: cover;width: 100%;height: 40vw;" alt="...">
                         <div class="carousel-caption d-none d-md-block">
                             <h5 class="text-black bg-light bg-opacity-75 rounded-2">@Model.Projects.First().Description</h5>
                             <a class="text-black" href="@Model.Projects.First().Url"><p>Go to the project site</p></a>
                         </div>
-
-                        @*<div>
-                    <h4 class="text-center">
-                    @Model.Projects.First().Description
-                    </h4>
-                    </div>*@
                     </div>
                     @foreach (var item in Model.Projects)
                     {
@@ -109,27 +84,19 @@
                             continue;
                         }
                         <div class="carousel-item">
-                            <div>
-                                <h3 class="text-center">@item.Name</h3>
-                            </div>
-
-                            <img decoding="async" src="data:@item.Image.ContentType;base64,@item.Image.ImageData" asp-append-version="true" class="d-block w-100" style="max-height: 500px;" alt="...">
+                            <img decoding="async" src="data:@item.Image.ContentType;base64,@item.Image.ImageData" asp-append-version="true" style="object-fit: cover;width: 100%;height: 40vw;" alt="...">
                             <div class="carousel-caption d-none d-md-block">
                                 <h5 class="text-black bg-light bg-opacity-50 rounded-2">@item.Description</h5>
                                 <a class="text-black" href="@item.Url"> <p>Go to the project site</p></a>
                             </div>
-
-                            @*<div>
-                    <h4 class="text-center">@item.Description</h4>
-                    </div>*@
                         </div>
                     }
                 </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                     <span class="visually-hidden">Previous</span>
                 </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
                     <span class="visually-hidden">Next</span>
                 </button>
@@ -156,11 +123,7 @@
                         <h5 class="card-title">@item.Title</h5>
                         <p class="card-text">@(item.Content.Substring(0, 149))...</p>
                         <p class="card-text"><small class="text-body-secondary"> Edited on: @(item.EditedOn.ToString("dd-MMM-yyyy"))</small></p>
-                        <a asp-controller="Blog" asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-light">Continue reading</a>
-                        @*@if (@User?.Identity?.Name == Model.UserName)
-                    {
-                    <a asp-controller="Blog" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-dark">Edit Content</a>
-                    }*@
+                        <a asp-controller="Blog" asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-light">Continue reading</a>                        
                     </div>
                 </div>
             }
@@ -176,22 +139,7 @@
     <div class="justify-content-center d-flex border-top mt-3">
         <h1 class="display-4">Contact</h1>
     </div>
-    <div class="d-flex flex-column align-items-center justify-content-center" id="Contact">
-        @*<div class="row col-6 border">
-        <div class="col-3 justify-content-center d-flex border">
-        <a href="https://www.facebook.com/"><img src="/images/icons/icons8-facebook-48.png" class="d-block w-100" alt="..."></a>
-        </div>
-        <div class="col-3 justify-content-center d-flex border">
-        <a href="https://twitter.com/"><img src="/images/icons/icons8-twitter-48.png" class="d-block w-100" alt="..."></a>
-        </div>
-        <div class="col-3 justify-content-center d-flex border">
-        <a href="https://www.linkedin.com"><img src="/images/icons/icons8-linkedin-48.png" class="d-block w-100" alt="..."></a>
-        </div>
-        <div class="col-3 justify-content-center d-flex border">
-        <a href="https://www.instagram.com/"><img src="/images/icons/icons8-instagram-48.png" class="d-block w-100" alt="..."></a>
-        </div>
-        </div>*@
-
+    <div class="d-flex flex-column align-items-center justify-content-center" id="Contact">       
         <a asp-action="SendEmail" asp-route-id="@Model.UserName" class="btn btn-outline-dark">Send Message</a>
     </div>
 </div>

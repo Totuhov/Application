@@ -144,7 +144,7 @@ public class PortfolioController : BaseController
 
     [AllowAnonymous]
     [HttpPost]
-    public async Task<IActionResult> SendEmail(ContactFormViewModel model, string id)
+    public IActionResult SendEmail(ContactFormViewModel model, string id)
     {
         try
         {

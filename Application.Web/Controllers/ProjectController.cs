@@ -121,6 +121,7 @@ public class ProjectController : BaseController
     public async Task<IActionResult> Edit(string id)
     {
         ProjectViewModel model = await _projectService.GetCurrentProjectAsync(id);
+        model.ApplicationUserId = GetCurrentUserId();
         return View(model);
     }
 

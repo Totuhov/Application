@@ -10,6 +10,7 @@
             <form asp-action="Edit" method="post">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="ApplicationUserId" />
                 <div class="mb-3 col-6 w-100">
                     <label asp-for="Name" class="control-label"></label>
                     <input asp-for="@Model.Name" class="form-control" />

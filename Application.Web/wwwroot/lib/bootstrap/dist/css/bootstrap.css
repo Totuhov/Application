@@ -11216,6 +11216,16 @@ textarea.form-control-lg {
   .d-print-none {
     display: none !important;
   }
+  /*custom css*/
+  .img-fit{
+      aspect-ratio: 16 /9;
+      object-fit: cover;
+  }
+  @media (max-width: 764.98px){
+      .ing-fit {
+          aspect-ratio: 1 / 1;
+      }
+  }
 }
 
 /*# sourceMappingURL=bootstrap.css.map */

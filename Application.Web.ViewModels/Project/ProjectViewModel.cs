@@ -1,7 +1,7 @@
 ﻿
-using Application.Web.ViewModels.Image;
-
 namespace Application.Web.ViewModels.Project;
+
+using Application.Web.ViewModels.Image;
 
 public class ProjectViewModel
 {
