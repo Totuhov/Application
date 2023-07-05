@@ -10,12 +10,16 @@
   <ItemGroup>
     <Compile Remove="Models\**" />
     <Compile Remove="Views\Contact\**" />
+    <Compile Remove="wwwroot\temp\**" />
     <Content Remove="Models\**" />
     <Content Remove="Views\Contact\**" />
+    <Content Remove="wwwroot\temp\**" />
     <EmbeddedResource Remove="Models\**" />
     <EmbeddedResource Remove="Views\Contact\**" />
+    <EmbeddedResource Remove="wwwroot\temp\**" />
     <None Remove="Models\**" />
     <None Remove="Views\Contact\**" />
+    <None Remove="wwwroot\temp\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,10 +40,6 @@
     <ProjectReference Include="..\Application.Data\Application.Data.csproj" />
     <ProjectReference Include="..\Application.Services\Application.Services.csproj" />
     <ProjectReference Include="..\Application.Web.ViewModels\Application.Web.ViewModels.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="wwwroot\temp\" />
   </ItemGroup>
 
 </Project>

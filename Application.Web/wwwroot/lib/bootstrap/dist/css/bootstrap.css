@@ -11226,6 +11226,11 @@ textarea.form-control-lg {
           aspect-ratio: 1 / 1;
       }
   }
+
+    .bg-image {
+        background-image: url('https://mdbcdn.b-cdn.net/img/Photos/Others/images/76.webp');
+        height: 100vh;
+    }
 }
 
 /*# sourceMappingURL=bootstrap.css.map */

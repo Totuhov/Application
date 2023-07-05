@@ -7,7 +7,6 @@
     </div>
 }
 
-
 <div class="border-2 rounded-3">
     <div class="justify-content-center d-flex">
         <h1 class="display-4">@Model.GreetingsMessage</h1>
@@ -36,13 +35,12 @@
                     <img decoding="async" src="data:@Model.ProfileImage.ContentType;base64,@Model.ProfileImage.ImageData" asp-append-version="true" class="rounded-circle mx-auto" style="object-fit: cover;width: 20vw;height: 20vw;" />
                 </div>
             </div>
-            <div class="col-md-7 justify-content-center d-flex">
-                <div class="col-10 mt-3 justify-content-center d-flex">
+            <div class="col-md-7 justify-content-center align-items-center d-flex">
+                <div class="col-10 mt-3 justify-content-center align-items-center  d-flex">
                     <p style="font-family: Georgia, serif">
                         &emsp;&emsp;@Model.About
                     </p>
                 </div>
-
             </div>
             @if (User?.Identity?.Name == Model.UserName)
             {
@@ -75,7 +73,7 @@
                         <div class="carousel-caption">
                             <h5 class="text-black bg-light bg-opacity-75 rounded-2">@Model.Projects.First().Description</h5>
                             <div class="bg-light bg-opacity-75 rounded-2">
-                                <a class="text-black" href="@Model.Projects.First().Url"><p>Visit project site</p></a>
+                                <a class="text-black" href="@Model.Projects.First().Url"><p>Visit site</p></a>
                             </div>
                         </div>
                     </div>
@@ -90,7 +88,7 @@
                             <div class="carousel-caption">
                                 <h5 class="text-black bg-light bg-opacity-75 rounded-2">@item.Description</h5>
                                 <div class="bg-light bg-opacity-50 rounded-2">
-                                    <a class="text-black bg-light bg-opacity-75" href="@item.Url"> <p>Visit project site</p></a>
+                                    <a class="text-black bg-light bg-opacity-75" href="@item.Url"> <p>Visit site</p></a>
                                 </div>
                             </div>
                         </div>
@@ -122,7 +120,7 @@
         <div class="row">
             @foreach (var item in Model.Blog)
             {
-                <div class="col-md-6 card">
+                <div class="col-md-6 card border-0 border-start">
                     <div class="card-body">
                         <h5 class="card-title">@item.Title</h5>
                         <p class="card-text">@(item.Content.Substring(0, 149))...</p>
