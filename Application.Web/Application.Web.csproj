@@ -8,9 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\**" />
     <Compile Remove="Views\Contact\**" />
+    <Content Remove="Models\**" />
     <Content Remove="Views\Contact\**" />
+    <EmbeddedResource Remove="Models\**" />
     <EmbeddedResource Remove="Views\Contact\**" />
+    <None Remove="Models\**" />
     <None Remove="Views\Contact\**" />
   </ItemGroup>
 
@@ -32,11 +36,9 @@
     <ProjectReference Include="..\Application.Data\Application.Data.csproj" />
     <ProjectReference Include="..\Application.Services\Application.Services.csproj" />
     <ProjectReference Include="..\Application.Web.ViewModels\Application.Web.ViewModels.csproj" />
-    <ProjectReference Include="..\Applocation.Common\Application.Common.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
     <Folder Include="wwwroot\temp\" />
   </ItemGroup>
 

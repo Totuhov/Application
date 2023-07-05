@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Application.Data.Common\Application.Data.Common.csproj" />
+    <ProjectReference Include="..\Application.Common\Application.Common.csproj" />
     <ProjectReference Include="..\Application.Data.Models\Application.Data.Models.csproj" />
   </ItemGroup>
 

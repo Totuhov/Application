@@ -5,7 +5,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 
 using Application.Data.Models;
-using static Data.Common.DataConstants.ContextConstants;
+
+using static Application.Common.DbContextConstants;
 
 public class DataSeeder
 {

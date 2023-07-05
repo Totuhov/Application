@@ -4,10 +4,6 @@ namespace Application.Services;
 using System.Net;
 using System.Net.Mail;
 using System;
-using System.IO;
-using MailKit;
-using MailKit.Net.Smtp;
-using MimeKit;
 
 using Application.Services.Interfaces;
 
@@ -25,11 +21,11 @@ public class MessageService : IMessageService
             Body = text
         };
 
-        System.Net.Mail.SmtpClient smtp = new()
+        SmtpClient smtp = new()
         {
-            Host = "smtp.mailgun.org",
+            Host = "smtp-relay.brevo.com",
             Port = 587,
-            Credentials = new NetworkCredential("postmaster@sandboxfd890ce84ecb4f5f9b26cc13db3578b4.mailgun.org", "a205d3cc2e1789a5f0318f7d44493925-6d8d428c-fe8368de"),
+            Credentials = new NetworkCredential("nikolaytotuhov@gmail.com", "LCrJMFvS2aAPR34q"),
             DeliveryMethod = SmtpDeliveryMethod.Network,
             EnableSsl = true
         };

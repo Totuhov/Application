@@ -7,7 +7,6 @@ using Application.Services.Interfaces;
 using Application.Web.ViewModels.Image;
 
 using static Application.Common.NotificationMessagesConstants;
-using Microsoft.AspNetCore.Routing.Constraints;
 
 public class ImageController : BaseController
 {

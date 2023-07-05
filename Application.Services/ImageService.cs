@@ -5,7 +5,7 @@ using Application.Data;
 using Application.Data.Models;
 using Application.Services.Interfaces;
 
-using static Data.Common.DataConstants.ContextConstants;
+using static Application.Common.DbContextConstants;
 
 using Application.Web.ViewModels.Image;
 using Microsoft.EntityFrameworkCore;
