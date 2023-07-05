@@ -65,14 +65,14 @@
     }
     else
     {
-        <div class="justify-content-center col-11 mx-auto">
+        <div class="justify-content-center col-11 col-md-9 mx-auto">
             <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner rounded-3">
                     <div class="carousel-item active">
                         <img decoding="async" id="" src="data:@Model.Projects.First().Image.ContentType;base64,@Model.Projects.First().Image.ImageData" asp-append-version="true" style="object-fit: cover;width: 100%;height: 50vh;" alt="...">
                         <div class="carousel-caption">
                             <h5 class="text-black bg-light bg-opacity-75 rounded-2">@Model.Projects.First().Description</h5>
-                            <div class="bg-light bg-opacity-75 rounded-2">
+                            <div class="bg-light bg-opacity-75 rounded-2 w-25 mx-auto">
                                 <a class="text-black" href="@Model.Projects.First().Url"><p>Visit site</p></a>
                             </div>
                         </div>
@@ -85,10 +85,10 @@
                         }
                         <div class="carousel-item">
                             <img decoding="async" src="data:@item.Image.ContentType;base64,@item.Image.ImageData" asp-append-version="true" style="object-fit: cover;width: 100%;height: 50vh;" alt="...">
-                            <div class="carousel-caption">
+                            <div class="carousel-caption justify-content-center">
                                 <h5 class="text-black bg-light bg-opacity-75 rounded-2">@item.Description</h5>
-                                <div class="bg-light bg-opacity-50 rounded-2">
-                                    <a class="text-black bg-light bg-opacity-75" href="@item.Url"> <p>Visit site</p></a>
+                                <div class="bg-light bg-opacity-75 rounded-2 w-25 mx-auto">
+                                    <a class="text-black bg-light" href="@item.Url"> <p>Visit site</p></a>
                                 </div>
                             </div>
                         </div>
