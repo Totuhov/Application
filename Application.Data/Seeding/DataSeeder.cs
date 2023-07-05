@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 using Application.Data.Models;
 
-using static Application.Common.DbContextConstants;
+using static Application.Common.ModelConstants;
 
 public class DataSeeder
 {

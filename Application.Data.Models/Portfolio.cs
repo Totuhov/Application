@@ -1,19 +1,26 @@
 ﻿
+namespace Application.Data.Models;
+
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Application.Data.Models;
+using static Application.Common.ModelConstants.PortfolioConstants;
 
 public class Portfolio
 {
     public string Id { get; set; } = Guid.NewGuid().ToString();
 
-    public string? GreetingsMessage { get; set; } = "Hallo ";
+    [MaxLength(GreetingsMessageMaxLength)]
+    public string? GreetingsMessage { get; set; } = GreetingsMessageDefaultText;
 
-    public string? UserDisplayName { get; set; } = "friend";
+    [MaxLength(UserDisplayNameMaxLength)]
+    public string? UserDisplayName { get; set; } = UserDisplayNameDefaultText;
 
-    public string? Description { get; set; } = "Hier you can write somethig to describe you...";
+    [MaxLength(DescriptionMaxLength)]
+    public string? Description { get; set; } = DescriptionDefaultText;
 
-    public string? About { get; set; } = "here you can describe your work, competences or just a short autobiography";
+    [MaxLength(AboutMaxLength)]
+    public string? About { get; set; } = AboutDefaultText;
 
     public string? ImageId { get; set; }
 

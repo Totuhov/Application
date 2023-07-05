@@ -7,6 +7,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 
+using static Application.Common.ModelConstants.ImageConstants;
+
 public class Image
 {
     [Key]
@@ -14,8 +16,11 @@ public class Image
         
     public byte[] Bytes { get; set; } = null!;
 
+    [Required]
+    [MaxLength(FileExtensionMaxLength)]
     public string FileExtension { get; set; } = null!;
 
+    [Column(TypeName = "decimal(18, 2)")]
     public decimal Size { get; set; }
 
     [FromForm]
@@ -27,7 +32,7 @@ public class Image
     [ForeignKey(nameof(ApplicationUserId))]
     public virtual ApplicationUser? ApplicationUser { get; set; }
 
-    [MaxLength(20)]   
+    [MaxLength(CharacteristicMaxLength)]   
     public string? Characteristic { get; set; }
 
     public virtual ICollection<Portfolio> Portfolios { get; set; } = new List<Portfolio>();

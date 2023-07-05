@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-using static Application.Common.DbContextConstants;
+using static Application.Common.ModelConstants;
 
 public class ProjectService : IProjectService
 {
