@@ -7,7 +7,7 @@ using static Common.ModelConstants.ArticleConstants;
 
 public class CreateArticleViewModel
 {
-    //public string Id { get; set; } = null!;
+    public string Id { get; set; } = null!;
 
     [Required]
     [StringLength(TitleMaxLength, MinimumLength = TitleMinLength)]
