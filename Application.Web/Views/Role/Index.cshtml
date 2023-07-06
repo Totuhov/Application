@@ -3,11 +3,14 @@
     ViewData["Title"] = "ROLES";
 }
 
-<h1 class="bg-info text-white">All Roles</h1>
-<a asp-action="Create" class="btn btn-secondary">Create a Role</a>
+<h1 class="text-center">All Roles</h1>
 
+<div class="mt-5 mb-2">
+        <a asp-action="Index" asp-controller="Home" class="btn btn-dark shadow-none">Back</a>
+        <a asp-action="Create" class="btn btn-dark shadow-none">Create a Role</a>
+</div>
 
-    <table class="table table-sm table-bordered table-bordered">
+    <table class="table table-sm">
         <tr><th>ID</th><th>Name</th><th>Users</th><th>Update</th><th>Delete</th></tr>
         @foreach (var role in Model)
         {

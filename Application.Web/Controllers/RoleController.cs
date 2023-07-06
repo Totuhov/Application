@@ -3,6 +3,7 @@ namespace Application.Web.Controllers;
 
 using Application.Data.Models;
 using Application.Web.ViewModels.Role;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
@@ -12,7 +13,8 @@ using System.ComponentModel.DataAnnotations;
 /// </summary>
 // the code of this class is from https://www.yogihosting.com/aspnet-core-identity-roles/
 
-public class RoleController : Controller
+[Authorize(Roles = "Admin")]
+public class RoleController : BaseController
 {    
     private readonly RoleManager<IdentityRole> _roleManager;
     private readonly UserManager<ApplicationUser> _userManager;
