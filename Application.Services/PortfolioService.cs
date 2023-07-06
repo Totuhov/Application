@@ -92,7 +92,7 @@ public class PortfolioService : IPortfolioService
                 About = portfolio.About,
                 Blog = await _context
                 .Articles
-                .Where(a => a.ApplicationUserId == user.Id)
+                .Where(a => a.ApplicationUserId == user.Id && a.IsDeleted == false)
                 .Select(a => new ArticleViewModel()
                 {
                     Id = a.Id,
@@ -102,6 +102,8 @@ public class PortfolioService : IPortfolioService
                     EditedOn = a.EditedOn,
                     ApplicationUserName = a.ApplicationUser.UserName,
                 })
+                .OrderByDescending(a => a.EditedOn)
+                .Take(6)
                 .ToListAsync(),
                 Projects = await _context
                 .Projects
