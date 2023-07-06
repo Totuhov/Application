@@ -9,9 +9,8 @@
 <div class="row justify-content-center">
     <div class="col-md-8 col-lg-6">
         <h3 class="text-center">@Model.Name</h3>
-        <div class="d-flex justify-content-center">
-            
-            <img decoding="async" src="data:@Model.Image.ContentType;base64,@Model.Image.ImageData" asp-append-version="true" width="250px" height="250px" />
+        <div class="d-flex justify-content-center" style="height: 300px;">
+            <img decoding="async" src="data:@Model.Image.ContentType;base64,@Model.Image.ImageData" asp-append-version="true" style="height: 100%" />
         </div>
         <form asp-action="Delete" method="post">
            @* <input type="hidden" asp-for="ImageId" />*@
