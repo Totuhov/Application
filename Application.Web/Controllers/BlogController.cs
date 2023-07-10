@@ -106,7 +106,7 @@ public class BlogController : BaseController
 
         await _service.DeleteArteicleAsync(model);
 
-        return RedirectToAction("Index", "Portfolio");
+        return RedirectToAction("Details", "Portfolio", new { id = model.ApplicationUserName});
     }
 
     //[HttpPost]
