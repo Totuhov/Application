@@ -7,7 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Application.Services.Interfaces;
 using Application.Web.ViewModels.Article;
 
-[AllowAnonymous]
+using static Application.Common.NotificationMessagesConstants;
+
 public class BlogController : BaseController
 {
     private readonly IBlogService _service;
@@ -22,16 +23,25 @@ public class BlogController : BaseController
     [HttpGet]
     public IActionResult Create(string id)
     {
-        if (id == GetCurrentUserName())
+        try
         {
-            CreateArticleViewModel model = new()
+            if (id == GetCurrentUserName())
             {
-                ApplicationUserId = GetCurrentUserId()
-            };
-            return View(model);
-        }
+                CreateArticleViewModel model = new()
+                {
+                    ApplicationUserId = GetCurrentUserId()
+                };
 
-        return NotFound();
+                return View(model);
+            }
+
+            return NotFound();
+        }
+        catch (Exception)
+        {
+
+            return NotFound();
+        }        
     }
 
     [HttpPost]
@@ -43,14 +53,23 @@ public class BlogController : BaseController
             return View(model);
         }
 
-        await _service.CreatePostAsync(model);
-
-        return RedirectToAction("Index", "Portfolio");
+        try
+        {
+            await _service.CreatePostAsync(model);
+            this.TempData[SuccessMessage] = "Article was posted successfily!";
+            return RedirectToAction("Index", "Portfolio");
+        }
+        catch (Exception)
+        {
+            this.TempData[ErrorMessage] = "Article was not posted successfily!";
+            return RedirectToAction("Index", "Portfolio");
+        }
     }
 
     [HttpGet]
     public async Task<IActionResult> Edit(string id)
     {
+
         CreateArticleViewModel model = await _service.GetCreateArticleViewModelByIdAsync(id, GetCurrentUserId());
 
         return View(model);
@@ -73,9 +92,10 @@ public class BlogController : BaseController
             return NotFound();
         }
 
-        return RedirectToAction("All", new {id = userName});
+        return RedirectToAction("All", new { id = userName });
     }
 
+    [AllowAnonymous]
     [HttpGet]
     public async Task<IActionResult> Details(string id)
     {
@@ -84,37 +104,47 @@ public class BlogController : BaseController
         return View(model);
     }
 
+    [AllowAnonymous]
     [HttpGet]
     public async Task<IActionResult> All(string id)
     {
-        
-        List<ArticleViewModel> articles = await _service.GetAllArticlesByUserNameAsync(id);
-
-        AllArticlesViewModel model = new()
+        try
         {
-            Articles = articles,
-            UserName = id
-        };
-        return View(model);
+            List<ArticleViewModel> articles = await _service.GetAllArticlesByUserNameAsync(id);
+
+            AllArticlesViewModel model = new()
+            {
+                Articles = articles,
+                UserName = id
+            };
+            return View(model);
+        }
+        catch (Exception)
+        {
+
+            return RedirectToAction("Index", "Home");
+        }
     }
 
 
     [HttpGet]
     public async Task<IActionResult> Delete(string id)
     {
-        ArticleViewModel model = await _service.GetArticleViewModelByIdAsync(id);
+        try
+        {
+            ArticleViewModel model = await _service.GetArticleViewModelByIdAsync(id);
 
-        await _service.DeleteArteicleAsync(model);
+            await _service.DeleteArteicleAsync(model);
 
-        return RedirectToAction("Details", "Portfolio", new { id = model.ApplicationUserName});
+            this.TempData[SuccessMessage] = "Article was deleted successfily!";
+            return RedirectToAction("Details", "Portfolio", new { id = model.ApplicationUserName });
+        }
+        catch (Exception)
+        {
+
+            this.TempData[ErrorMessage] = "Something wrong. Article was not deleted successfily!";
+            return RedirectToAction("Details", "Portfolio");
+        }
     }
-
-    //[HttpPost]
-    //public async Task<IActionResult> Delete(ArticleViewModel model)
-    //{
-    //    await _service.DeleteArteicleAsync(model);
-
-    //    return RedirectToAction("All");
-    //}
 }
 

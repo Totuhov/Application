@@ -1,5 +1,9 @@
 ﻿@model AllProjectsViewModel
 
+@{
+    ViewData["Title"] = $"All projects of {Model.UserName}";
+}
+
 @if (TempData["SuccessMessage"] != null)
 {
     <div class="alert alert-success" role="alert">

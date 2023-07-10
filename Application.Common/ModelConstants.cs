@@ -15,7 +15,7 @@ public static class ModelConstants
         public const int TitleMaxLength = 200;
         public const int TitleMinLength = 2;
         public const int ContentMaxLength = 4000;
-        public const int ContentMinLength = 50;
+        public const int ContentMinLength = 150;
     }
     public static class ImageConstants
     {

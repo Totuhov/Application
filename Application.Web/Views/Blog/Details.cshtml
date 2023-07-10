@@ -1,5 +1,9 @@
 ﻿@model ArticleViewModel
 
+@{
+    ViewData["Title"] = $"{Model.Title}";
+}
+
 <div class="row d-flex align-items-center justify-content-center mt-5">
     <div class="col-6 border rounded">
         <h1 class="text-center">@Model.Title</h1>

@@ -1,6 +1,10 @@
 ﻿
 @model List<ImageViewModel>
 
+@{
+    ViewData["Title"] = "All";
+}
+
 @if (TempData["SuccessMessage"] != null)
 {
     <div class="alert alert-success" role="alert">

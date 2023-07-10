@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 
 using Application.Services.Interfaces;
 using Application.Web.ViewModels.Portfolio;
-using Application.Services;
 
 using static Application.Common.NotificationMessagesConstants;
 using Application.Web.ViewModels.ContactForm;
