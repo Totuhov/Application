@@ -10,15 +10,19 @@
   <ItemGroup>
     <Compile Remove="Models\**" />
     <Compile Remove="Views\Contact\**" />
+    <Compile Remove="Views\Role\**" />
     <Compile Remove="wwwroot\temp\**" />
     <Content Remove="Models\**" />
     <Content Remove="Views\Contact\**" />
+    <Content Remove="Views\Role\**" />
     <Content Remove="wwwroot\temp\**" />
     <EmbeddedResource Remove="Models\**" />
     <EmbeddedResource Remove="Views\Contact\**" />
+    <EmbeddedResource Remove="Views\Role\**" />
     <EmbeddedResource Remove="wwwroot\temp\**" />
     <None Remove="Models\**" />
     <None Remove="Views\Contact\**" />
+    <None Remove="Views\Role\**" />
     <None Remove="wwwroot\temp\**" />
   </ItemGroup>
 

@@ -1,12 +1,13 @@
-﻿@model IEnumerable<IdentityRole>
+﻿@using Microsoft.AspNetCore.Identity
+@model IEnumerable<IdentityRole>
 @{
-    ViewData["Title"] = "ROLES";
+    ViewData["Title"] = "Roles";
 }
 
 <h1 class="text-center">All Roles</h1>
 
 <div class="mt-5 mb-2">
-        <a asp-action="Index" asp-controller="Home" class="btn btn-dark shadow-none">Back</a>
+        <a asp-area="" asp-action="Index" asp-controller="Home" class="btn btn-dark shadow-none">Back</a>
         <a asp-action="Create" class="btn btn-dark shadow-none">Create a Role</a>
 </div>
 

@@ -110,7 +110,7 @@ public class LoginModel : PageModel
             if (result.Succeeded)
             {
                 _logger.LogInformation("User logged in.");
-                return RedirectToAction("Index", "Portfolio", Input.UserName);
+                return RedirectToAction("Index", "Portfolio", new { area = "", id= Input.UserName });
             }
             if (result.RequiresTwoFactor)
             {
