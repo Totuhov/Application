@@ -8,12 +8,10 @@ namespace Application.Web.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
         private readonly IPortfolioService _portfolioService;
 
-        public HomeController(ILogger<HomeController> logger, IPortfolioService portfolioService)
+        public HomeController(IPortfolioService portfolioService)
         {
-            this._logger = logger;
             this._portfolioService = portfolioService;
         }
 
