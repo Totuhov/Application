@@ -55,12 +55,12 @@ public class BlogController : BaseController
         try
         {
             await _service.CreatePostAsync(model);
-            this.TempData[SuccessMessage] = "Article was posted successfily!";
+            this.TempData[SuccessMessage] = "Article was posted successfuly!";
             return RedirectToAction("Index", "Portfolio");
         }
         catch (Exception)
         {
-            this.TempData[ErrorMessage] = "Article was not posted successfily!";
+            this.TempData[ErrorMessage] = "Article was not posted successfuly!";
             return RedirectToAction("Index", "Portfolio");
         }
     }
@@ -135,13 +135,13 @@ public class BlogController : BaseController
 
             await _service.DeleteArteicleAsync(model);
 
-            this.TempData[SuccessMessage] = "Article was deleted successfily!";
+            this.TempData[SuccessMessage] = "Article was deleted successfuly!";
             return RedirectToAction("Details", "Portfolio", new { id = model.ApplicationUserName });
         }
         catch (Exception)
         {
 
-            this.TempData[ErrorMessage] = "Something wrong. Article was not deleted successfily!";
+            this.TempData[ErrorMessage] = "Something wrong. Article was not deleted successfuly!";
             return RedirectToAction("Details", "Portfolio");
         }
     }

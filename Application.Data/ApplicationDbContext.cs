@@ -17,6 +17,10 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         _env = env;
     }
 
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+    {
+    }
+
     public DbSet<Portfolio> Portfolios { get; set; } = null!;
 
     public DbSet<Image> Images { get; set; } = null!;
@@ -72,8 +76,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .IsRequired(false)
             .OnDelete(DeleteBehavior.NoAction);
 
-        var seeder = new DataSeeder(_env);
-        seeder.Seed(builder);
+        //var seeder = new DataSeeder(_env);
+        //seeder.Seed(builder);
 
         base.OnModelCreating(builder);
     }

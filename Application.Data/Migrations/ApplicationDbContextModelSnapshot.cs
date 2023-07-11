@@ -119,7 +119,7 @@ namespace Application.Data.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.ToTable("Articles");
+                    b.ToTable("Articles", (string)null);
                 });
 
             modelBuilder.Entity("Application.Data.Models.Image", b =>
@@ -150,7 +150,7 @@ namespace Application.Data.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.ToTable("Images");
+                    b.ToTable("Images", (string)null);
 
                     b.HasData(
                         new
@@ -206,7 +206,7 @@ namespace Application.Data.Migrations
 
                     b.HasIndex("ImageId");
 
-                    b.ToTable("Portfolios");
+                    b.ToTable("Portfolios", (string)null);
                 });
 
             modelBuilder.Entity("Application.Data.Models.Project", b =>
@@ -239,7 +239,7 @@ namespace Application.Data.Migrations
 
                     b.HasIndex("ImageId");
 
-                    b.ToTable("Projects");
+                    b.ToTable("Projects", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
