@@ -36,45 +36,50 @@ public class PortfolioService : IPortfolioService
             await _context.SaveChangesAsync();
         }
     }
-    
-    public async Task<EditDescriptionPortfolioViewModelViewModel> GetEditDescriptionViewModelAsync(string userId)
-    {
 
-        Portfolio? portfolio = await _context.Portfolios.FirstOrDefaultAsync(p => p.ApplicationUserId == userId);
-
-        EditDescriptionPortfolioViewModelViewModel model = new()
-        {
-            GreetingsMessage = portfolio.GreetingsMessage,
-            UserDisplayName = portfolio.UserDisplayName,
-            Description = portfolio.Description
-        };
-
-        return model;
-    }
-
-    public async Task<EditAboutPortfolioViewModelViewModel> GetEditAboutViewModelAsync(string userId)
+    public async Task<EditDescriptionPortfolioViewModelViewModel?> GetEditDescriptionViewModelAsync(string userId)
     {
         Portfolio? portfolio = await _context.Portfolios.FirstOrDefaultAsync(p => p.ApplicationUserId == userId);
-
-        EditAboutPortfolioViewModelViewModel model = new()
-        {
-            About = portfolio.About
-        };
-
-        return model;
-    }
-
-    public async Task<PortfolioViewModel> GetPortfolioFromRouteAsync(string userName)
-    {
-        ApplicationUser user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == userName);
-        Portfolio? portfolio = await _context.Portfolios.FirstOrDefaultAsync(p => p.ApplicationUserId == user.Id);
 
         if (portfolio != null)
         {
-            if (portfolio.Image == null)
+            EditDescriptionPortfolioViewModelViewModel model = new()
             {
-                portfolio.Image = await _context.Images.FirstOrDefaultAsync(i => i.Characteristic == DefaultProfileImageCharacteristic);
-            }
+                GreetingsMessage = portfolio.GreetingsMessage,
+                UserDisplayName = portfolio.UserDisplayName,
+                Description = portfolio.Description
+            };
+
+            return model;
+        }
+
+        return null;
+    }
+
+    public async Task<EditAboutPortfolioViewModelViewModel?> GetEditAboutViewModelAsync(string userId)
+    {
+        Portfolio? portfolio = await _context.Portfolios.FirstOrDefaultAsync(p => p.ApplicationUserId == userId);
+
+        if (portfolio != null)
+        {
+            EditAboutPortfolioViewModelViewModel model = new()
+            {
+                About = portfolio.About
+            };
+
+            return model;
+        }
+        return null;
+    }
+
+    public async Task<PortfolioViewModel?> GetPortfolioFromRouteAsync(string userName)
+    {
+        ApplicationUser? user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == userName);
+        Portfolio? portfolio = await _context.Portfolios.FirstOrDefaultAsync(p => p.ApplicationUserId == user.Id);
+
+        if (portfolio != null && user != null)
+        {
+            portfolio.Image ??= await _context.Images.FirstOrDefaultAsync(i => i.Characteristic == DefaultProfileImageCharacteristic);
 
             PortfolioViewModel model = new()
             {

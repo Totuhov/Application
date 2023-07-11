@@ -36,7 +36,9 @@ namespace UnitTests
                     Id = "193e0179-9a55-4f6e-ac06-ce75d48bd6c2",
                     ApplicationUserId = "c184f1f8-ccd7-4d62-b9df-ab4221cfce01",
                     Title = "First Article",
-                    Content = "Mir wurde gesagt von denen, dass die die Ruckmeldkarte Ihnen schiken werden. Wahrscheinlich haben sie das noch nich gemacht. Ich habe mit denen gesprochen und sie werden, dass sie Ihnen so schnell wie möglich zusenden werden.",
+                    Content = "Mir wurde gesagt von denen, dass die die Ruckmeldkarte Ihnen schiken " +
+                    "werden. Wahrscheinlich haben sie das noch nich gemacht. Ich habe mit denen " +
+                    "gesprochen und sie werden, dass sie Ihnen so schnell wie möglich zusenden werden.",
                     CreatedOn = DateTime.Now,
                     EditedOn = DateTime.Now,
                     IsDeleted = false,
@@ -47,7 +49,9 @@ namespace UnitTests
                     Id = "2e63dbec-91bc-4c09-8aa6-7c6e70fd3ad6",
                     ApplicationUserId = "6960a305-4ea5-4d22-8611-c437f5e5164c",
                     Title = "Second Article",
-                    Content = "Mir wurde gesagt von denen, dass die die Ruckmeldkarte Ihnen schiken werden. Wahrscheinlich haben sie das noch nich gemacht. Ich habe mit denen gesprochen und sie werden, dass sie Ihnen so schnell wie möglich zusenden werden.",
+                    Content = "Mir wurde gesagt von denen, dass die die Ruckmeldkarte Ihnen schiken " +
+                    "werden. Wahrscheinlich haben sie das noch nich gemacht. Ich habe mit denen " +
+                    "gesprochen und sie werden, dass sie Ihnen so schnell wie möglich zusenden werden.",
                     CreatedOn = DateTime.Now,
                     EditedOn = DateTime.Now,
                     IsDeleted = false
@@ -57,7 +61,9 @@ namespace UnitTests
                     Id = "293e0179-9a55-4f6e-ac06-ce75d48bd6c3",
                     ApplicationUserId = "c184f1f8-ccd7-4d62-b9df-ab4221cfce01",
                     Title = "Third Article",
-                    Content = "Mir wurde gesagt von denen, dass die die Ruckmeldkarte Ihnen schiken werden. Wahrscheinlich haben sie das noch nich gemacht. Ich habe mit denen gesprochen und sie werden, dass sie Ihnen so schnell wie möglich zusenden werden.",
+                    Content = "Mir wurde gesagt von denen, dass die die Ruckmeldkarte Ihnen schiken" +
+                    " werden. Wahrscheinlich haben sie das noch nich gemacht. Ich habe mit denen " +
+                    "gesprochen und sie werden, dass sie Ihnen so schnell wie möglich zusenden werden.",
                     CreatedOn = DateTime.Now,
                     EditedOn = DateTime.Now,
                     IsDeleted = false,

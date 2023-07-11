@@ -54,7 +54,7 @@ public class PortfolioController : BaseController
     {
         if (await _userService.IsUserExists(id))
         {
-            PortfolioViewModel model = await _portfolioService.GetPortfolioFromRouteAsync(id);
+            PortfolioViewModel? model = await _portfolioService.GetPortfolioFromRouteAsync(id);
 
             if (model == null)
             {
@@ -78,15 +78,23 @@ public class PortfolioController : BaseController
 
     [HttpGet]
     public async Task<IActionResult> EditDescription(string id)
-    {
-        if (id != GetCurrentUserName())
+    {        
+        try
         {
+            if (GetCurrentUserName() != id)
+            {
+                return NotFound();
+            }
+
+            EditDescriptionPortfolioViewModelViewModel? model = await _portfolioService.GetEditDescriptionViewModelAsync(GetCurrentUserId());
+
+            return View(model);
+        }
+        catch (Exception)
+        {
+
             return RedirectToAction("Error", "Home");
         }
-
-        EditDescriptionPortfolioViewModelViewModel model = await _portfolioService.GetEditDescriptionViewModelAsync(GetCurrentUserId());
-
-        return View(model);
     }
 
     [HttpPost]
@@ -107,7 +115,7 @@ public class PortfolioController : BaseController
     {
         if (id != GetCurrentUserName())
         {
-            return RedirectToAction("Error", "Home");
+            return NotFound();
         }
 
         EditAboutPortfolioViewModelViewModel model = await _portfolioService.GetEditAboutViewModelAsync(GetCurrentUserId());
