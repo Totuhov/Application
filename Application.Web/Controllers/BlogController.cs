@@ -133,7 +133,7 @@ public class BlogController : BaseController
         {
             ArticleViewModel model = await _service.GetArticleViewModelByIdAsync(id);
 
-            await _service.DeleteArteicleAsync(model);
+            await _service.DeleteArticleAsync(model);
 
             this.TempData[SuccessMessage] = "Article was deleted successfuly!";
             return RedirectToAction("Details", "Portfolio", new { id = model.ApplicationUserName });

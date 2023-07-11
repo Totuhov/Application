@@ -15,4 +15,6 @@ public class ArticleViewModel
     public string Content { get; set; } = null!;
 
     public string ApplicationUserName { get; set; } = null!;
+
+    public bool IsDeleted { get; set; }
 }

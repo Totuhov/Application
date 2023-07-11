@@ -10,5 +10,5 @@ public interface IBlogService
     Task<CreateArticleViewModel> GetCreateArticleViewModelByIdAsync(string articleId, string userId);
     Task<ArticleViewModel> GetArticleViewModelByIdAsync(string id);
     Task<List<ArticleViewModel>> GetAllArticlesByUserNameAsync(string userName);
-    Task DeleteArteicleAsync(ArticleViewModel model);
+    Task DeleteArticleAsync(ArticleViewModel model);
 }

@@ -17,7 +17,7 @@ public class ImageService : IImageService
 
     public ImageService(ApplicationDbContext context)
     {
-        _context = context;        
+        _context = context;
     }
 
     public async Task<List<ImageViewModel>> GetUserImagesAsync(string userId)
@@ -34,9 +34,9 @@ public class ImageService : IImageService
             .ToListAsync();
     }
 
-    static string GetContentType(string fileExtension)
+    public static string GetContentType(string fileExtension)
     {
-        // Add additional mappings for different file extensions if needed
+        // Hier can be addedadditional mappings for different file extensions if needed
         return fileExtension.ToLower() switch
         {
             ".jpg" or ".jpeg" => "image/jpeg",
@@ -46,10 +46,17 @@ public class ImageService : IImageService
         };
     }
 
-    // It is not possible to implement static method in iterface. In this case is needed
+    //It is not possible to implement static method in iterface.In this case is needed
+
     string IImageService.GetContentType(string fileExtension)
     {
-        return "";
+        return fileExtension.ToLower() switch
+        {
+            ".jpg" or ".jpeg" => "image/jpeg",
+            ".png" => "image/png",
+            ".gif" => "image/gif",
+            _ => "application/octet-stream",
+        };
     }
 
     public async Task SaveImageInDatabaseAsync(CreateImageViewModel model, string userId)
@@ -76,23 +83,29 @@ public class ImageService : IImageService
         _context.SaveChanges();
     }
 
-    public async Task<ImageViewModel> GetImageByIdAsync(string id)
+    public async Task<ImageViewModel?> GetImageByIdAsync(string id)
     {
         Image? image = await _context.Images.FindAsync(id);
 
         if (image != null)
         {
-            return new ImageViewModel()
+            var result = new ImageViewModel()
             {
                 ImageId = image.ImageId,
                 ImageData = Convert.ToBase64String(image.Bytes),
                 ContentType = GetContentType(image.FileExtension),
-                ApplicationUserId = image.ApplicationUserId
+                
             };
+            if (image.ApplicationUserId != null)
+            {
+                result.ApplicationUserId = image.ApplicationUserId;
+            }
+
+            return result;
         }
         else
         {
-            return new ImageViewModel();
+            return null;
         }
     }
 

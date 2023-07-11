@@ -1,19 +1,22 @@
-﻿using Application.Data;
+﻿
+using Application.Data;
 using Application.Data.Models;
 using Application.Services;
 using Application.Services.Interfaces;
 using Application.Web.ViewModels.Article;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
-using Assert = NUnit.Framework.Assert;
 
 namespace UnitTests
 {
     [TestFixture]
-    public class BlogServiceDbTests
+    public class BlogServiceTests
     {
+        private IBlogService _service;
+
         private IEnumerable<Article> _articles;
         private IEnumerable<ApplicationUser> _users;
+
         private ApplicationDbContext _context;
 
         [OneTimeSetUp]
@@ -153,6 +156,21 @@ namespace UnitTests
             ArticleViewModel tesModel = await service.GetArticleViewModelByIdAsync(articleId);
 
             Assert.That(tesModel, Is.Not.EqualTo(null));
+        }
+
+        [Test]
+        public async Task Test_DeleteArteicleAsync()
+        {
+            IBlogService service = new BlogService(this._context);
+            string articleId = "293e0179-9a55-4f6e-ac06-ce75d48bd6c3";
+
+            ArticleViewModel testModel = await service.GetArticleViewModelByIdAsync(articleId);
+
+            await service.DeleteArticleAsync(testModel);
+
+            testModel = await service.GetArticleViewModelByIdAsync(articleId);
+
+            Assert.That(testModel.IsDeleted, Is.EqualTo(true));
         }
     }
 }

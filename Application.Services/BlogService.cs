@@ -71,13 +71,14 @@ public class BlogService : IBlogService
             CreatedOn = article.CreatedOn,
             EditedOn = article.EditedOn,
             Content = article.Content,
-            ApplicationUserName = article.ApplicationUser.UserName
+            ApplicationUserName = article.ApplicationUser.UserName,
+            IsDeleted = article.IsDeleted
         };
     }
 
     public async Task<List<ArticleViewModel>> GetAllArticlesByUserNameAsync(string userName)
     {
-        ApplicationUser user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == userName);
+        ApplicationUser? user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == userName);
 
 
         return await _context.Articles
@@ -89,13 +90,13 @@ public class BlogService : IBlogService
                 CreatedOn = a.CreatedOn,
                 EditedOn = a.EditedOn,
                 Content = a.Content,
-                ApplicationUserName = a.ApplicationUserId
+                ApplicationUserName = a.ApplicationUserId                
             })
             .OrderByDescending(a => a.CreatedOn)
             .ToListAsync();
     }
 
-    public async Task DeleteArteicleAsync(ArticleViewModel model)
+    public async Task DeleteArticleAsync(ArticleViewModel model)
     {
         Article? article = await _context.Articles.FirstOrDefaultAsync(a => a.Id == model.Id);
 
