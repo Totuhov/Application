@@ -12,8 +12,6 @@ namespace UnitTests
     [TestFixture]
     public class BlogServiceTests
     {
-        private IBlogService _service;
-
         private IEnumerable<Article> _articles;
         private IEnumerable<ApplicationUser> _users;
 

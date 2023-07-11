@@ -9,28 +9,38 @@ using Application.Services.Interfaces;
 
 public class MessageService : IMessageService
 {
-    public void SendEmail(string recieverEmail, string senderName, string senderEmail, string text)
+    public bool SendEmail(string recieverEmail, string senderName, string senderEmail, string text)
     {
-
-        MailAddress to = new(recieverEmail);
-        MailAddress from = new(senderEmail);
-
-        MailMessage email = new(from, to)
+        try
         {
-            Subject = $"{senderName} send you a new message via Portfolio.com",
-            Body = text
-        };
+            MailAddress to = new(recieverEmail);
+            MailAddress from = new(senderEmail);
 
-        SmtpClient smtp = new()
+            MailMessage email = new(from, to)
+            {
+                Subject = $"{senderName} send you a new message via Portfolio.com",
+                Body = text
+            };
+
+            SmtpClient smtp = new()
+            {
+                Host = "smtp-relay.brevo.com",
+                Port = 587,
+                Credentials = new NetworkCredential("nikolaytotuhov@gmail.com", "LCrJMFvS2aAPR34q"),
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                EnableSsl = true
+            };
+            smtp.Send(email);
+
+            return true;
+        }
+        catch (Exception)
         {
-            Host = "smtp-relay.brevo.com",
-            Port = 587,
-            Credentials = new NetworkCredential("nikolaytotuhov@gmail.com", "LCrJMFvS2aAPR34q"),
-            DeliveryMethod = SmtpDeliveryMethod.Network,
-            EnableSsl = true
-        };
 
-        smtp.Send(email);
+            return false;
+        }
+
+
     }
 
     public bool SendVerificationEmail(string reciever, string subject, string confitmLink)
@@ -64,6 +74,6 @@ public class MessageService : IMessageService
         {
 
             return false;
-        }        
+        }
     }
 }
