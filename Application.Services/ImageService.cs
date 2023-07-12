@@ -119,7 +119,7 @@ public class ImageService : IImageService
             {
                 foreach (var portfolio in image.Portfolios.Where(p => p.ImageId == id))
                 {
-                    portfolio.Image = await _context.Images.FirstOrDefaultAsync(i => i.Characteristic == DefaultProfileImageCharacteristic);
+                    portfolio.Image = await _context.Images.FirstAsync(i => i.Characteristic == DefaultProfileImageCharacteristic);
                 }
             }
 
@@ -127,7 +127,7 @@ public class ImageService : IImageService
             {
                 foreach (var project in image.Projects.Where(p => p.ImageId == id))
                 {
-                    project.Image = await _context.Images.FirstOrDefaultAsync(i => i.Characteristic == DefaultProjectImageCharacteristic);
+                    project.Image = await _context.Images.FirstAsync(i => i.Characteristic == DefaultProjectImageCharacteristic);
                 }
             }
             _context.Images.Remove(image);
