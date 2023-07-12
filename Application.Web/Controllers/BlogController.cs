@@ -84,7 +84,7 @@ public class BlogController : BaseController
 
         await _service.SavePostAsync(model);
 
-        string? userName = await _userService.GetUsernameByIdAsync(model.ApplicationUserId);
+        string userName = await _userService.GetUsernameByIdAsync(model.ApplicationUserId);
 
         if (userName == null)
         {

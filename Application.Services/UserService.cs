@@ -21,26 +21,17 @@ public class UserService : IUserService
         return await _context.Users.AnyAsync(u => u.UserName == userName);
     }
 
-    public async Task<string?> GetUsernameByIdAsync(string userId)
+    public async Task<string> GetUsernameByIdAsync(string userId)
     {
-        ApplicationUser? user = await _context.Users.FindAsync(userId);
-
-        if (user == null)
-        {
-            return null;
-        }
+        ApplicationUser user = await _context.Users.FirstAsync(u => u.Id == userId);
+               
         return user.UserName;
     }
 
-    public async Task<string?> GetUserEmailByUsernameAsync(string userName)
+    public async Task<string> GetUserEmailByUsernameAsync(string userName)
     {
-        ApplicationUser? user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == userName);
+        ApplicationUser user = await _context.Users.FirstAsync(u => u.UserName == userName);
 
-        if (user != null)
-        {
-            return user.Email;
-        }
-
-        return null;
+        return user.Email;        
     }
 }

@@ -32,28 +32,6 @@ public class ImageService : IImageService
             .ToListAsync();
     }
 
-    public static string GetContentType(string fileExtension)
-    {        
-        return fileExtension.ToLower() switch
-        {
-            ".jpg" or ".jpeg" => "image/jpeg",
-            ".png" => "image/png",
-            ".gif" => "image/gif",
-            _ => "application/octet-stream",
-        };
-    }
-
-    string IImageService.GetContentType(string fileExtension)
-    {
-        return fileExtension.ToLower() switch
-        {
-            ".jpg" or ".jpeg" => "image/jpeg",
-            ".png" => "image/png",
-            ".gif" => "image/gif",
-            _ => "application/octet-stream",
-        };
-    }
-
     public async Task SaveImageInDatabaseAsync(CreateImageViewModel model, string userId)
     {
         // Read the image file as bytes
@@ -62,7 +40,6 @@ public class ImageService : IImageService
         byte[] imageData = memoryStream.ToArray();
 
         memoryStream.Close();
-
 
         Image image = new()
         {
@@ -93,7 +70,6 @@ public class ImageService : IImageService
         }
 
         return result;
-
     }
 
     public async Task DeleteImageByIdAsync(string id)
@@ -115,6 +91,7 @@ public class ImageService : IImageService
                 project.Image = await _context.Images.FirstAsync(i => i.Characteristic == DefaultProjectImageCharacteristic);
             }
         }
+
         _context.Images.Remove(image);
         await _context.SaveChangesAsync();
     }
@@ -127,4 +104,27 @@ public class ImageService : IImageService
         portfolio.Image = image;
         await _context.SaveChangesAsync();
     }
+
+    public static string GetContentType(string fileExtension)
+    {        
+        return fileExtension.ToLower() switch
+        {
+            ".jpg" or ".jpeg" => "image/jpeg",
+            ".png" => "image/png",
+            ".gif" => "image/gif",
+            _ => "application/octet-stream",
+        };
+    }
+
+    string IImageService.GetContentType(string fileExtension)
+    {
+        return fileExtension.ToLower() switch
+        {
+            ".jpg" or ".jpeg" => "image/jpeg",
+            ".png" => "image/png",
+            ".gif" => "image/gif",
+            _ => "application/octet-stream",
+        };
+    }
+
 }

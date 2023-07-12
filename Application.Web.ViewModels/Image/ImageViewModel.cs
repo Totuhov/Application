@@ -9,6 +9,6 @@ public class ImageViewModel
 
     public string ContentType { get; set; } = null!;
 
-    public string ApplicationUserId { get; set; } = null!;
+    public string? ApplicationUserId { get; set; }
 
 }

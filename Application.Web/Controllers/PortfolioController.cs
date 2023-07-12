@@ -54,12 +54,8 @@ public class PortfolioController : BaseController
     {
         if (await _userService.IsUserExists(id))
         {
-            PortfolioViewModel? model = await _portfolioService.GetPortfolioFromRouteAsync(id);
-
-            if (model == null)
-            {
-                return NotFound();
-            }
+            PortfolioViewModel model = await _portfolioService.GetPortfolioFromRouteAsync(id);
+                        
             return View(model);
         }
 

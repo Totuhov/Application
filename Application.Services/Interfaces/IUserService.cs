@@ -16,8 +16,14 @@ public interface IUserService
     /// Return userName by id
     /// </summary>
     /// <param name="userId"></param>
-    /// <returns>userName, null if not found</returns>
-    Task<string?> GetUsernameByIdAsync(string userId);
+    /// <returns>userName</returns>
+    Task<string> GetUsernameByIdAsync(string userId);
 
-    Task<string?> GetUserEmailByUsernameAsync(string userName);
+    /// <summary>
+    /// Returns user's email by username
+    /// </summary>
+    /// <param name="userName"></param>
+    /// <returns></returns>
+
+    Task<string> GetUserEmailByUsernameAsync(string userName);
 }

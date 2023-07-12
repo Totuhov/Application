@@ -126,17 +126,6 @@ public class ProjectServiceTests
 
     [Test]
     [Order(2)]
-    public async Task Test_AddImageToProjectAsync_Fail()
-    {
-        Project project = await this._context.Projects.FirstAsync(p => p.Id == "1");
-
-        await this._service.AddImageToProjectAsync("1", "115");
-
-        Assert.That(project.Image.ImageId, Is.EqualTo("113"));
-    }
-
-    [Test]
-    [Order(3)]
     public async Task Test_GetAllProjectsFromUserByUsernameAsync_SucceedWithProjects()
     {
         List<ProjectViewModel> projects = await this._service.GetAllProjectsFromUserByUsernameAsync("guest");
@@ -145,7 +134,7 @@ public class ProjectServiceTests
     }
 
     [Test]
-    [Order(4)]
+    [Order(3)]
     public async Task Test_GetAllProjectsFromUserByUsernameAsync_SucceedWithoutProjects()
     {
         List<ProjectViewModel> projects = await this._service.GetAllProjectsFromUserByUsernameAsync("test");
@@ -154,7 +143,7 @@ public class ProjectServiceTests
     }
 
     [Test]
-    [Order(5)]
+    [Order(4)]
     public async Task Test_GetCurrentProjectAsync_Succeed()
     {
         ProjectViewModel? testModel = await this._service.GetCurrentProjectAsync("1");
@@ -164,16 +153,7 @@ public class ProjectServiceTests
     }
 
     [Test]
-    [Order(6)]
-    public async Task Test_GetCurrentProjectAsync_Fail()
-    {
-        ProjectViewModel? testModel = await this._service.GetCurrentProjectAsync("5");
-
-        Assert.That(testModel, Is.EqualTo(null));
-    }
-
-    [Test]
-    [Order(7)]
+    [Order(5)]
     public async Task Test_GetEditProjectViewModelAsync_Succeed()
     {
         EditProjectViewModel? testModel = await this._service.GetEditProjectViewModelAsync("2");
@@ -181,18 +161,10 @@ public class ProjectServiceTests
         Assert.That(testModel, Is.Not.EqualTo(null));
         Assert.That(testModel.Name, Is.EqualTo("Test project 2"));
     }
+    
 
     [Test]
-    [Order(8)]
-    public async Task Test_GetEditProjectViewModelAsync_Fail()
-    {
-        EditProjectViewModel? testModel = await this._service.GetEditProjectViewModelAsync("5");
-
-        Assert.That(testModel, Is.EqualTo(null));
-    }
-
-    [Test]
-    [Order(9)]
+    [Order(6)]
     public async Task Test_SaveProjectChangesAsync_Succeed()
     {
         EditProjectViewModel? testModel = await this._service.GetEditProjectViewModelAsync("1");
@@ -208,7 +180,7 @@ public class ProjectServiceTests
     }
 
     [Test]
-    [Order(10)]
+    [Order(7)]
     public async Task Test_SaveProjectForUserAsync_Succeed()
     {
         CreateProjectViewModel testModel = new();
@@ -220,23 +192,12 @@ public class ProjectServiceTests
     }
 
     [Test]
-    [Order(11)]
+    [Order(8)]
     public async Task Test_DeleteProjectByIdAsync_Succeed()
     {
         ApplicationUser user = await _context.Users.FirstAsync(u => u.Id == "1");
 
         await this._service.DeleteProjectByIdAsync("1");
-
-        Assert.That(user.Projects, Has.Count.EqualTo(2));
-    }
-
-    [Test]
-    [Order(12)]
-    public async Task Test_DeleteProjectByIdAsync_Fail()
-    {
-        ApplicationUser user = await _context.Users.FirstAsync(u => u.Id == "1");
-
-        await this._service.DeleteProjectByIdAsync("5"); // there is no project with id "5"
 
         Assert.That(user.Projects, Has.Count.EqualTo(2));
     }

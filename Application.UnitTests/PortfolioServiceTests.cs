@@ -22,6 +22,7 @@ public class PortfolioServiceTests
                     Description = "Description",
                     UserDisplayName = "User's display name",
                     About = "About user",
+                    ImageId = "111",
                     ApplicationUserId = "1"                       
                 }
             },
@@ -90,7 +91,6 @@ public class PortfolioServiceTests
             }
         };
 
-
         Article article = new()
         {
             Id = "221",
@@ -149,16 +149,6 @@ public class PortfolioServiceTests
             Assert.That(model?.UserDisplayName, Is.EqualTo("User's display name"));
         });
     }
-    [Test]
-    public async Task Test_GetEditDescriptionViewModelAsync_Fail()
-    {
-        string userId = "4"; // there is no user with Id == "4"
-        IPortfolioService service = new PortfolioService(_context);
-
-        EditDescriptionPortfolioViewModelViewModel? model = await service.GetEditDescriptionViewModelAsync(userId);
-
-        Assert.That(model, Is.Null);
-    }
 
     [Test]
     public async Task Test_GetEditAboutViewModelAsync_Succeed()
@@ -174,16 +164,7 @@ public class PortfolioServiceTests
             Assert.That(model?.About, Is.EqualTo("About user"));
         });
     }
-    [Test]
-    public async Task Test_GetEditAboutViewModelAsync_Fail()
-    {
-        string userId = "4"; // there is no user with Id == "4"
-        IPortfolioService service = new PortfolioService(_context);
 
-        EditAboutPortfolioViewModelViewModel? model = await service.GetEditAboutViewModelAsync(userId);
-
-        Assert.That(model, Is.Null);
-    }
     [Test]
     [Order(1)]
     public async Task Test_GetPortfolioFromRouteAsync_Succeed()
@@ -199,17 +180,6 @@ public class PortfolioServiceTests
             Assert.That(testModel.About, Is.EqualTo("About user"));
             Assert.That(testModel.ProfileImage.ImageId, Is.EqualTo("111")); // There was no profil image
         });
-    }
-
-    [Test]
-    public async Task Test_GetPortfolioFromRouteAsync_FailWithoutUser()
-    {
-        string username = "gues"; // there is no user with username == "gues"
-        IPortfolioService service = new PortfolioService(_context);
-
-        PortfolioViewModel? testModel = await service.GetPortfolioFromRouteAsync(username);
-
-        Assert.That(testModel, Is.Null);
     }
 
     [Test]
@@ -241,13 +211,13 @@ public class PortfolioServiceTests
         string userId = "1";
         string userName = "guest";
         IPortfolioService service = new PortfolioService(_context);
-        EditDescriptionPortfolioViewModelViewModel? model = 
+        EditDescriptionPortfolioViewModelViewModel model = 
             await service.GetEditDescriptionViewModelAsync(userId);
-        model.Description = "new description";
 
+        model.Description = "new description";
         await service.SaveDescriptionAsync(model, userId);
 
-        PortfolioViewModel? portfolioModel = await service.GetPortfolioFromRouteAsync(userName);
+        PortfolioViewModel portfolioModel = await service.GetPortfolioFromRouteAsync(userName);
 
         Assert.That(portfolioModel, Is.Not.Null);
         Assert.That(portfolioModel.Description, Is.EqualTo("new description"));

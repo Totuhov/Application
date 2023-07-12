@@ -28,7 +28,6 @@ public class BlogService : IBlogService
             Content = article.Content,
             ApplicationUserId = userId
         };
-
     }
 
     public async Task CreatePostAsync(CreateArticleViewModel model)

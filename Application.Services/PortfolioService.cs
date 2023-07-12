@@ -32,123 +32,96 @@ public class PortfolioService : IPortfolioService
         if (user != null)
         {
             user.Portfolio ??= new();
-            user.Portfolio.Image = await _context.Images.FirstOrDefaultAsync(i => i.Characteristic == DefaultProfileImageCharacteristic);
+            user.Portfolio.Image = await _context.Images.FirstAsync(i => i.Characteristic == DefaultProfileImageCharacteristic);
 
             await _context.SaveChangesAsync();
         }
     }
 
-    public async Task<EditDescriptionPortfolioViewModelViewModel?> GetEditDescriptionViewModelAsync(string userId)
+    public async Task<EditDescriptionPortfolioViewModelViewModel> GetEditDescriptionViewModelAsync(string userId)
     {
-        Portfolio? portfolio = await _context.Portfolios.FirstOrDefaultAsync(p => p.ApplicationUserId == userId);
+        Portfolio portfolio = await _context.Portfolios.FirstAsync(p => p.ApplicationUserId == userId);
 
-        if (portfolio != null)
+        EditDescriptionPortfolioViewModelViewModel model = new()
         {
-            EditDescriptionPortfolioViewModelViewModel model = new()
-            {
-                GreetingsMessage = portfolio.GreetingsMessage,
-                UserDisplayName = portfolio.UserDisplayName,
-                Description = portfolio.Description
-            };
+            GreetingsMessage = portfolio.GreetingsMessage,
+            UserDisplayName = portfolio.UserDisplayName,
+            Description = portfolio.Description
+        };
 
-            return model;
-        }
-
-        return null;
+        return model;
     }
 
-    public async Task<EditAboutPortfolioViewModelViewModel?> GetEditAboutViewModelAsync(string userId)
+    public async Task<EditAboutPortfolioViewModelViewModel> GetEditAboutViewModelAsync(string userId)
     {
-        Portfolio? portfolio = await _context.Portfolios.FirstOrDefaultAsync(p => p.ApplicationUserId == userId);
+        Portfolio portfolio = await _context.Portfolios.FirstAsync(p => p.ApplicationUserId == userId);
 
-        if (portfolio != null)
+        EditAboutPortfolioViewModelViewModel model = new()
         {
-            EditAboutPortfolioViewModelViewModel model = new()
-            {
-                About = portfolio.About
-            };
+            About = portfolio.About
+        };
 
-            return model;
-        }
-        return null;
+        return model;
+
     }
 
-    public async Task<PortfolioViewModel?> GetPortfolioFromRouteAsync(string userName)
+    public async Task<PortfolioViewModel> GetPortfolioFromRouteAsync(string userName)
     {
-        ApplicationUser? user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == userName);
+        ApplicationUser user = await _context.Users.FirstAsync(u => u.UserName == userName);
+        Portfolio portfolio = await _context.Portfolios.FirstAsync(p => p.ApplicationUserId == user.Id);
 
-        if (user != null)
+        PortfolioViewModel model = new()
         {
-            Portfolio? portfolio = await _context.Portfolios.FirstOrDefaultAsync(p => p.ApplicationUserId == user.Id);
-
-            if (portfolio != null)
+            UserName = userName,
+            GreetingsMessage = portfolio.GreetingsMessage,
+            UserDisplayName = portfolio.UserDisplayName,
+            Description = portfolio.Description,
+            Email = user.Email,
+            ProfileImage = new ImageViewModel()
             {
-                if (portfolio.Image == null)
+                ImageId = portfolio.ImageId,
+                ImageData = Convert.ToBase64String(portfolio.Image.Bytes),
+                ContentType = portfolio.Image.FileExtension
+            },
+            About = portfolio.About,
+            Blog = await _context
+            .Articles
+            .Where(a => a.ApplicationUserId == user.Id && a.IsDeleted == false)
+            .Select(a => new ArticleViewModel()
+            {
+                Id = a.Id,
+                Title = a.Title,
+                Content = a.Content,
+                CreatedOn = a.CreatedOn,
+                EditedOn = a.EditedOn,
+                ApplicationUserName = a.ApplicationUser.UserName,
+            })
+            .OrderByDescending(a => a.EditedOn)
+            .Take(6)
+            .ToListAsync(),
+            Projects = await _context
+            .Projects
+            .Where(p => p.ApplicationUserId == user.Id)
+            .Select(p => new ProjectViewModel()
+            {
+                Id = p.Id,
+                Name = p.Name,
+                ImageId = p.ImageId,
+                Description = p.Description,
+                Url = p.Url,
+                ApplicationUserId = p.ApplicationUserId,
+                Image = new ImageViewModel()
                 {
-                    Image? image = await _context.Images.FirstOrDefaultAsync(i => i.Characteristic == DefaultProfileImageCharacteristic);
-                    if (image != null)
-                    {
-                        portfolio.Image = image;
-                        portfolio.ImageId = image.ImageId;
-                    }
+                    ImageId = p.Image.ImageId,
+                    ApplicationUserId = p.Image.ApplicationUserId,
+                    ImageData = Convert.ToBase64String(p.Image.Bytes),
+                    ContentType = p.Image.FileExtension
                 }
-                if (portfolio.ImageId != null && portfolio.Image != null)
-                {
-                    PortfolioViewModel model = new()
-                    {
-                        UserName = userName,
-                        GreetingsMessage = portfolio.GreetingsMessage,
-                        UserDisplayName = portfolio.UserDisplayName,
-                        Description = portfolio.Description,
-                        Email = user.Email,
-                        ProfileImage = new ImageViewModel()
-                        {
-                            ImageId = portfolio.ImageId,
-                            ImageData = Convert.ToBase64String(portfolio.Image.Bytes),
-                            ContentType = portfolio.Image.FileExtension
-                        },
-                        About = portfolio.About,
-                        Blog = await _context
-                        .Articles
-                        .Where(a => a.ApplicationUserId == user.Id && a.IsDeleted == false)
-                        .Select(a => new ArticleViewModel()
-                        {
-                            Id = a.Id,
-                            Title = a.Title,
-                            Content = a.Content,
-                            CreatedOn = a.CreatedOn,
-                            EditedOn = a.EditedOn,
-                            ApplicationUserName = a.ApplicationUser.UserName,
-                        })
-                        .OrderByDescending(a => a.EditedOn)
-                        .Take(6)
-                        .ToListAsync(),
-                        Projects = await _context
-                        .Projects
-                        .Where(p => p.ApplicationUserId == user.Id)
-                        .Select(p => new ProjectViewModel()
-                        {
-                            Id = p.Id,
-                            Name = p.Name,
-                            ImageId = p.ImageId,
-                            Description = p.Description,
-                            Url = p.Url,
-                            ApplicationUserId = p.ApplicationUserId,
-                            Image = new ImageViewModel()
-                            {
-                                ImageId = p.Image.ImageId,
-                                ApplicationUserId = p.Image.ApplicationUserId,
-                                ImageData = Convert.ToBase64String(p.Image.Bytes),
-                                ContentType = p.Image.FileExtension
-                            }
-                        })
-                        .ToListAsync()
-                    };
-                    return model;
-                }
-            }
-        }
-        return null;
+            })
+            .ToListAsync()
+        };
+        return model;
+
     }
     public async Task<bool> LogedInUserHasPortfolio(string userId)
     {
@@ -160,39 +133,26 @@ public class PortfolioService : IPortfolioService
 
     public async Task SaveDescriptionAsync(EditDescriptionPortfolioViewModelViewModel model, string userId)
     {
-        ApplicationUser? user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+        ApplicationUser user = await _context.Users.FirstAsync(u => u.Id == userId);
 
-        if (user != null)
-        {
-            if (user.Portfolio != null)
-            {
-                user.Portfolio.GreetingsMessage = model.GreetingsMessage;
-                user.Portfolio.UserDisplayName = model.UserDisplayName;
-                user.Portfolio.Description = model.Description;
+        user.Portfolio.GreetingsMessage = model.GreetingsMessage;
+        user.Portfolio.UserDisplayName = model.UserDisplayName;
+        user.Portfolio.Description = model.Description;
 
-                await _context.SaveChangesAsync();
-            }
-        }
+        await _context.SaveChangesAsync();
     }
 
     public async Task SaveAboutAsync(EditAboutPortfolioViewModelViewModel model, string userId)
     {
-        ApplicationUser? user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+        ApplicationUser user = await _context.Users.FirstAsync(u => u.Id == userId);
 
-        if (user != null)
-        {
-            if (user.Portfolio != null)
-            {
-                user.Portfolio.About = model.About;
+        user.Portfolio.About = model.About;
 
-                await _context.SaveChangesAsync();
-            }
-        }
+        await _context.SaveChangesAsync();
     }
 
     public async Task<List<PreviewPortfolioViewModel>> GetAllUsersByRegexAsync(string expression)
     {
-
         return await _context.Portfolios
             .Where(p => p.ApplicationUser.UserName.Contains(expression))
             .Select(p => new PreviewPortfolioViewModel()
