@@ -1,12 +1,4 @@
 ﻿
-using Application.Data;
-using Application.Data.Models;
-using Application.Services;
-using Application.Services.Interfaces;
-using Application.Web.ViewModels.Article;
-using Microsoft.EntityFrameworkCore;
-using NUnit.Framework;
-
 namespace Application.UnitTests
 {
     [TestFixture]
@@ -24,8 +16,8 @@ namespace Application.UnitTests
             {
                 new ApplicationUser()
                 {
-                    Id = "6960a305-4ea5-4d22-8611-c437f5e5164c",
-                    UserName = "guest2"
+                    Id = "1",
+                    UserName = "guest"
                 }
             };
 
@@ -33,8 +25,8 @@ namespace Application.UnitTests
             {
                 new Article()
                 {
-                    Id = "193e0179-9a55-4f6e-ac06-ce75d48bd6c2",
-                    ApplicationUserId = "c184f1f8-ccd7-4d62-b9df-ab4221cfce01",
+                    Id = "1",
+                    ApplicationUserId = "2",
                     Title = "First Article",
                     Content = "Mir wurde gesagt von denen, dass die die Ruckmeldkarte Ihnen schiken " +
                     "werden. Wahrscheinlich haben sie das noch nich gemacht. Ich habe mit denen " +
@@ -46,8 +38,8 @@ namespace Application.UnitTests
                 },
                 new Article()
                 {
-                    Id = "2e63dbec-91bc-4c09-8aa6-7c6e70fd3ad6",
-                    ApplicationUserId = "6960a305-4ea5-4d22-8611-c437f5e5164c",
+                    Id = "2",
+                    ApplicationUserId = "1",
                     Title = "Second Article",
                     Content = "Mir wurde gesagt von denen, dass die die Ruckmeldkarte Ihnen schiken " +
                     "werden. Wahrscheinlich haben sie das noch nich gemacht. Ich habe mit denen " +
@@ -58,8 +50,8 @@ namespace Application.UnitTests
                 },
                 new Article()
                 {
-                    Id = "293e0179-9a55-4f6e-ac06-ce75d48bd6c3",
-                    ApplicationUserId = "c184f1f8-ccd7-4d62-b9df-ab4221cfce01",
+                    Id = "3",
+                    ApplicationUserId = "2",
                     Title = "Third Article",
                     Content = "Mir wurde gesagt von denen, dass die die Ruckmeldkarte Ihnen schiken" +
                     " werden. Wahrscheinlich haben sie das noch nich gemacht. Ich habe mit denen " +
@@ -70,7 +62,7 @@ namespace Application.UnitTests
                     ApplicationUser = new ApplicationUser()
                     {
                         UserName = "Nikolay",
-                        Id = "1960a305-4ea5-4d22-8611-c437f5e5164d"
+                        Id = "2"
                     }
                 }
             };
@@ -88,8 +80,8 @@ namespace Application.UnitTests
         [Test]
         public async Task Test_GetCreateArticleViewModelByIdAsync()
         {
-            string articleId = "193e0179-9a55-4f6e-ac06-ce75d48bd6c2";
-            string userId = "c184f1f8-ccd7-4d62-b9df-ab4221cfce01";
+            string articleId = "1";
+            string userId = "2";
 
             IBlogService service = new BlogService(this._context);
             CreateArticleViewModel? testModel = await service.GetCreateArticleViewModelByIdAsync(articleId, userId);
@@ -100,7 +92,9 @@ namespace Application.UnitTests
                 Assert.That(testModel.Id, Is.EqualTo(articleId));
                 Assert.That(testModel.ApplicationUserId, Is.EqualTo(userId));
                 Assert.That(testModel.Title, Is.EqualTo("First Article"));
-                Assert.That(testModel.Content, Is.EqualTo("Mir wurde gesagt von denen, dass die die Ruckmeldkarte Ihnen schiken werden. Wahrscheinlich haben sie das noch nich gemacht. Ich habe mit denen gesprochen und sie werden, dass sie Ihnen so schnell wie möglich zusenden werden."));
+                Assert.That(testModel.Content, Is.EqualTo("Mir wurde gesagt von denen, dass die die " +
+                    "Ruckmeldkarte Ihnen schiken werden. Wahrscheinlich haben sie das noch nich gemacht. Ich " +
+                    "habe mit denen gesprochen und sie werden, dass sie Ihnen so schnell wie möglich zusenden werden."));
             });
         }
 
@@ -111,9 +105,11 @@ namespace Application.UnitTests
 
             var article = new CreateArticleViewModel()
             {
-                ApplicationUserId = "6960a305-4ea5-4d22-8611-c437f5e5164c",
+                ApplicationUserId = "1",
                 Title = "Fourth Article",
-                Content = "Mir wurde gesagt von denen, dass die die Ruckmeldkarte Ihnen schiken werden. Wahrscheinlich haben sie das noch nich gemacht. Ich habe mit denen gesprochen und sie werden, dass sie Ihnen so schnell wie möglich zusenden werden.",
+                Content = "Mir wurde gesagt von denen, dass die die Ruckmeldkarte Ihnen schiken werden. " +
+                "Wahrscheinlich haben sie das noch nich gemacht. Ich habe mit denen gesprochen und " +
+                "sie werden, dass sie Ihnen so schnell wie möglich zusenden werden.",
                 EditedOn = DateTime.Now,
                 IsDeleted = false
             };
@@ -128,8 +124,8 @@ namespace Application.UnitTests
         {
             IBlogService service = new BlogService(this._context);
 
-            string articleId = "2e63dbec-91bc-4c09-8aa6-7c6e70fd3ad6";
-            string userId = "6960a305-4ea5-4d22-8611-c437f5e5164c";
+            string articleId = "2";
+            string userId = "1";
 
             CreateArticleViewModel? testModel = await service.GetCreateArticleViewModelByIdAsync(articleId, userId);
 
@@ -145,7 +141,7 @@ namespace Application.UnitTests
         [Test]
         public async Task Test_GetAllArticlesByUserNameAsync()
         {
-            string username = "guest2";
+            string username = "guest";
             IBlogService service = new BlogService(this._context);
             List<ArticleViewModel> testModels = await service.GetAllArticlesByUserNameAsync(username);
 
@@ -156,7 +152,7 @@ namespace Application.UnitTests
         public async Task Test_GetArticleViewModelByIdAsync_ReturnsArticleViewModel()
         {
             IBlogService service = new BlogService(this._context);
-            string articleId = "293e0179-9a55-4f6e-ac06-ce75d48bd6c3";
+            string articleId = "3";
 
             ArticleViewModel tesModel = await service.GetArticleViewModelByIdAsync(articleId);
 
@@ -167,7 +163,7 @@ namespace Application.UnitTests
         public async Task Test_DeleteArteicleAsync()
         {
             IBlogService service = new BlogService(this._context);
-            string articleId = "293e0179-9a55-4f6e-ac06-ce75d48bd6c3";
+            string articleId = "3";
 
             ArticleViewModel testModel = await service.GetArticleViewModelByIdAsync(articleId);
 

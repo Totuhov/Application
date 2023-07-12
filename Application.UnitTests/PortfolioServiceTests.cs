@@ -1,12 +1,4 @@
 ﻿
-using Application.Data;
-using Application.Data.Models;
-using Application.Services.Interfaces;
-using Application.Services;
-using Microsoft.EntityFrameworkCore;
-using NUnit.Framework;
-using Application.Web.ViewModels.Portfolio;
-
 namespace Application.UnitTests;
 
 [TestFixture]
@@ -21,7 +13,7 @@ public class PortfolioServiceTests
         {
             new ApplicationUser()
             {
-                Id = "55",
+                Id = "1",
                 UserName = "guest",
                 Portfolio = new()
                 {
@@ -30,12 +22,12 @@ public class PortfolioServiceTests
                     Description = "Description",
                     UserDisplayName = "User's display name",
                     About = "About user",
-                    ApplicationUserId = "55"                       
+                    ApplicationUserId = "1"                       
                 }
             },
             new ApplicationUser()
             {
-                Id = "57",
+                Id = "3",
                 UserName = "vv",
                 Portfolio = new()
                 {
@@ -45,12 +37,12 @@ public class PortfolioServiceTests
                     UserDisplayName = "User's display name",
                     About = "About user",
                     ImageId = "113",
-                    ApplicationUserId = "57"
+                    ApplicationUserId = "3"
                 }
             },
             new ApplicationUser()
             {
-                Id = "56",
+                Id = "2",
                 UserName = "Test"
             }
         };
@@ -94,7 +86,7 @@ public class PortfolioServiceTests
                 ImageId = "112",
                 Description = "Project description",
                 Url = null,
-                ApplicationUserId = "55",
+                ApplicationUserId = "1",
             }
         };
 
@@ -102,7 +94,7 @@ public class PortfolioServiceTests
         Article article = new()
         {
             Id = "221",
-            ApplicationUserId = "55",
+            ApplicationUserId = "1",
             Title = "Title",
             Content = "Mir wurde gesagt von denen, dass die die Ruckmeldkarte Ihnen schiken " +
             "werden. Wahrscheinlich haben sie das noch nich gemacht. Ich habe mit denen " +
@@ -127,7 +119,7 @@ public class PortfolioServiceTests
     [Test]
     public async Task Test_CreateFirstPortfolioAsync_Succeed()
     {
-        string userId = "56"; // This user still have not Portfolio
+        string userId = "2"; // This user still have not Portfolio
         IPortfolioService service = new PortfolioService(_context);
 
         ApplicationUser? user = await _context.Users.FindAsync(userId);
@@ -144,7 +136,7 @@ public class PortfolioServiceTests
     [Order(2)]
     public async Task Test_GetEditDescriptionViewModelAsync_Succeed()
     {
-        string userId = "55";
+        string userId = "1";
         IPortfolioService service = new PortfolioService(_context);
 
         EditDescriptionPortfolioViewModelViewModel? model = await service.GetEditDescriptionViewModelAsync(userId);
@@ -160,7 +152,7 @@ public class PortfolioServiceTests
     [Test]
     public async Task Test_GetEditDescriptionViewModelAsync_Fail()
     {
-        string userId = "3"; // there is no user with Id == "3"
+        string userId = "4"; // there is no user with Id == "4"
         IPortfolioService service = new PortfolioService(_context);
 
         EditDescriptionPortfolioViewModelViewModel? model = await service.GetEditDescriptionViewModelAsync(userId);
@@ -171,7 +163,7 @@ public class PortfolioServiceTests
     [Test]
     public async Task Test_GetEditAboutViewModelAsync_Succeed()
     {
-        string userId = "55";
+        string userId = "1";
         IPortfolioService service = new PortfolioService(_context);
 
         EditAboutPortfolioViewModelViewModel? model = await service.GetEditAboutViewModelAsync(userId);
@@ -185,7 +177,7 @@ public class PortfolioServiceTests
     [Test]
     public async Task Test_GetEditAboutViewModelAsync_Fail()
     {
-        string userId = "3"; // there is no user with Id == "3"
+        string userId = "4"; // there is no user with Id == "4"
         IPortfolioService service = new PortfolioService(_context);
 
         EditAboutPortfolioViewModelViewModel? model = await service.GetEditAboutViewModelAsync(userId);
@@ -223,7 +215,7 @@ public class PortfolioServiceTests
     [Test]
     public async Task Test_LogedInUserHasPortfolio_Succeed()
     {
-        string userId = "55";
+        string userId = "1";
         IPortfolioService service = new PortfolioService(_context);
 
         bool testResult = await service.LogedInUserHasPortfolio(userId);
@@ -235,7 +227,7 @@ public class PortfolioServiceTests
     [Order(3)]
     public async Task Test_LogedInUserHasPortfolio_Fail()
     {
-        string userId = "56"; // user with id 56 has not portfolio
+        string userId = "2"; // user with id 2 has not portfolio
         IPortfolioService service = new PortfolioService(_context);
 
         bool testResult = await service.LogedInUserHasPortfolio(userId);
@@ -246,7 +238,7 @@ public class PortfolioServiceTests
     [Test]
     public async Task Test_SaveDescriptionAsync_Succeed()
     {
-        string userId = "55";
+        string userId = "1";
         string userName = "guest";
         IPortfolioService service = new PortfolioService(_context);
         EditDescriptionPortfolioViewModelViewModel? model = 
@@ -264,7 +256,7 @@ public class PortfolioServiceTests
     [Test]
     public async Task Test_SaveAboutAsync_Succeed()
     {
-        string userId = "55";
+        string userId = "1";
         string userName = "guest";
         IPortfolioService service = new PortfolioService(_context);
         EditAboutPortfolioViewModelViewModel? model =

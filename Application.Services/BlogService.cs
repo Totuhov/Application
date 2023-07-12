@@ -18,7 +18,7 @@ public class BlogService : IBlogService
 
     public async Task<CreateArticleViewModel> GetCreateArticleViewModelByIdAsync(string articleId, string userId)
     {
-        Article? article = await _context.Articles.FirstOrDefaultAsync(a => a.Id == articleId);
+        Article article = await _context.Articles.FirstAsync(a => a.Id == articleId);
 
         return new CreateArticleViewModel()
         {
@@ -37,32 +37,28 @@ public class BlogService : IBlogService
         {
             Title = model.Title,
             Content = model.Content,
-            EditedOn=DateTime.Now,
+            EditedOn = DateTime.Now,
             ApplicationUserId = model.ApplicationUserId
         };
 
         await _context.Articles.AddAsync(article);
-
         await _context.SaveChangesAsync();
     }
 
     public async Task SavePostAsync(CreateArticleViewModel model)
     {
-        Article? article = await _context.Articles.FirstOrDefaultAsync(a => a.Id == model.Id);
+        Article article = await _context.Articles.FirstAsync(a => a.Id == model.Id);
 
-        if (article != null)
-        {
-            article.Title = model.Title;
-            article.EditedOn = DateTime.Now;
-            article.Content = model.Content;
+        article.Title = model.Title;
+        article.EditedOn = DateTime.Now;
+        article.Content = model.Content;
 
-            await _context.SaveChangesAsync();
-        }
+        await _context.SaveChangesAsync();
     }
 
     public async Task<ArticleViewModel> GetArticleViewModelByIdAsync(string id)
     {
-        Article? article = await _context.Articles.FirstOrDefaultAsync(a => a.Id == id);
+        Article article = await _context.Articles.FirstAsync(a => a.Id == id);
 
         return new ArticleViewModel()
         {
@@ -78,7 +74,7 @@ public class BlogService : IBlogService
 
     public async Task<List<ArticleViewModel>> GetAllArticlesByUserNameAsync(string userName)
     {
-        ApplicationUser? user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == userName);
+        ApplicationUser user = await _context.Users.FirstAsync(u => u.UserName == userName);
 
 
         return await _context.Articles
@@ -90,7 +86,7 @@ public class BlogService : IBlogService
                 CreatedOn = a.CreatedOn,
                 EditedOn = a.EditedOn,
                 Content = a.Content,
-                ApplicationUserName = a.ApplicationUserId                
+                ApplicationUserName = a.ApplicationUserId
             })
             .OrderByDescending(a => a.CreatedOn)
             .ToListAsync();
@@ -98,12 +94,9 @@ public class BlogService : IBlogService
 
     public async Task DeleteArticleAsync(ArticleViewModel model)
     {
-        Article? article = await _context.Articles.FirstOrDefaultAsync(a => a.Id == model.Id);
+        Article article = await _context.Articles.FirstAsync(a => a.Id == model.Id);
 
-        if (article != null)
-        {
-            article.IsDeleted = true;
-            await _context.SaveChangesAsync();
-        }
+        article.IsDeleted = true;
+        await _context.SaveChangesAsync();
     }
 }

@@ -1,15 +1,13 @@
 ﻿
 namespace Application.Services;
 
+using Microsoft.EntityFrameworkCore;
+
+using Application.Services.Interfaces;
+using Application.Web.ViewModels.Image;
 using Application.Data;
 using Application.Data.Models;
-using Application.Services.Interfaces;
-
 using static Application.Common.ModelConstants;
-
-using Application.Web.ViewModels.Image;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Hosting;
 
 public class ImageService : IImageService
 {
@@ -29,14 +27,13 @@ public class ImageService : IImageService
                 ImageId = i.ImageId,
                 ImageData = Convert.ToBase64String(i.Bytes),
                 ContentType = GetContentType(i.FileExtension),
-                ApplicationUserId = i.ApplicationUserId
+                ApplicationUserId = i.ApplicationUserId!
             })
             .ToListAsync();
     }
 
     public static string GetContentType(string fileExtension)
-    {
-        // Hier can be addedadditional mappings for different file extensions if needed
+    {        
         return fileExtension.ToLower() switch
         {
             ".jpg" or ".jpeg" => "image/jpeg",
@@ -45,8 +42,6 @@ public class ImageService : IImageService
             _ => "application/octet-stream",
         };
     }
-
-    //It is not possible to implement static method in iterface.In this case is needed
 
     string IImageService.GetContentType(string fileExtension)
     {
@@ -77,75 +72,59 @@ public class ImageService : IImageService
             ApplicationUserId = userId
         };
 
-        // TODO: Save the image to the database using EF Core
         await _context.Images.AddAsync(image);
-
         _context.SaveChanges();
     }
 
-    public async Task<ImageViewModel?> GetImageByIdAsync(string id)
+    public async Task<ImageViewModel> GetImageByIdAsync(string id)
     {
-        Image? image = await _context.Images.FindAsync(id);
+        Image image = await _context.Images.FirstAsync(i => i.ImageId == id);
 
-        if (image != null)
+        var result = new ImageViewModel()
         {
-            var result = new ImageViewModel()
-            {
-                ImageId = image.ImageId,
-                ImageData = Convert.ToBase64String(image.Bytes),
-                ContentType = GetContentType(image.FileExtension),
-                
-            };
-            if (image.ApplicationUserId != null)
-            {
-                result.ApplicationUserId = image.ApplicationUserId;
-            }
+            ImageId = image.ImageId,
+            ImageData = Convert.ToBase64String(image.Bytes),
+            ContentType = GetContentType(image.FileExtension),
 
-            return result;
-        }
-        else
+        };
+        if (image.ApplicationUserId != null)
         {
-            return null;
+            result.ApplicationUserId = image.ApplicationUserId;
         }
+
+        return result;
+
     }
 
     public async Task DeleteImageByIdAsync(string id)
     {
-        Image? image = await _context.Images.FindAsync(id);
+        Image image = await _context.Images.FirstAsync(i => i.ImageId == id);
 
-        if (image != null)
+        if (image.Portfolios.Any(p => p.ImageId == id))
         {
-            if (image.Portfolios.Any(p => p.ImageId == id))
+            foreach (var portfolio in image.Portfolios.Where(p => p.ImageId == id))
             {
-                foreach (var portfolio in image.Portfolios.Where(p => p.ImageId == id))
-                {
-                    portfolio.Image = await _context.Images.FirstAsync(i => i.Characteristic == DefaultProfileImageCharacteristic);
-                }
+                portfolio.Image = await _context.Images.FirstAsync(i => i.Characteristic == DefaultProfileImageCharacteristic);
             }
-
-            if (image.Projects.Any(p => p.ImageId == id))
-            {
-                foreach (var project in image.Projects.Where(p => p.ImageId == id))
-                {
-                    project.Image = await _context.Images.FirstAsync(i => i.Characteristic == DefaultProjectImageCharacteristic);
-                }
-            }
-            _context.Images.Remove(image);
-            await _context.SaveChangesAsync();
         }
+
+        if (image.Projects.Any(p => p.ImageId == id))
+        {
+            foreach (var project in image.Projects.Where(p => p.ImageId == id))
+            {
+                project.Image = await _context.Images.FirstAsync(i => i.Characteristic == DefaultProjectImageCharacteristic);
+            }
+        }
+        _context.Images.Remove(image);
+        await _context.SaveChangesAsync();
     }
+
     public async Task UseImageAsProfilAsync(string imageId, string userId)
     {
-        ApplicationUser? user = await _context.Users.FindAsync(userId);
-        Image? image = await _context.Images.FindAsync(imageId);
+        Image image = await _context.Images.FirstAsync(i => i.ImageId == imageId);
+        Portfolio portfolio = await _context.Portfolios.FirstAsync(p => p.ApplicationUserId == userId);
 
-        if (user != null && image != null)
-        {
-            if (user.Portfolio != null)
-            {
-                user.Portfolio.Image = image;
-                await _context.SaveChangesAsync();
-            }
-        }
+        portfolio.Image = image;
+        await _context.SaveChangesAsync();
     }
 }

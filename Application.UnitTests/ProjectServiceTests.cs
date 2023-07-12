@@ -1,19 +1,11 @@
 ﻿
-using Application.Data;
-using Application.Data.Models;
-using Application.Services.Interfaces;
-using Application.Services;
-using Microsoft.EntityFrameworkCore;
-using NUnit.Framework;
-using Microsoft.AspNetCore.Builder;
-using Application.Web.ViewModels.Project;
-
 namespace Application.UnitTests;
 
 [TestFixture]
 public class ProjectServiceTests
 {
     private ApplicationDbContext _context;
+    private IProjectService _service;
 
     [OneTimeSetUp]
     public void TestInitialize()
@@ -117,16 +109,17 @@ public class ProjectServiceTests
         this._context.Projects.AddRange(projects);
         this._context.Images.AddRange(images);
         this._context.SaveChanges();
+
+        this._service = new ProjectService(this._context);
     }
 
     [Test]
     [Order(1)]
     public async Task Test_AddImageToProjectAsync_Succeed()
     {
-        IProjectService service = new ProjectService(this._context);
         Project project = await this._context.Projects.FirstAsync(p => p.Id == "1");
 
-        await service.AddImageToProjectAsync("1", "113");
+        await this._service.AddImageToProjectAsync("1", "113");
 
         Assert.That(project.Image.ImageId, Is.EqualTo("113"));
     }
@@ -135,10 +128,9 @@ public class ProjectServiceTests
     [Order(2)]
     public async Task Test_AddImageToProjectAsync_Fail()
     {
-        IProjectService service = new ProjectService(this._context);
         Project project = await this._context.Projects.FirstAsync(p => p.Id == "1");
 
-        await service.AddImageToProjectAsync("1", "115");
+        await this._service.AddImageToProjectAsync("1", "115");
 
         Assert.That(project.Image.ImageId, Is.EqualTo("113"));
     }
@@ -147,9 +139,7 @@ public class ProjectServiceTests
     [Order(3)]
     public async Task Test_GetAllProjectsFromUserByUsernameAsync_SucceedWithProjects()
     {
-        IProjectService service = new ProjectService(this._context);
-
-        List<ProjectViewModel> projects = await service.GetAllProjectsFromUserByUsernameAsync("guest");
+        List<ProjectViewModel> projects = await this._service.GetAllProjectsFromUserByUsernameAsync("guest");
 
         Assert.That(projects, Has.Count.EqualTo(2));
     }
@@ -158,9 +148,7 @@ public class ProjectServiceTests
     [Order(4)]
     public async Task Test_GetAllProjectsFromUserByUsernameAsync_SucceedWithoutProjects()
     {
-        IProjectService service = new ProjectService(this._context);
-
-        List<ProjectViewModel> projects = await service.GetAllProjectsFromUserByUsernameAsync("test");
+        List<ProjectViewModel> projects = await this._service.GetAllProjectsFromUserByUsernameAsync("test");
 
         Assert.That(projects, Is.Empty);
     }
@@ -169,8 +157,7 @@ public class ProjectServiceTests
     [Order(5)]
     public async Task Test_GetCurrentProjectAsync_Succeed()
     {
-        IProjectService service = new ProjectService(this._context);
-        ProjectViewModel? testModel = await service.GetCurrentProjectAsync("1");
+        ProjectViewModel? testModel = await this._service.GetCurrentProjectAsync("1");
 
         Assert.That(testModel, Is.Not.EqualTo(null));
         Assert.That(testModel.Name, Is.EqualTo("Test project 1"));
@@ -180,9 +167,7 @@ public class ProjectServiceTests
     [Order(6)]
     public async Task Test_GetCurrentProjectAsync_Fail()
     {
-        IProjectService service = new ProjectService(this._context);
-
-        ProjectViewModel? testModel = await service.GetCurrentProjectAsync("5");
+        ProjectViewModel? testModel = await this._service.GetCurrentProjectAsync("5");
 
         Assert.That(testModel, Is.EqualTo(null));
     }
@@ -191,8 +176,7 @@ public class ProjectServiceTests
     [Order(7)]
     public async Task Test_GetEditProjectViewModelAsync_Succeed()
     {
-        IProjectService service = new ProjectService(this._context);
-        EditProjectViewModel? testModel = await service.GetEditProjectViewModelAsync("2");
+        EditProjectViewModel? testModel = await this._service.GetEditProjectViewModelAsync("2");
 
         Assert.That(testModel, Is.Not.EqualTo(null));
         Assert.That(testModel.Name, Is.EqualTo("Test project 2"));
@@ -202,9 +186,7 @@ public class ProjectServiceTests
     [Order(8)]
     public async Task Test_GetEditProjectViewModelAsync_Fail()
     {
-        IProjectService service = new ProjectService(this._context);
-
-        EditProjectViewModel? testModel = await service.GetEditProjectViewModelAsync("5");
+        EditProjectViewModel? testModel = await this._service.GetEditProjectViewModelAsync("5");
 
         Assert.That(testModel, Is.EqualTo(null));
     }
@@ -213,14 +195,13 @@ public class ProjectServiceTests
     [Order(9)]
     public async Task Test_SaveProjectChangesAsync_Succeed()
     {
-        IProjectService service = new ProjectService(this._context);
-        EditProjectViewModel? testModel = await service.GetEditProjectViewModelAsync("1");
+        EditProjectViewModel? testModel = await this._service.GetEditProjectViewModelAsync("1");
         Assert.That(testModel, Is.Not.EqualTo(null));
 
         testModel.Name = "Test project 1 (edited)";
         testModel.Description = "Project description (edited)";
 
-        await service.SaveProjectChangesAsync(testModel);
+        await this._service.SaveProjectChangesAsync(testModel);
 
         Assert.That(testModel.Name, Is.EqualTo("Test project 1 (edited)"));
         Assert.That(testModel.Description, Is.EqualTo("Project description (edited)"));
@@ -230,11 +211,10 @@ public class ProjectServiceTests
     [Order(10)]
     public async Task Test_SaveProjectForUserAsync_Succeed()
     {
-        IProjectService service = new ProjectService(this._context);
         CreateProjectViewModel testModel = new();
         ApplicationUser user = await _context.Users.FirstAsync(u => u.Id == "1");
 
-        await service.SaveProjectForUserAsync(user.Id, testModel);
+        await this._service.SaveProjectForUserAsync(user.Id, testModel);
 
         Assert.That(user.Projects, Has.Count.EqualTo(3));
     }
@@ -243,22 +223,20 @@ public class ProjectServiceTests
     [Order(11)]
     public async Task Test_DeleteProjectByIdAsync_Succeed()
     {
-        IProjectService service = new ProjectService(this._context);
         ApplicationUser user = await _context.Users.FirstAsync(u => u.Id == "1");
 
-        await service.DeleteProjectByIdAsync("1");
+        await this._service.DeleteProjectByIdAsync("1");
 
         Assert.That(user.Projects, Has.Count.EqualTo(2));
     }
 
     [Test]
-    [Order(11)]
+    [Order(12)]
     public async Task Test_DeleteProjectByIdAsync_Fail()
     {
-        IProjectService service = new ProjectService(this._context);
         ApplicationUser user = await _context.Users.FirstAsync(u => u.Id == "1");
 
-        await service.DeleteProjectByIdAsync("5"); // there is no project with id "5"
+        await this._service.DeleteProjectByIdAsync("5"); // there is no project with id "5"
 
         Assert.That(user.Projects, Has.Count.EqualTo(2));
     }

@@ -1,11 +1,4 @@
 ﻿
-using Application.Data;
-using Application.Data.Models;
-using Application.Services;
-using Application.Services.Interfaces;
-using Application.Web.ViewModels.Image;
-using Microsoft.EntityFrameworkCore;
-using NUnit.Framework;
 
 namespace Application.UnitTests
 {
@@ -37,8 +30,16 @@ namespace Application.UnitTests
                     ImageId = "1",
                     ApplicationUserId = "1",
                     FileExtension = ".png",
-                    Bytes = new byte[] { 137, 80, 78, 71, 13, 10, 26, 10, 0, 0, 0, 13, 73, 72, 68, 82, 
+                    Bytes = new byte[] { 137, 80, 78, 71, 13, 10, 26, 10, 0, 0, 0, 13, 73, 72, 68, 82,
                         0, 0, 2, 0, 0, 0, 2, 0, 8, 2, 0, 0, 0, 123, 26, 67, 173, 0, 0, 0}
+                },
+                new Image()
+                {
+                    ImageId = "4",
+                    FileExtension = ".png",
+                    Bytes = new byte[] { 137, 80, 78, 71, 13, 10, 26, 10, 0, 0, 0, 13, 73, 72, 68, 82,
+                        0, 0, 2, 0, 0, 0, 2, 0, 8, 2, 0, 0, 0, 123, 26, 67, 173, 0, 0, 0},
+                    Characteristic = "defaultProjectImage"
                 },
                 new Image()
                 {
@@ -47,6 +48,19 @@ namespace Application.UnitTests
                     Bytes = new byte[] { 137, 80, 78, 71, 13, 10, 26, 10, 0, 0, 0, 13, 73, 72, 68, 82,
                         0, 0, 2, 0, 0, 0, 2, 0, 8, 2, 0, 0, 0, 123, 26, 67, 173, 0, 0, 0},
                     Characteristic = "defaultProfileImage"
+                }
+            };
+
+            List<Project> projects = new()
+            {
+                new()
+                {
+                    Id = "1",
+                    Name = "Test project",
+                    ImageId = "1",
+                    Description = "Project description",
+                    Url = null,
+                    ApplicationUserId = "1",
                 }
             };
 
@@ -65,7 +79,7 @@ namespace Application.UnitTests
                         ImageId = "2",
                         ApplicationUserId = "1",
                         FileExtension = ".png",
-                        Bytes = new byte[] { 137, 80, 78, 71, 13, 10, 26, 10, 0, 0, 0, 13, 73, 72, 
+                        Bytes = new byte[] { 137, 80, 78, 71, 13, 10, 26, 10, 0, 0, 0, 13, 73, 72,
                             68, 82, 0, 0, 2, 0, 0, 0, 2, 0, 8, 2, 0, 0, 0, 123, 26, 67, 173, 0, 0, 0}
                     },
                     ApplicationUserId= "1",
@@ -79,6 +93,7 @@ namespace Application.UnitTests
             this._context = new ApplicationDbContext(options);
             this._context.Users.AddRange(this._users);
             this._context.Images.AddRange(this._images);
+            this._context.Projects.AddRange(projects);
             this._context.Portfolios.AddRange(this._portfolios);
             this._context.SaveChanges();
         }
@@ -91,7 +106,7 @@ namespace Application.UnitTests
 
             List<ImageViewModel> testModels = await service.GetUserImagesAsync("1");
 
-            Assert.That(testModels.Count, Is.EqualTo(2));
+            Assert.That(testModels, Has.Count.EqualTo(2));
         }
 
         [Test]
@@ -113,7 +128,7 @@ namespace Application.UnitTests
             IImageService service = new ImageService(this._context);
             string imageId = "1";
 
-            ImageViewModel? testModel = await service.GetImageByIdAsync(imageId);
+            ImageViewModel testModel = await service.GetImageByIdAsync(imageId);
 
             Assert.Multiple(() =>
             {
@@ -125,39 +140,13 @@ namespace Application.UnitTests
 
         [Test]
         [Order(4)]
-        public async Task Test_GetImageByIdAsync_Fail()
-        {
-            IImageService service = new ImageService(this._context);
-            string imageId = "6";
-
-            ImageViewModel? testModel = await service.GetImageByIdAsync(imageId);
-
-            Assert.That(testModel, Is.EqualTo(null));
-
-        }
-
-        [Test]
-        [Order(7)]
-        public async Task Test_DeleteImageByIdAsync()
-        {
-            IImageService service = new ImageService(this._context);
-            string imageId = "1";
-
-            await service.DeleteImageByIdAsync(imageId);
-            Image? image = await _context.Images.FirstOrDefaultAsync(i => i.ImageId == imageId);
-
-            Assert.That(image, Is.EqualTo(null));
-        }
-
-        [Test]
-        [Order(6)]
         public async Task Test_UseImageAsProfilAsync_Succeed()
         {
             IImageService service = new ImageService(this._context);
             string imageId = "1";
             string userId = "1";
 
-            ApplicationUser? user = await this._context.Users.FindAsync("1");
+            ApplicationUser user = await this._context.Users.FirstAsync(u => u.Id == "1");
 
             await service.UseImageAsProfilAsync(imageId, userId);
 
@@ -166,17 +155,14 @@ namespace Application.UnitTests
 
         [Test]
         [Order(5)]
-        public async Task Test_UseImageAsProfilAsync_Fail()
+        public async Task Test_DeleteImageByIdAsync()
         {
             IImageService service = new ImageService(this._context);
-            string imageId = "5";
-            string userId = "1";
+            string imageId = "1";
 
-            ApplicationUser? user = await this._context.Users.FindAsync("1");
+            await service.DeleteImageByIdAsync(imageId);
 
-            await service.UseImageAsProfilAsync(imageId, userId);
-
-            Assert.That(user?.Portfolio?.ImageId, Is.EqualTo("2"));
+            Assert.That(await _context.Images.FirstOrDefaultAsync(i => i.ImageId == imageId), Is.EqualTo(null));
         }
     }
 }

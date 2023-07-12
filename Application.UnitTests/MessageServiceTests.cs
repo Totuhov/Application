@@ -1,8 +1,4 @@
 ﻿
-using Application.Services;
-using Application.Services.Interfaces;
-using NUnit.Framework;
-
 namespace Application.UnitTests;
 
 [TestFixture]
