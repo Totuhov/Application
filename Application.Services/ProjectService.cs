@@ -48,57 +48,64 @@ public class ProjectService : IProjectService
                 Description = p.Description,
                 Url = p.Url,
                 ImageId = p.ImageId,
+                Image = new ImageViewModel()
+                {
+                    ImageId = p.Image.ImageId,
+                    ApplicationUserId = p.Image.ApplicationUserId,
+                    ImageData = Convert.ToBase64String(p.Image.Bytes),
+                    ContentType = p.Image.FileExtension
+                },
                 ApplicationUserId = p.ApplicationUserId,
             })
             .OrderBy(p => p.Name)
             .ToListAsync();
 
-        foreach (var item in result)
-        {
-            if (item.ImageId != null)
-            {
-                Image? image = await _context.Images.FindAsync(item.ImageId);
-
-                if (image != null)
-                {
-                    ImageViewModel imageModel = new()
-                    {
-                        ImageId = image.ImageId,
-                        ApplicationUserId = image.ApplicationUserId,
-                        ImageData = Convert.ToBase64String(image.Bytes),
-                        ContentType = image.FileExtension
-                    };
-
-                    item.Image = imageModel;
-                }
-            }
-        }
-
         return result;
     }
 
-    public async Task<ProjectViewModel> GetCurrentProjectAsync(string projectId)
+    public async Task<ProjectViewModel?> GetCurrentProjectAsync(string projectId)
     {
         Project? project = await _context.Projects.FindAsync(projectId);
 
-        return new ProjectViewModel()
+        if (project != null)
         {
-            Image = new ImageViewModel()
+            return new ProjectViewModel()
             {
-                ImageId = project.Image.ImageId,
-                ApplicationUserId = project.Image.ApplicationUserId,
-                ImageData = Convert.ToBase64String(project.Image.Bytes),
-                ContentType = project.Image.FileExtension
+                Image = new ImageViewModel()
+                {
+                    ImageId = project.Image.ImageId,
+                    ApplicationUserId = project.Image.ApplicationUserId,
+                    ImageData = Convert.ToBase64String(project.Image.Bytes),
+                    ContentType = project.Image.FileExtension
 
-            },
-            Id = project.Id,
-            Name = project.Name,
-            Description = project.Description,
-            Url = project.Url,
-        };
+                },
+                Id = project.Id,
+                Name = project.Name,
+                Description = project.Description,
+                Url = project.Url,
+            };
+        }
+        return null;
     }
 
-    public async Task SaveProjectChangesAsync(ProjectViewModel model)
+    public async Task<EditProjectViewModel?> GetEditProjectViewModelAsync(string projectId)
+    {
+        Project? project = await _context.Projects.FindAsync(projectId);
+
+        if (project != null)
+        {
+            return new EditProjectViewModel()
+            {                
+                Id = project.Id,
+                Name = project.Name,
+                Description = project.Description,
+                Url = project.Url,
+            };
+        }
+        return null;
+    }
+
+    public async Task SaveProjectChangesAsync(EditProjectViewModel model)
     {
         Project? project = await _context.Projects.FindAsync(model.Id);
 

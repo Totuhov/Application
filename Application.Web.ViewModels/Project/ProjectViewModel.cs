@@ -9,9 +9,9 @@ public class ProjectViewModel
 
     public string? Name { get; set; }
 
-    public string? ImageId { get; set; }
+    public string ImageId { get; set; } = null!;
 
-    public virtual ImageViewModel? Image { get; set; }
+    public virtual ImageViewModel Image { get; set; } = null!;
 
     public string? Description { get; set; }
 

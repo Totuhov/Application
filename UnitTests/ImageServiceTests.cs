@@ -63,7 +63,7 @@ namespace UnitTests
             };
 
             var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(databaseName: "InMemoryApplicationDatabase")
+                .UseInMemoryDatabase(databaseName: "InMemoryImageServiceDatabase")
                 .Options;
 
             this._context = new ApplicationDbContext(options);

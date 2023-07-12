@@ -13,8 +13,6 @@ namespace UnitTests
     public class PortfolioServiceTests
     {
         private ApplicationDbContext _context;
-        private readonly List<ApplicationUser> _users;
-        private readonly List<Image> _images;
 
         [OneTimeSetUp]
         public void TestInitialize()
@@ -32,7 +30,6 @@ namespace UnitTests
                         Description = "Description",
                         UserDisplayName = "User's display name",
                         About = "About user",
-                        ImageId = null,
                         ApplicationUserId = "55"                       
                     }
                 },
@@ -116,7 +113,7 @@ namespace UnitTests
             };
 
             var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(databaseName: "InMemoryApplicationDatabase")
+                .UseInMemoryDatabase(databaseName: "InMemoryPortfolioServiceDatabase")
                 .Options;
 
             this._context = new ApplicationDbContext(options);

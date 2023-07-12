@@ -41,7 +41,7 @@ public class ProjectController : BaseController
         return NotFound();
 
     }
-    
+
     [HttpGet]
     public IActionResult Create(string id)
     {
@@ -111,22 +111,30 @@ public class ProjectController : BaseController
         {
             await _imageService.SaveImageInDatabaseAsync(model, GetCurrentUserId());
 
-            // TODO: Redirect or show success message to the user
+            // Redirect or show success message to the user
         }
-        // TODO: Handle validation errors if necessary
+        // Handle validation errors if necessary
         return RedirectToAction("All", new { id = GetCurrentUserName() });
     }
 
     [HttpGet]
     public async Task<IActionResult> Edit(string id)
     {
-        ProjectViewModel model = await _projectService.GetCurrentProjectAsync(id);
-        model.ApplicationUserId = GetCurrentUserId();
-        return View(model);
+        EditProjectViewModel? model = await _projectService.GetEditProjectViewModelAsync(id);
+        if (model != null)
+        {
+            model.ApplicationUserId = GetCurrentUserId();
+            return View(model);
+        }
+        else
+        {
+            this.TempData[ErrorMessage] = "Somethig's wrong. Project was not found. Contact administrator or try again later.";
+            return RedirectToAction("All", new { id = GetCurrentUserName() });
+        }
     }
 
     [HttpPost]
-    public async Task<IActionResult> Edit(ProjectViewModel model)
+    public async Task<IActionResult> Edit(EditProjectViewModel model)
     {
         if (!ModelState.IsValid)
         {
@@ -148,8 +156,17 @@ public class ProjectController : BaseController
     [HttpGet]
     public async Task<IActionResult> Delete(string id)
     {
-        ProjectViewModel model = await _projectService.GetCurrentProjectAsync(id);
-        return View(model);
+        ProjectViewModel? model = await _projectService.GetCurrentProjectAsync(id);
+
+        if (model != null)
+        {
+            return View(model);
+        }
+
+        this.TempData[ErrorMessage] = "Somethig's wrong. Project was not found. Contact administrator or try again later.";
+        return RedirectToAction("All", new { id = GetCurrentUserName() });
+
+
     }
 
     [HttpPost]

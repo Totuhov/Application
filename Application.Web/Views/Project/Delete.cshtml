@@ -4,6 +4,13 @@
     ViewData["Title"] = "Delete";
 }
 
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
 <h1 class="text-center">@ViewData["Title"]</h1>
 
 <div class="row justify-content-center">
