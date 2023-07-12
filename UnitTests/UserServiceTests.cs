@@ -1,7 +1,6 @@
 ﻿
-namespace UnitTests
+namespace Application.UnitTests;
+
+public class UserServiceTests
 {
-    public class UserServiceTests
-    {
-    }
 }

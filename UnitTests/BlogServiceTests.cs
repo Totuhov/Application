@@ -7,7 +7,7 @@ using Application.Web.ViewModels.Article;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 
-namespace UnitTests
+namespace Application.UnitTests
 {
     [TestFixture]
     public class BlogServiceTests
