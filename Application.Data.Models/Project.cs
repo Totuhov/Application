@@ -14,9 +14,9 @@ public class Project
     [MaxLength(NameMaxLength)]
     public string? Name { get; set; }
 
-    public string? ImageId { get; set; }
+    public string ImageId { get; set; } = null!;
 
-    public virtual Image? Image { get; set; }
+    public virtual Image Image { get; set; } = null!;
 
     [MaxLength(DescriptionMaxLength)]
     public string? Description { get; set; }

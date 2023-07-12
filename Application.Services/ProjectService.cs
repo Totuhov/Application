@@ -125,8 +125,7 @@ public class ProjectService : IProjectService
                 Url = model.Url,
                 ApplicationUserId = user.Id,
                 Image = await _context.Images
-                .Where(i => i.Characteristic == DefaultProjectImageCharacteristic)
-                .FirstOrDefaultAsync()
+                .FirstAsync(i => i.Characteristic == DefaultProjectImageCharacteristic)
             };
 
             await _context.Projects.AddAsync(project);

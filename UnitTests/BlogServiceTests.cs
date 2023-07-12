@@ -25,7 +25,7 @@ namespace UnitTests
                 new ApplicationUser()
                 {
                     Id = "6960a305-4ea5-4d22-8611-c437f5e5164c",
-                    UserName = "guest"
+                    UserName = "guest2"
                 }
             };
 
@@ -84,6 +84,7 @@ namespace UnitTests
             this._context.Users.AddRange(this._users);
             this._context.SaveChanges();
         }
+
         [Test]
         public async Task Test_GetCreateArticleViewModelByIdAsync()
         {
@@ -144,7 +145,7 @@ namespace UnitTests
         [Test]
         public async Task Test_GetAllArticlesByUserNameAsync()
         {
-            string username = "guest";
+            string username = "guest2";
             IBlogService service = new BlogService(this._context);
             List<ArticleViewModel> testModels = await service.GetAllArticlesByUserNameAsync(username);
 

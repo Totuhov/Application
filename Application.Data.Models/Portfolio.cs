@@ -8,6 +8,7 @@ using static Application.Common.ModelConstants.PortfolioConstants;
 
 public class Portfolio
 {
+    [Key]
     public string Id { get; set; } = Guid.NewGuid().ToString();
 
     [MaxLength(GreetingsMessageMaxLength)]
@@ -22,10 +23,10 @@ public class Portfolio
     [MaxLength(AboutMaxLength)]
     public string? About { get; set; } = AboutDefaultText;
 
-    public string? ImageId { get; set; }
+    public string ImageId { get; set; } = null!;
 
     [ForeignKey(nameof(ImageId))]
-    public virtual Image? Image { get; set; }
+    public virtual Image Image { get; set; } = null!;
 
     public string ApplicationUserId { get; set; } = null!;
 

@@ -10,6 +10,7 @@ using Application.Web.ViewModels.Portfolio;
 using Application.Web.ViewModels.Project;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Reflection.Metadata.Ecma335;
 using System.Threading.Tasks;
 
 using static Application.Common.ModelConstants;
@@ -75,63 +76,77 @@ public class PortfolioService : IPortfolioService
     public async Task<PortfolioViewModel?> GetPortfolioFromRouteAsync(string userName)
     {
         ApplicationUser? user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == userName);
-        Portfolio? portfolio = await _context.Portfolios.FirstOrDefaultAsync(p => p.ApplicationUserId == user.Id);
 
-        if (portfolio != null && user != null)
+        if (user != null)
         {
-            portfolio.Image ??= await _context.Images.FirstOrDefaultAsync(i => i.Characteristic == DefaultProfileImageCharacteristic);
+            Portfolio? portfolio = await _context.Portfolios.FirstOrDefaultAsync(p => p.ApplicationUserId == user.Id);
 
-            PortfolioViewModel model = new()
+            if (portfolio != null)
             {
-                UserName = userName,
-                GreetingsMessage = portfolio.GreetingsMessage,
-                UserDisplayName = portfolio.UserDisplayName,
-                Description = portfolio.Description,
-                Email = user.Email,
-                ProfileImage = new ImageViewModel()
+                if (portfolio.Image == null)
                 {
-                    ImageId = portfolio.ImageId,
-                    ImageData = Convert.ToBase64String(portfolio.Image.Bytes),
-                    ContentType = portfolio.Image.FileExtension
-                },
-                About = portfolio.About,
-                Blog = await _context
-                .Articles
-                .Where(a => a.ApplicationUserId == user.Id && a.IsDeleted == false)
-                .Select(a => new ArticleViewModel()
-                {
-                    Id = a.Id,
-                    Title = a.Title,
-                    Content = a.Content,
-                    CreatedOn = a.CreatedOn,
-                    EditedOn = a.EditedOn,
-                    ApplicationUserName = a.ApplicationUser.UserName,
-                })
-                .OrderByDescending(a => a.EditedOn)
-                .Take(6)
-                .ToListAsync(),
-                Projects = await _context
-                .Projects
-                .Where(p => p.ApplicationUserId == user.Id)
-                .Select(p => new ProjectViewModel()
-                {
-                    Id = p.Id,
-                    Name = p.Name,
-                    ImageId = p.ImageId,
-                    Description = p.Description,
-                    Url = p.Url,
-                    ApplicationUserId = p.ApplicationUserId,
-                    Image = new ImageViewModel()
+                    Image? image = await _context.Images.FirstOrDefaultAsync(i => i.Characteristic == DefaultProfileImageCharacteristic);
+                    if (image != null)
                     {
-                        ImageId = p.Image.ImageId,
-                        ApplicationUserId = p.Image.ApplicationUserId,
-                        ImageData = Convert.ToBase64String(p.Image.Bytes),
-                        ContentType = p.Image.FileExtension
+                        portfolio.Image = image;
+                        portfolio.ImageId = image.ImageId;
                     }
-                })
-                .ToListAsync()
-            };
-            return model;
+                }
+                if (portfolio.ImageId != null && portfolio.Image != null)
+                {
+                    PortfolioViewModel model = new()
+                    {
+                        UserName = userName,
+                        GreetingsMessage = portfolio.GreetingsMessage,
+                        UserDisplayName = portfolio.UserDisplayName,
+                        Description = portfolio.Description,
+                        Email = user.Email,
+                        ProfileImage = new ImageViewModel()
+                        {
+                            ImageId = portfolio.ImageId,
+                            ImageData = Convert.ToBase64String(portfolio.Image.Bytes),
+                            ContentType = portfolio.Image.FileExtension
+                        },
+                        About = portfolio.About,
+                        Blog = await _context
+                        .Articles
+                        .Where(a => a.ApplicationUserId == user.Id && a.IsDeleted == false)
+                        .Select(a => new ArticleViewModel()
+                        {
+                            Id = a.Id,
+                            Title = a.Title,
+                            Content = a.Content,
+                            CreatedOn = a.CreatedOn,
+                            EditedOn = a.EditedOn,
+                            ApplicationUserName = a.ApplicationUser.UserName,
+                        })
+                        .OrderByDescending(a => a.EditedOn)
+                        .Take(6)
+                        .ToListAsync(),
+                        Projects = await _context
+                        .Projects
+                        .Where(p => p.ApplicationUserId == user.Id)
+                        .Select(p => new ProjectViewModel()
+                        {
+                            Id = p.Id,
+                            Name = p.Name,
+                            ImageId = p.ImageId,
+                            Description = p.Description,
+                            Url = p.Url,
+                            ApplicationUserId = p.ApplicationUserId,
+                            Image = new ImageViewModel()
+                            {
+                                ImageId = p.Image.ImageId,
+                                ApplicationUserId = p.Image.ApplicationUserId,
+                                ImageData = Convert.ToBase64String(p.Image.Bytes),
+                                ContentType = p.Image.FileExtension
+                            }
+                        })
+                        .ToListAsync()
+                    };
+                    return model;
+                }
+            }
         }
         return null;
     }

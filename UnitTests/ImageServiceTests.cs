@@ -26,7 +26,7 @@ namespace UnitTests
                 new ApplicationUser()
                 {
                     Id = "1",
-                    UserName = "guest"
+                    UserName = "guest1"
                 }
             };
 
@@ -47,7 +47,7 @@ namespace UnitTests
                 {
                     Id = "1",
                     GreetingsMessage = "Hi",
-                    UserDisplayName = "guest",
+                    UserDisplayName = "guest1",
                     Description = "Some Random Description",
                     About = "Text about user",
                     ImageId= "2",

@@ -19,7 +19,7 @@ namespace UnitTests
         [OneTimeSetUp]
         public void TestInitialize()
         {
-            List<ApplicationUser> users = new List<ApplicationUser>()
+            List<ApplicationUser> users = new()
             {
                 new ApplicationUser()
                 {
@@ -33,8 +33,22 @@ namespace UnitTests
                         UserDisplayName = "User's display name",
                         About = "About user",
                         ImageId = null,
-                        Image = null,
-                        ApplicationUserId = "55"
+                        ApplicationUserId = "55"                       
+                    }
+                },
+                new ApplicationUser()
+                {
+                    Id = "57",
+                    UserName = "vv",
+                    Portfolio = new()
+                    {
+                        Id = "134",
+                        GreetingsMessage = "Greetings message",
+                        Description = "Description",
+                        UserDisplayName = "User's display name",
+                        About = "About user",
+                        ImageId = "113",
+                        ApplicationUserId = "57"
                     }
                 },
                 new ApplicationUser()
@@ -44,7 +58,7 @@ namespace UnitTests
                 }
             };
 
-            List<Image> images = new List<Image>()
+            List<Image> images = new()
             {
                 new()
                 {
@@ -61,20 +75,32 @@ namespace UnitTests
                     ApplicationUserId = null,
                     FileExtension = ".png",
                     Bytes = new byte[] { 137, 80, 78, 71, 13, 10, 26, 10, 0, 0, 0, 13, 73, 72, 68,
+                        82, 0, 0, 2, 0, 0, 0, 2, 0, 8, 2, 0, 0, 0, 123, 26, 67, 173, 0, 0, 0 },
+                    Characteristic = "defaultProjectImage"
+                },
+                new()
+                {
+                    ImageId = "113",
+                    ApplicationUserId = null,
+                    FileExtension = ".png",
+                    Bytes = new byte[] { 137, 80, 78, 71, 13, 10, 26, 10, 0, 0, 0, 13, 73, 72, 68,
                         82, 0, 0, 2, 0, 0, 0, 2, 0, 8, 2, 0, 0, 0, 123, 26, 67, 173, 0, 0, 0 }
                 }
             };
 
-            Project project = new()
+            List<Project> projects = new()
             {
-                Id = "771",
-                Name = "Test project",
-                ImageId = null,
-                Image = null,
-                Description = "Project description",
-                Url = null,
-                ApplicationUserId = "55",
+                new()
+                {
+                    Id = "771",
+                    Name = "Test project",
+                    ImageId = "112",
+                    Description = "Project description",
+                    Url = null,
+                    ApplicationUserId = "55",
+                }
             };
+
 
             Article article = new()
             {
@@ -95,7 +121,7 @@ namespace UnitTests
 
             this._context = new ApplicationDbContext(options);
             this._context.Users.AddRange(users);
-            this._context.Projects.Add(project);
+            this._context.Projects.AddRange(projects);
             this._context.Images.AddRange(images);
             this._context.Articles.Add(article);
             this._context.SaveChanges();
@@ -118,13 +144,14 @@ namespace UnitTests
         }
 
         [Test]
+        [Order(2)]
         public async Task Test_GetEditDescriptionViewModelAsync_Succeed()
         {
             string userId = "55";
             IPortfolioService service = new PortfolioService(_context);
 
             EditDescriptionPortfolioViewModelViewModel? model = await service.GetEditDescriptionViewModelAsync(userId);
-            
+
             Assert.Multiple(() =>
             {
                 Assert.That(model, Is.Not.Null);
@@ -167,6 +194,114 @@ namespace UnitTests
             EditAboutPortfolioViewModelViewModel? model = await service.GetEditAboutViewModelAsync(userId);
 
             Assert.That(model, Is.Null);
+        }
+        [Test]
+        [Order(1)]
+        public async Task Test_GetPortfolioFromRouteAsync_Succeed()
+        {
+            string username = "guest";
+            IPortfolioService service = new PortfolioService(_context);
+
+            PortfolioViewModel? testModel = await service.GetPortfolioFromRouteAsync(username);
+
+            Assert.That(testModel, Is.Not.EqualTo(null));
+            Assert.Multiple(() =>
+            {
+                Assert.That(testModel.About, Is.EqualTo("About user"));
+                Assert.That(testModel.ProfileImage.ImageId, Is.EqualTo("111")); // There was no profil image
+            });
+        }
+
+        [Test]
+        public async Task Test_GetPortfolioFromRouteAsync_FailWithoutUser()
+        {
+            string username = "gues"; // there is no user with username == "gues"
+            IPortfolioService service = new PortfolioService(_context);
+
+            PortfolioViewModel? testModel = await service.GetPortfolioFromRouteAsync(username);
+
+            Assert.That(testModel, Is.Null);
+        }
+
+        [Test]
+        public async Task Test_LogedInUserHasPortfolio_Succeed()
+        {
+            string userId = "55";
+            IPortfolioService service = new PortfolioService(_context);
+
+            bool testResult = await service.LogedInUserHasPortfolio(userId);
+
+            Assert.That(testResult, Is.EqualTo(true));
+        }
+
+        [Test]
+        [Order(3)]
+        public async Task Test_LogedInUserHasPortfolio_Fail()
+        {
+            string userId = "56"; // user with id 56 has not portfolio
+            IPortfolioService service = new PortfolioService(_context);
+
+            bool testResult = await service.LogedInUserHasPortfolio(userId);
+
+            Assert.That(testResult, Is.EqualTo(false));
+        }
+
+        [Test]
+        public async Task Test_SaveDescriptionAsync_Succeed()
+        {
+            string userId = "55";
+            string userName = "guest";
+            IPortfolioService service = new PortfolioService(_context);
+            EditDescriptionPortfolioViewModelViewModel? model = 
+                await service.GetEditDescriptionViewModelAsync(userId);
+            model.Description = "new description";
+
+            await service.SaveDescriptionAsync(model, userId);
+
+            PortfolioViewModel? portfolioModel = await service.GetPortfolioFromRouteAsync(userName);
+
+            Assert.That(portfolioModel, Is.Not.Null);
+            Assert.That(portfolioModel.Description, Is.EqualTo("new description"));
+        }
+
+        [Test]
+        public async Task Test_SaveAboutAsync_Succeed()
+        {
+            string userId = "55";
+            string userName = "guest";
+            IPortfolioService service = new PortfolioService(_context);
+            EditAboutPortfolioViewModelViewModel? model =
+                await service.GetEditAboutViewModelAsync(userId);
+            model.About = "new about";
+
+            await service.SaveAboutAsync(model, userId);
+
+            PortfolioViewModel? portfolioModel = await service.GetPortfolioFromRouteAsync(userName);
+
+            Assert.That(portfolioModel, Is.Not.Null);
+            Assert.That(portfolioModel.About, Is.EqualTo("new about"));
+        }
+
+        [Test]
+        public async Task Test_GetAllUsersByRegexAsync_SucceedWithResult()
+        {
+            string expression = "v";
+            IPortfolioService service = new PortfolioService(_context);
+
+            List<PreviewPortfolioViewModel> ports = await service.GetAllUsersByRegexAsync(expression);
+
+            Assert.That(ports, Is.Not.Empty);
+        }
+
+        [Test]
+        public async Task Test_GetAllUsersByRegexAsync_SucceedWithoutResult()
+        {
+            string expression = "ww";
+            IPortfolioService service = new PortfolioService(_context);
+
+            List<PreviewPortfolioViewModel> ports = await service.GetAllUsersByRegexAsync(expression);
+
+            Assert.That(ports, Is.Empty);
         }
     }
 }
