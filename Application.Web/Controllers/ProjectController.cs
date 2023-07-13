@@ -120,16 +120,16 @@ public class ProjectController : BaseController
     [HttpGet]
     public async Task<IActionResult> Edit(string id)
     {
-        EditProjectViewModel? model = await _projectService.GetEditProjectViewModelAsync(id);
-        if (model != null)
+        try
         {
+            EditProjectViewModel model = await _projectService.GetEditProjectViewModelAsync(id);
+
             model.ApplicationUserId = GetCurrentUserId();
             return View(model);
         }
-        else
+        catch (Exception)
         {
-            this.TempData[ErrorMessage] = "Somethig's wrong. Project was not found. Contact administrator or try again later.";
-            return RedirectToAction("All", new { id = GetCurrentUserName() });
+            return NotFound();
         }
     }
 
@@ -141,32 +141,46 @@ public class ProjectController : BaseController
             return View(model);
         }
 
-        await _projectService.SaveProjectChangesAsync(model);
-
-        return RedirectToAction("All", new { id = GetCurrentUserName() });
+        try
+        {
+            await _projectService.SaveProjectChangesAsync(model);
+            return RedirectToAction("All", new { id = GetCurrentUserName() });
+        }
+        catch (Exception)
+        {
+            this.TempData[ErrorMessage] = "Somethig's wrong. Project was not saved successfuly.";
+            return RedirectToAction("Index", "Home");
+        }
+        
     }
 
     public async Task<IActionResult> Use(string id)
     {
-        await _imageService.UseImageAsProfilAsync(id, GetCurrentUserId());
+        try
+        {
+            await _imageService.UseImageAsProfilAsync(id, GetCurrentUserId());
+            return RedirectToAction("Details", "Portfolio", new { id = GetCurrentUserName() });
+        }
+        catch (Exception)
+        {
 
-        return RedirectToAction("Details", "Portfolio", new { id = GetCurrentUserName() });
+            this.TempData[ErrorMessage] = "Somethig's wrong. Image was not added to profile successfuly.";
+            return RedirectToAction("Index", "Home");
+        }        
     }
 
     [HttpGet]
     public async Task<IActionResult> Delete(string id)
     {
-        ProjectViewModel? model = await _projectService.GetCurrentProjectAsync(id);
-
-        if (model != null)
+        try
         {
+            ProjectViewModel model = await _projectService.GetCurrentProjectAsync(id);
             return View(model);
         }
-
-        this.TempData[ErrorMessage] = "Somethig's wrong. Project was not found. Contact administrator or try again later.";
-        return RedirectToAction("All", new { id = GetCurrentUserName() });
-
-
+        catch (Exception)
+        {
+            return NotFound();
+        }                 
     }
 
     [HttpPost]

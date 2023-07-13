@@ -68,10 +68,17 @@ public class BlogController : BaseController
     [HttpGet]
     public async Task<IActionResult> Edit(string id)
     {
+        try
+        {
+            CreateArticleViewModel model = await _service.GetCreateArticleViewModelByIdAsync(id, GetCurrentUserId());
+            return View(model);
+        }
+        catch (Exception)
+        {
 
-        CreateArticleViewModel model = await _service.GetCreateArticleViewModelByIdAsync(id, GetCurrentUserId());
-
-        return View(model);
+            return NotFound();
+        }
+        
     }
 
     [HttpPost]
