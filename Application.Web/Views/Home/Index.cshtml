@@ -10,5 +10,26 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>       
+    <h1 class="display-4">Welcome</h1>
 </div>
+<div class="mb-5"></div>
+<div class="row">
+    <div class="col-12 text-center">
+        <button class="btn btn-dark" id="statistics_button">Show Statistics</button>
+    </div>
+</div>
+<div class="mt-4 p-5 d-none" id="statistics_box">
+    <div class="row">
+        <h2 class="col-md-4 text-center" id="total_Users"></h2>
+        <h2 class="col-md-4 text-center" id="total_Projects"></h2>
+        <h2 class="col-md-4 text-center" id="total_Articles"></h2>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        statistics();
+    </script>
+}
+
+
