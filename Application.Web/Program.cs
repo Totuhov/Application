@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Application.Services.Interfaces;
 using Application.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +18,11 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddRoles<IdentityRole>() // needed to using roles
     .AddEntityFrameworkStores<ApplicationDbContext>();
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews()
+    .AddMvcOptions(options =>
+    {
+        options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
+    });
 
 // Dependencies
 
@@ -27,8 +32,8 @@ builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<IPortfolioService, PortfolioService>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<IMessageService, MessageService>();
-builder.Services.AddScoped<RoleManager<IdentityRole>>();
-builder.Services.AddScoped<UserManager<ApplicationUser>>();
+//builder.Services.AddScoped<RoleManager<IdentityRole>>();
+//builder.Services.AddScoped<UserManager<ApplicationUser>>();
 
 var app = builder.Build();
 
