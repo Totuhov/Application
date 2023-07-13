@@ -60,7 +60,7 @@ public class BlogController : BaseController
         }
         catch (Exception)
         {
-            this.TempData[ErrorMessage] = "Article was not posted successfuly!";
+            this.TempData[ErrorMessage] = "Something's wrong. Article was not posted successfuly!";
             return RedirectToAction("Index", "Portfolio");
         }
     }
@@ -98,9 +98,15 @@ public class BlogController : BaseController
     [HttpGet]
     public async Task<IActionResult> Details(string id)
     {
-        ArticleViewModel model = await _service.GetArticleViewModelByIdAsync(id);
-
-        return View(model);
+        try
+        {
+            ArticleViewModel model = await _service.GetArticleViewModelByIdAsync(id);
+            return View(model);
+        }
+        catch (Exception)
+        {
+            return NotFound();
+        }
     }
 
     [AllowAnonymous]

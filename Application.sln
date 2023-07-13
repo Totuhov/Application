@@ -23,7 +23,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{7DE539
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.Common", "Application.Common\Application.Common.csproj", "{7F0F1DBF-78EE-44B5-90D7-95CD723BD697}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{5F7ADDDB-76EB-4746-B35B-85C7B7F34A7A}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{5F7ADDDB-76EB-4746-B35B-85C7B7F34A7A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.UnitTests", "Application.UnitTests\Application.UnitTests.csproj", "{BF5C5B2D-C5B9-42DB-BE7D-F3F784C38C2A}"
 EndProject

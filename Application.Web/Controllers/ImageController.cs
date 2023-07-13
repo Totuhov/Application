@@ -23,7 +23,7 @@ public class ImageController : BaseController
     {
         if (id != GetCurrentUserName())
         {
-            return RedirectToAction("Error", "Home");
+            return NotFound();
         }
 
         var model = await _imageService.GetUserImagesAsync(GetCurrentUserId());
@@ -38,6 +38,7 @@ public class ImageController : BaseController
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create([FromForm] CreateImageViewModel model)
     {
 
@@ -68,22 +69,37 @@ public class ImageController : BaseController
         return View(model);
     }
 
-    // POST: Image/Delete/5
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(string id)
     {
+        try
+        {
+            await _imageService.DeleteImageByIdAsync(id);
+            this.TempData[SuccessMessage] = "Image deleted successfily!";
+            return RedirectToAction("All", new { id = GetCurrentUserName() });
+        }
+        catch (Exception)
+        {
+            this.TempData[ErrorMessage] = "Something's. Image was not deleted. Try again later or contact administrator";
+            return RedirectToAction("All", new { id = GetCurrentUserName() });
+        }
 
-        await _imageService.DeleteImageByIdAsync(id);
-
-        return RedirectToAction("All", new { id = GetCurrentUserName() });
     }
 
     public async Task<IActionResult> UseAsProfile(string id)
     {
+        try
+        {
+            await _imageService.UseImageAsProfilAsync(id, GetCurrentUserId());
+            this.TempData[SuccessMessage] = "Profile image change successfily!";
 
-        await _imageService.UseImageAsProfilAsync(id, GetCurrentUserId());
-
-        return RedirectToAction("Details", "Portfolio", new { id = GetCurrentUserName() });
+            return RedirectToAction("Details", "Portfolio", new { id = GetCurrentUserName() });
+        }
+        catch (Exception)
+        {
+            this.TempData[ErrorMessage] = "Something's. Image was not changed successfuly. Try again later or contact administrator";
+            return RedirectToAction("Details", "Portfolio", new { id = GetCurrentUserName() });
+        }
     }
 }

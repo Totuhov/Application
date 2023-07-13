@@ -55,7 +55,7 @@ public class PortfolioController : BaseController
         if (await _userService.IsUserExists(id))
         {
             PortfolioViewModel model = await _portfolioService.GetPortfolioFromRouteAsync(id);
-                        
+
             return View(model);
         }
 
@@ -74,7 +74,7 @@ public class PortfolioController : BaseController
 
     [HttpGet]
     public async Task<IActionResult> EditDescription(string id)
-    {        
+    {
         try
         {
             if (GetCurrentUserName() != id)
@@ -94,6 +94,7 @@ public class PortfolioController : BaseController
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> EditDescription(EditDescriptionPortfolioViewModelViewModel model)
     {
         if (!ModelState.IsValid)
@@ -120,33 +121,54 @@ public class PortfolioController : BaseController
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> EditAbout(EditAboutPortfolioViewModelViewModel model)
     {
         if (!ModelState.IsValid)
         {
             return View(model);
         }
+        try
+        {
+            await _portfolioService.SaveAboutAsync(model, GetCurrentUserId());
+            this.TempData[SuccessMessage] = "Changes was saved.";
+            return RedirectToAction("Details", new { id = GetCurrentUserName() });
+        }
+        catch (Exception)
+        {
+            return GeneralError();
+        }
 
-        await _portfolioService.SaveAboutAsync(model, GetCurrentUserId());
-
-        return RedirectToAction("Details", new { id = GetCurrentUserName() });
     }
 
     [AllowAnonymous]
     [HttpGet]
     public async Task<IActionResult> SendEmail(string id)
     {
-        ContactFormViewModel model = new()
+        try
         {
-            RecieverEmail = await _userService.GetUserEmailByUsernameAsync(id),
-            RecieverUserName = id
-        };
+            if (await _userService.IsUserExists(id))
+            {
+                ContactFormViewModel model = new()
+                {
+                    RecieverEmail = await _userService.GetUserEmailByUsernameAsync(id),
+                    RecieverUserName = id
+                };
 
-        return View(model);
+                return View(model);
+            }
+            return NotFound();
+        }
+        catch (Exception)
+        {
+
+            return GeneralError();
+        }
     }
 
     [AllowAnonymous]
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public IActionResult SendEmail(ContactFormViewModel model, string id)
     {
         try
@@ -165,13 +187,10 @@ public class PortfolioController : BaseController
 
             this.TempData[SuccessMessage] = "Message was send successfily!";
 
-            return RedirectToAction("Details", new {id});
-
+            return RedirectToAction("Details", new { id });
         }
         catch (Exception)
         {
-
-            this.TempData[ErrorMessage] = "Message was not send! Try again later";
             return RedirectToAction("GeneralError");
         }
     }
