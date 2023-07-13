@@ -72,14 +72,14 @@ public class ImageController : BaseController
         {
             if (id == null)
             {
-                return NotFound();
+                return GeneralError();
             }
 
             var model = await _imageService.GetImageByIdAsync(id);
 
             if (model.ImageId == null)
             {
-                return NotFound();
+                return GeneralError();
             }
 
             return View(model);
