@@ -6,7 +6,7 @@ using System.Diagnostics;
 
 namespace Application.Web.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         private readonly IPortfolioService _portfolioService;
 
@@ -18,11 +18,19 @@ namespace Application.Web.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            if (User?.Identity?.IsAuthenticated == true)
+            try
             {
-                return RedirectToAction("Index", "Portfolio");
+                if (User?.Identity?.IsAuthenticated == true)
+                {
+                    return RedirectToAction("Index", "Portfolio");
+                }
+                return View();
             }
-            return View();
+            catch (Exception)
+            {
+                return GeneralError();
+            }
+
         }
 
         [HttpGet]
@@ -34,14 +42,22 @@ namespace Application.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> All(string expression)
         {
-            if (String.IsNullOrEmpty(expression))
+            try
             {
-                return RedirectToAction("Index");
-            }
-            
-            List<PreviewPortfolioViewModel> model = await _portfolioService.GetAllUsersByRegexAsync(expression);
+                if (String.IsNullOrEmpty(expression))
+                {
+                    return RedirectToAction("Index");
+                }
 
-            return View(model);
+                List<PreviewPortfolioViewModel> model = await _portfolioService.GetAllUsersByRegexAsync(expression);
+
+                return View(model);
+            }
+            catch (Exception)
+            {
+
+                return GeneralError();
+            }
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

@@ -46,30 +46,45 @@ public class PortfolioController : BaseController
         catch (Exception)
         {
 
-            return this.GeneralError();
+            return GeneralError();
         }
     }
     [AllowAnonymous]
     public async Task<IActionResult> Details(string id)
     {
-        if (await _userService.IsUserExists(id))
+        try
         {
-            PortfolioViewModel model = await _portfolioService.GetPortfolioFromRouteAsync(id);
+            if (await _userService.IsUserExists(id))
+            {
+                PortfolioViewModel model = await _portfolioService.GetPortfolioFromRouteAsync(id);
 
-            return View(model);
+                return View(model);
+            }
+
+            return NotFound();
         }
+        catch (Exception)
+        {
 
-        return NotFound();
+            return GeneralError();
+        }
     }
 
     public async Task<IActionResult> Create(string id)
     {
-        if (GetCurrentUserName() == id && !await _portfolioService.LogedInUserHasPortfolio(GetCurrentUserId()))
+        try
         {
-            await _portfolioService.CreateFirstPortfolioAsync(GetCurrentUserId());
-        }
+            if (GetCurrentUserName() == id && !await _portfolioService.LogedInUserHasPortfolio(GetCurrentUserId()))
+            {
+                await _portfolioService.CreateFirstPortfolioAsync(GetCurrentUserId());
+            }
 
-        return RedirectToAction("Details", new { id });
+            return RedirectToAction("Details", new { id });
+        }
+        catch (Exception)
+        {
+            return GeneralError();
+        }
     }
 
     [HttpGet]
@@ -83,18 +98,15 @@ public class PortfolioController : BaseController
             }
 
             EditDescriptionPortfolioViewModelViewModel? model = await _portfolioService.GetEditDescriptionViewModelAsync(GetCurrentUserId());
-
             return View(model);
         }
         catch (Exception)
         {
-
-            return RedirectToAction("Error", "Home");
+            return GeneralError();
         }
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public async Task<IActionResult> EditDescription(EditDescriptionPortfolioViewModelViewModel model)
     {
         if (!ModelState.IsValid)
@@ -102,26 +114,38 @@ public class PortfolioController : BaseController
             return View(model);
         }
 
-        await _portfolioService.SaveDescriptionAsync(model, GetCurrentUserId());
-
-        return RedirectToAction("Details", new { id = GetCurrentUserName() });
+        try
+        {
+            await _portfolioService.SaveDescriptionAsync(model, GetCurrentUserId());
+            this.TempData[SuccessMessage] = "Changes was saved.";
+            return RedirectToAction("Details", new { id = GetCurrentUserName() });
+        }
+        catch (Exception)
+        {
+            return GeneralError();
+        }
     }
 
     [HttpGet]
     public async Task<IActionResult> EditAbout(string id)
     {
-        if (id != GetCurrentUserName())
+        try
         {
-            return NotFound();
+            if (id != GetCurrentUserName())
+            {
+                return NotFound();
+            }
+
+            EditAboutPortfolioViewModelViewModel model = await _portfolioService.GetEditAboutViewModelAsync(GetCurrentUserId());
+            return View(model);
         }
-
-        EditAboutPortfolioViewModelViewModel model = await _portfolioService.GetEditAboutViewModelAsync(GetCurrentUserId());
-
-        return View(model);
+        catch (Exception)
+        {
+            return GeneralError();
+        }
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public async Task<IActionResult> EditAbout(EditAboutPortfolioViewModelViewModel model)
     {
         if (!ModelState.IsValid)
@@ -138,7 +162,6 @@ public class PortfolioController : BaseController
         {
             return GeneralError();
         }
-
     }
 
     [AllowAnonymous]
@@ -168,7 +191,6 @@ public class PortfolioController : BaseController
 
     [AllowAnonymous]
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public IActionResult SendEmail(ContactFormViewModel model, string id)
     {
         try
@@ -193,14 +215,5 @@ public class PortfolioController : BaseController
         {
             return RedirectToAction("GeneralError");
         }
-    }
-
-    [AllowAnonymous]
-    private IActionResult GeneralError()
-    {
-        this.TempData[ErrorMessage] =
-            "Unexpected error occurred! Please try again later or contact administrator";
-
-        return this.RedirectToAction("Index", "Home");
     }
 }

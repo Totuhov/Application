@@ -9,8 +9,8 @@ using Application.Data.Models;
 [HtmlTargetElement("td", Attributes = "i-role")]
 public class RoleUsersTH : TagHelper
 {
-    private UserManager<ApplicationUser> _userManager;
-    private RoleManager<IdentityRole> _roleManager;
+    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly RoleManager<IdentityRole> _roleManager;
 
     public RoleUsersTH(UserManager<ApplicationUser> usermgr, RoleManager<IdentityRole> rolemgr)
     {
@@ -23,7 +23,7 @@ public class RoleUsersTH : TagHelper
 
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
-        List<string> names = new List<string>();
+        List<string> names = new();
         IdentityRole role = await _roleManager.FindByIdAsync(Role);
         if (role != null)
         {

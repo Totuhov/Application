@@ -11,13 +11,11 @@ using static Application.Common.NotificationMessagesConstants;
 
 public class BlogController : BaseController
 {
-    private readonly IBlogService _service;
-    private readonly IUserService _userService;
+    private readonly IBlogService _blogService;
 
-    public BlogController(IBlogService service, IUserService userService)
+    public BlogController(IBlogService service)
     {
-        _service = service;
-        _userService = userService;
+        _blogService = service;
     }
 
     [HttpGet]
@@ -35,12 +33,12 @@ public class BlogController : BaseController
                 return View(model);
             }
 
-            return NotFound();
+            return GeneralError();
         }
         catch (Exception)
         {
-            return NotFound();
-        }        
+            return GeneralError();
+        }
     }
 
     [HttpPost]
@@ -54,14 +52,13 @@ public class BlogController : BaseController
 
         try
         {
-            await _service.CreatePostAsync(model);
+            await _blogService.CreatePostAsync(model);
             this.TempData[SuccessMessage] = "Article was posted successfuly!";
             return RedirectToAction("Index", "Portfolio");
         }
         catch (Exception)
         {
-            this.TempData[ErrorMessage] = "Something's wrong. Article was not posted successfuly!";
-            return RedirectToAction("Index", "Portfolio");
+            return GeneralError();
         }
     }
 
@@ -70,15 +67,20 @@ public class BlogController : BaseController
     {
         try
         {
-            CreateArticleViewModel model = await _service.GetCreateArticleViewModelByIdAsync(id, GetCurrentUserId());
-            return View(model);
+            bool result = _blogService.IsUserOwnerOfArticle(id, GetCurrentUserId());
+
+            if (result || User.IsInRole("Admin"))
+            {
+                CreateArticleViewModel model = await _blogService.GetCreateArticleViewModelByIdAsync(id, GetCurrentUserId());
+                return View(model);
+            }
+            return GeneralError();
         }
         catch (Exception)
         {
-
-            return NotFound();
+            return GeneralError();
         }
-        
+
     }
 
     [HttpPost]
@@ -89,16 +91,22 @@ public class BlogController : BaseController
             return View(model);
         }
 
-        await _service.SavePostAsync(model);
-
-        string userName = await _userService.GetUsernameByIdAsync(model.ApplicationUserId);
-
-        if (userName == null)
+        try
         {
-            return NotFound();
-        }
+            await _blogService.SavePostAsync(model);
+            string userName = await _blogService.GetUsernameByArticleIdAsync(model.Id);
 
-        return RedirectToAction("All", new { id = userName });
+            if (userName == null)
+            {
+                return GeneralError();
+            }
+            this.TempData[SuccessMessage] = "Article was edited successfuly!";
+            return RedirectToAction("All", new { id = userName });
+        }
+        catch (Exception)
+        {
+            return GeneralError();
+        }
     }
 
     [AllowAnonymous]
@@ -107,12 +115,12 @@ public class BlogController : BaseController
     {
         try
         {
-            ArticleViewModel model = await _service.GetArticleViewModelByIdAsync(id);
+            ArticleViewModel model = await _blogService.GetArticleViewModelByIdAsync(id);
             return View(model);
         }
         catch (Exception)
         {
-            return NotFound();
+            return GeneralError();
         }
     }
 
@@ -122,7 +130,7 @@ public class BlogController : BaseController
     {
         try
         {
-            List<ArticleViewModel> articles = await _service.GetAllArticlesByUserNameAsync(id);
+            List<ArticleViewModel> articles = await _blogService.GetAllArticlesByUserNameAsync(id);
 
             AllArticlesViewModel model = new()
             {
@@ -133,7 +141,6 @@ public class BlogController : BaseController
         }
         catch (Exception)
         {
-
             return RedirectToAction("Index", "Home");
         }
     }
@@ -144,18 +151,23 @@ public class BlogController : BaseController
     {
         try
         {
-            ArticleViewModel model = await _service.GetArticleViewModelByIdAsync(id);
+            bool result = _blogService.IsUserOwnerOfArticle(id, GetCurrentUserId());
 
-            await _service.DeleteArticleAsync(model);
+            if (result || User.IsInRole("Admin"))
+            {
+                ArticleViewModel model = await _blogService.GetArticleViewModelByIdAsync(id);
 
-            this.TempData[SuccessMessage] = "Article was deleted successfuly!";
-            return RedirectToAction("Details", "Portfolio", new { id = model.ApplicationUserName });
+                await _blogService.DeleteArticleAsync(model);
+
+                this.TempData[SuccessMessage] = "Article was deleted successfuly!";
+                return RedirectToAction("Details", "Portfolio", new { id = model.ApplicationUserName });
+            }
+
+            return GeneralError();
         }
         catch (Exception)
         {
-
-            this.TempData[ErrorMessage] = "Something wrong. Article was not deleted successfuly!";
-            return RedirectToAction("Details", "Portfolio");
+            return GeneralError();
         }
     }
 }

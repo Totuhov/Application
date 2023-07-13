@@ -1,9 +1,22 @@
-﻿@using Application.Data.Models
-@using Microsoft.AspNetCore.Identity;
+﻿
 @model AllArticlesViewModel
 
 @{
     ViewData["Title"] = "All Articles";
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success" role="alert">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @TempData["ErrorMessage"]
+    </div>
 }
 
 <div class="container d-flex flex-column align-items-center justify-content-center h-auto">

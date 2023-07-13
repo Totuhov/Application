@@ -11,4 +11,6 @@ public interface IBlogService
     Task<ArticleViewModel> GetArticleViewModelByIdAsync(string id);
     Task<List<ArticleViewModel>> GetAllArticlesByUserNameAsync(string userName);
     Task DeleteArticleAsync(ArticleViewModel model);
+    bool IsUserOwnerOfArticle(string articleId, string userId);
+    Task<string> GetUsernameByArticleIdAsync(string articleId);
 }

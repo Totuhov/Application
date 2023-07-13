@@ -21,14 +21,21 @@ public class ImageController : BaseController
     [HttpGet]
     public async Task<IActionResult> All(string id)
     {
-        if (id != GetCurrentUserName())
+        try
         {
-            return NotFound();
+            if (id != GetCurrentUserName())
+            {
+                return GeneralError();
+            }
+
+            var model = await _imageService.GetUserImagesAsync(GetCurrentUserId());
+
+            return View(model);
         }
-
-        var model = await _imageService.GetUserImagesAsync(GetCurrentUserId());
-
-        return View(model);
+        catch (Exception)
+        {
+            return GeneralError();
+        }
     }
 
     [HttpGet]
@@ -42,31 +49,45 @@ public class ImageController : BaseController
     public async Task<IActionResult> Create([FromForm] CreateImageViewModel model)
     {
 
-        if (model.File != null && model.File.Length > 0)
+        try
         {
-            await _imageService.SaveImageInDatabaseAsync(model, GetCurrentUserId());
-            this.TempData[SuccessMessage] = "Image added successfily!";
-        }
+            if (model.File != null && model.File.Length > 0)
+            {
+                await _imageService.SaveImageInDatabaseAsync(model, GetCurrentUserId());
+                this.TempData[SuccessMessage] = "Image added successfily!";
+            }
 
-        return RedirectToAction("All", new { id = GetCurrentUserName() });
+            return RedirectToAction("All", new { id = GetCurrentUserName() });
+        }
+        catch (Exception)
+        {
+            return GeneralError();
+        }
 
     }
 
     public async Task<IActionResult> Delete(string id)
     {
-        if (id == null)
+        try
         {
-            return NotFound();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var model = await _imageService.GetImageByIdAsync(id);
+
+            if (model.ImageId == null)
+            {
+                return NotFound();
+            }
+
+            return View(model);
         }
-
-        var model = await _imageService.GetImageByIdAsync(id);
-
-        if (model.ImageId == null)
+        catch (Exception)
         {
-            return NotFound();
+            return GeneralError();
         }
-
-        return View(model);
     }
 
     [HttpPost, ActionName("Delete")]
@@ -81,8 +102,7 @@ public class ImageController : BaseController
         }
         catch (Exception)
         {
-            this.TempData[ErrorMessage] = "Something's. Image was not deleted. Try again later or contact administrator";
-            return RedirectToAction("All", new { id = GetCurrentUserName() });
+            return GeneralError();
         }
 
     }
@@ -98,8 +118,7 @@ public class ImageController : BaseController
         }
         catch (Exception)
         {
-            this.TempData[ErrorMessage] = "Something's. Image was not changed successfuly. Try again later or contact administrator";
-            return RedirectToAction("Details", "Portfolio", new { id = GetCurrentUserName() });
+            return GeneralError();
         }
     }
 }

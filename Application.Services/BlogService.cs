@@ -98,4 +98,25 @@ public class BlogService : IBlogService
         article.IsDeleted = true;
         await _context.SaveChangesAsync();
     }
+
+    public bool IsUserOwnerOfArticle(string articleId, string userId)
+    {
+        Article? article = _context.Articles.FirstOrDefault(a => a.Id == articleId);
+
+        if (article != null)
+        {
+            if (article.ApplicationUserId == userId)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public async Task<string> GetUsernameByArticleIdAsync(string articleId)
+    {
+        Article article = await _context.Articles.FirstAsync(a => a.Id == articleId);
+
+        return article.ApplicationUser.UserName;
+    }
 }

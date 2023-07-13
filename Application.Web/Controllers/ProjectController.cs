@@ -38,18 +38,28 @@ public class ProjectController : BaseController
             return View(model);
         }
 
-        return NotFound();
-
+        return GeneralError();
     }
 
     [HttpGet]
     public IActionResult Create(string id)
     {
-        CreateProjectViewModel model = new()
+        try
         {
-            ApplicationUserId = GetCurrentUserId()
-        };
-        return View(model);
+            if (id == GetCurrentUserName())
+            {
+                CreateProjectViewModel model = new()
+                {
+                    ApplicationUserId = GetCurrentUserId()
+                };
+                return View(model);
+            }
+            return GeneralError();
+        }
+        catch (Exception)
+        {
+            return GeneralError();
+        }
     }
 
     [HttpPost]
@@ -68,34 +78,45 @@ public class ProjectController : BaseController
         }
         catch (Exception)
         {
-
-            this.TempData[ErrorMessage] = "Somethig's wrong. Creating a new project was unsuccessful!";
-            return View(model);
+            return GeneralError();
         }
     }
 
     [HttpGet]
     public async Task<IActionResult> ChangeImage(string id)
     {
-        ChangeProjectImageViewModel model = new()
+        try
         {
-            ProjectId = id,
-            Images = await _imageService.GetUserImagesAsync(GetCurrentUserId())
-        };
+            ChangeProjectImageViewModel model = new()
+            {
+                ProjectId = id,
+                Images = await _imageService.GetUserImagesAsync(GetCurrentUserId())
+            };
 
-        return View(model);
+            return View(model);
+        }
+        catch (Exception)
+        {
+            return GeneralError();
+        }
     }
 
     [HttpPost]
     public async Task<IActionResult> ChangeImage(ChangeProjectImageViewModel model)
     {
-
-        if (model.ProjectId != null && model.ImageId != null)
+        try
         {
-            await _projectService.AddImageToProjectAsync(model.ProjectId, model.ImageId);
-        }
+            if (model.ProjectId != null && model.ImageId != null)
+            {
+                await _projectService.AddImageToProjectAsync(model.ProjectId, model.ImageId);
+            }
 
-        return RedirectToAction("All", new { id = GetCurrentUserName() });
+            return RedirectToAction("All", new { id = GetCurrentUserName() });
+        }
+        catch (Exception)
+        {
+            return GeneralError();
+        }
     }
 
     public IActionResult CreateImage()
@@ -106,15 +127,20 @@ public class ProjectController : BaseController
     [HttpPost]
     public async Task<IActionResult> CreateImage([FromForm] CreateImageViewModel model)
     {
-
-        if (model.File != null && model.File.Length > 0)
+        try
         {
-            await _imageService.SaveImageInDatabaseAsync(model, GetCurrentUserId());
-
-            // Redirect or show success message to the user
+            if (model.File != null && model.File.Length > 0)
+            {
+                await _imageService.SaveImageInDatabaseAsync(model, GetCurrentUserId());
+            }         
+            
+            return RedirectToAction("All", new { id = GetCurrentUserName() });
         }
-        // Handle validation errors if necessary
-        return RedirectToAction("All", new { id = GetCurrentUserName() });
+        catch (Exception)
+        {
+
+            return GeneralError();
+        }
     }
 
     [HttpGet]
@@ -123,13 +149,12 @@ public class ProjectController : BaseController
         try
         {
             EditProjectViewModel model = await _projectService.GetEditProjectViewModelAsync(id);
-
             model.ApplicationUserId = GetCurrentUserId();
             return View(model);
         }
         catch (Exception)
         {
-            return NotFound();
+            return GeneralError();
         }
     }
 
@@ -148,10 +173,8 @@ public class ProjectController : BaseController
         }
         catch (Exception)
         {
-            this.TempData[ErrorMessage] = "Somethig's wrong. Project was not saved successfuly.";
-            return RedirectToAction("Index", "Home");
+            return GeneralError();
         }
-        
     }
 
     public async Task<IActionResult> Use(string id)
@@ -163,10 +186,8 @@ public class ProjectController : BaseController
         }
         catch (Exception)
         {
-
-            this.TempData[ErrorMessage] = "Somethig's wrong. Image was not added to profile successfuly.";
-            return RedirectToAction("Index", "Home");
-        }        
+            return GeneralError();
+        }
     }
 
     [HttpGet]
@@ -179,8 +200,8 @@ public class ProjectController : BaseController
         }
         catch (Exception)
         {
-            return NotFound();
-        }                 
+            return GeneralError();
+        }
     }
 
     [HttpPost]
@@ -194,8 +215,7 @@ public class ProjectController : BaseController
         }
         catch (Exception)
         {
-            this.TempData[ErrorMessage] = "Somethig's wrong. Delete was unsuccessful!";
-            return View(model);
+            return GeneralError();
         }
     }
 }
