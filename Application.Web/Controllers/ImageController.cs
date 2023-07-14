@@ -25,7 +25,7 @@ public class ImageController : BaseController
         {
             if (id != GetCurrentUserName())
             {
-                return GeneralError();
+                return NotFound();
             }
 
             var model = await _imageService.GetUserImagesAsync(GetCurrentUserId());
@@ -72,14 +72,14 @@ public class ImageController : BaseController
         {
             if (id == null)
             {
-                return GeneralError();
+                return NotFound();
             }
 
             var model = await _imageService.GetImageByIdAsync(id);
 
             if (model.ImageId == null)
             {
-                return GeneralError();
+                return NotFound();
             }
 
             return View(model);

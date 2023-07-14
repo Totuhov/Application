@@ -33,7 +33,7 @@ public class BlogController : BaseController
                 return View(model);
             }
 
-            return GeneralError();
+            return NotFound();
         }
         catch (Exception)
         {
@@ -74,11 +74,11 @@ public class BlogController : BaseController
                 CreateArticleViewModel model = await _blogService.GetCreateArticleViewModelByIdAsync(id, GetCurrentUserId());
                 return View(model);
             }
-            return GeneralError();
+            return NotFound();
         }
         catch (Exception)
         {
-            return GeneralError();
+            return NotFound();
         }
 
     }
@@ -98,7 +98,7 @@ public class BlogController : BaseController
 
             if (userName == null)
             {
-                return GeneralError();
+                return NotFound();
             }
             this.TempData[SuccessMessage] = "Article was edited successfuly!";
             return RedirectToAction("All", new { id = userName });
@@ -120,7 +120,7 @@ public class BlogController : BaseController
         }
         catch (Exception)
         {
-            return GeneralError();
+            return NotFound();
         }
     }
 
@@ -163,7 +163,7 @@ public class BlogController : BaseController
                 return RedirectToAction("Details", "Portfolio", new { id = model.ApplicationUserName });
             }
 
-            return GeneralError();
+            return NotFound();
         }
         catch (Exception)
         {

@@ -154,7 +154,7 @@ public class ProjectController : BaseController
         }
         catch (Exception)
         {
-            return GeneralError();
+            return NotFound();
         }
     }
 

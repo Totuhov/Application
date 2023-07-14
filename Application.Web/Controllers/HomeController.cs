@@ -1,6 +1,7 @@
 ﻿using Application.Services.Interfaces;
 using Application.Web.ViewModels;
 using Application.Web.ViewModels.Portfolio;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -15,6 +16,7 @@ namespace Application.Web.Controllers
             this._portfolioService = portfolioService;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult Index()
         {
@@ -33,12 +35,14 @@ namespace Application.Web.Controllers
 
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult Privacy()
         {
             return View();
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> All(string expression)
         {
