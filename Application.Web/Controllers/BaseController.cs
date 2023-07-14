@@ -14,7 +14,7 @@ public class BaseController : Controller
         return User.FindFirstValue(ClaimTypes.Name);
     }
 
-    protected string GetCurrentUserId()
+    protected virtual string GetCurrentUserId()
     {
         return User.FindFirstValue(ClaimTypes.NameIdentifier);
     }

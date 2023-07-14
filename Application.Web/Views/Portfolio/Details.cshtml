@@ -153,6 +153,7 @@
         <h1 class="display-4">Contact</h1>
     </div>
     <div class="d-flex flex-column align-items-center justify-content-center" id="Contact">
+        <p>email: @Model.Email</p>
         <a asp-action="SendEmail" asp-route-id="@Model.UserName" class="btn btn-outline-dark">Send Message</a>
     </div>
 </div>

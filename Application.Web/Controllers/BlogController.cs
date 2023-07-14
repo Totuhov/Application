@@ -53,7 +53,7 @@ public class BlogController : BaseController
         try
         {
             await _blogService.CreatePostAsync(model);
-            this.TempData[SuccessMessage] = "Article was posted successfuly!";
+            this.TempData[SuccessMessage] = "Article was posted successfully!";
             return RedirectToAction("Index", "Portfolio");
         }
         catch (Exception)
