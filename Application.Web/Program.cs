@@ -32,8 +32,6 @@ builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<IPortfolioService, PortfolioService>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<IMessageService, MessageService>();
-//builder.Services.AddScoped<RoleManager<IdentityRole>>();
-//builder.Services.AddScoped<UserManager<ApplicationUser>>();
 
 var app = builder.Build();
 
@@ -77,9 +75,5 @@ app.UseEndpoints(endpoints =>
     endpoints.MapRazorPages();
 });
 
-//app.MapControllerRoute(
-//    name: "default",
-//    pattern: "{controller=Home}/{action=Index}/{id?}");
-//app.MapRazorPages();
 
 app.Run();

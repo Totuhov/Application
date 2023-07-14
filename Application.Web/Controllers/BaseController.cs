@@ -9,7 +9,7 @@ namespace Application.Web.Controllers;
 [Authorize]
 public class BaseController : Controller
 {
-    protected string GetCurrentUserName()
+    protected virtual string GetCurrentUserName()
     {
         return User.FindFirstValue(ClaimTypes.Name);
     }

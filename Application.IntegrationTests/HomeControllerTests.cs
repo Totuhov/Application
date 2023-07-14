@@ -1,6 +1,4 @@
 ﻿
-using System.Net;
-
 namespace Application.IntegrationTests
 {
     public class HomeControllerTests

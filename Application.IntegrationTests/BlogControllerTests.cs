@@ -1,97 +1,115 @@
 ﻿
-using Application.Services.Interfaces;
-using Application.Web.Controllers;
-using Application.Web.ViewModels.Article;
-using Microsoft.AspNetCore.Http;
+
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using Moq;
-using System.Security.Claims;
 
 namespace Application.IntegrationTests
 {
     [TestFixture]
     public class BlogControllerTests
     {
-        private Mock<IBlogService> _mockBlogService;
-        private BlogController _controller;
+        private Mock<IBlogService> mockBlogService;
+        private Mock<HttpContext> mockHttpContext;
+        private MockControllerContext mockControllerContext;
+        private BlogController controller;
+        private ClaimsPrincipal user;
+        private List<CreateArticleViewModel> articles;
+        private string username;
 
-        [OneTimeSetUp]
+        [SetUp]
         public void Initialize()
         {
-            _mockBlogService = new Mock<IBlogService>();
-            _controller = new BlogController(_mockBlogService.Object);
+            this.mockBlogService = new Mock<IBlogService>();
+            this.mockHttpContext = new Mock<HttpContext>();
+            this.controller = new BlogController(mockBlogService.Object);
+
+            this.user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                new Claim(ClaimTypes.Name, "guest"),
+                new Claim(ClaimTypes.NameIdentifier, "1"),
+                new Claim(ClaimTypes.Role, "Admin")
+            }, "mock"));
+
+            mockControllerContext = new MockControllerContext(this.user);
+
+            this.controller.ControllerContext = mockControllerContext;
+
+            this.username = "guest";
+
+            this.articles = new List<CreateArticleViewModel>()
+            {
+                new CreateArticleViewModel()
+                {
+                    Id = "1",
+                    ApplicationUserId = "1",
+                    Title = "First Article",
+                    Content = "Mir wurde gesagt von denen, dass die die Ruckmeldkarte Ihnen schiken " +
+                        "werden. Wahrscheinlich haben sie das noch nich gemacht. Ich habe mit denen " +
+                        "gesprochen und sie werden, dass sie Ihnen so schnell wie möglich zusenden werden.",
+                    EditedOn = DateTime.Now,
+                    IsDeleted = false
+                },
+                new CreateArticleViewModel()
+                {
+                    Id = "1",
+                    ApplicationUserId = "2",
+                    Title = "First Article",
+                    Content = "Mir wurde gesagt von denen, dass die die Ruckmeldkarte Ihnen schiken " +
+                        "werden. Wahrscheinlich haben sie das noch nich gemacht. Ich habe mit denen " +
+                        "gesprochen und sie werden, dass sie Ihnen so schnell wie möglich zusenden werden.",
+                    EditedOn = DateTime.Now,
+                    IsDeleted = false
+                }
+            };
         }
 
         [Test]
-        public void Create_ValidId_ReturnsView()
+        public void Create_Get_ValidId_ReturnsView()
         {
-            // Arrange
-            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
-            {
-                new Claim(ClaimTypes.Name, "YourUsername") // Set the username or any other claims as needed
-            }, "mock"));
-            var mockControllerContext = new MockControllerContext(user);
-            var id = "YourUsername";
+            var result = controller.Create(this.username) as ActionResult;
 
-            var testableController = new TestableBlogController(_mockBlogService.Object, "YourUsername"); // Set the desired user ID for testing
-            testableController.ControllerContext = mockControllerContext;
-
-            // Manually initialize TempData
-            testableController.TempData = new TempDataDictionary(mockControllerContext.HttpContext, Mock.Of<ITempDataProvider>());
-
-            // Act
-            var result = testableController.Create(id) as ViewResult;
-
-            // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.ViewName, Is.EqualTo("Create")); // Verify that the view returned is the "Create" view
-                                                        // Additional assertions if needed
         }
 
         [Test]
-        [Order(1)]
-        public async Task Create_ValidModel_RedirectsToIndex()
+        public void Create_Get_InvalidId_ReturnsNotFound()
         {
-            // Arrange
-            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
-            {
-                new Claim(ClaimTypes.Name, "guest")
-            }, "mock"));
-            var mockControllerContext = new MockControllerContext(user);
+            var result = this.controller.Create("gues") as NotFoundResult;
+
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.StatusCode, Is.EqualTo(404));
+        }
+
+        [Test]
+        public async Task Create_Post_ValidModel_RedirectsToIndex()
+        {
             var model = new CreateArticleViewModel
             {
                 ApplicationUserId = "guest"
             };
-            _controller.TempData = new TempDataDictionary(mockControllerContext.HttpContext, Mock.Of<ITempDataProvider>());
+            controller.TempData = new TempDataDictionary(mockControllerContext.HttpContext, Mock.Of<ITempDataProvider>());
 
-            // Act
-            var result = await _controller.Create(model) as RedirectToActionResult;
+            var result = await controller.Create(model) as RedirectToActionResult;
 
-            // Assert
             Assert.That(result, Is.Not.Null);
             Assert.Multiple(() =>
             {
                 Assert.That(result.ActionName, Is.EqualTo("Index"));
                 Assert.That(result.ControllerName, Is.EqualTo("Portfolio"));
-                Assert.That(_controller.TempData["SuccessMessage"], Is.EqualTo("Article was posted successfully!"));
+                Assert.That(controller.TempData["SuccessMessage"], Is.EqualTo("Article was posted successfully!"));
             });
         }
 
         [Test]
-        public async Task Create_InvalidValidModel_RedirectsToView()
+        public async Task Create_Post_InvalidValidModel_RedirectsToView()
         {
-            // Arrange            
             var model = new CreateArticleViewModel
             {
                 ApplicationUserId = "guest",
             };
-            _controller.ModelState.AddModelError("Title", "1");
+            controller.ModelState.AddModelError("Title", "1");
 
-            // Act
-            var result = await _controller.Create(model) as ViewResult;
+            var result = await controller.Create(model) as ViewResult;
 
-            // Assert
             Assert.That(result, Is.Not.Null);
             Assert.Multiple(() =>
             {
@@ -101,51 +119,231 @@ namespace Application.IntegrationTests
         }
 
         [Test]
-        public async Task Create_ExceptionThrown_ReturnsGeneralError()
+        public async Task Create_Post_ReturnsGeneralError()
         {
-            // Arrange
-            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
-            {
-                new Claim(ClaimTypes.Name, "guest")
-            }, "mock"));
-            var mockControllerContext = new MockControllerContext(user);
             var model = new CreateArticleViewModel();
 
-            _controller.ControllerContext = mockControllerContext;
-            _controller.TempData = new TempDataDictionary(mockControllerContext.HttpContext, Mock.Of<ITempDataProvider>());
-            _mockBlogService.Setup(service => service.CreatePostAsync(It.IsAny<CreateArticleViewModel>())).ThrowsAsync(new Exception("Some error message"));
+            controller.TempData = new TempDataDictionary(mockControllerContext.HttpContext, Mock.Of<ITempDataProvider>());
+            mockBlogService.Setup(service => service.CreatePostAsync(It.IsAny<CreateArticleViewModel>())).ThrowsAsync(new Exception("Some error message"));
 
-            // Act
-            var result = await _controller.Create(model) as IActionResult;
+            var result = await controller.Create(model) as IActionResult;
 
-            // Assert
             Assert.That(result, Is.Not.Null);
         }
-    }
-    public class MockControllerContext : ControllerContext
-    {
-        public MockControllerContext(ClaimsPrincipal user)
+
+        [Test]
+        public async Task Edit_Get_ValidId_ReturnsView()
         {
-            HttpContext = new DefaultHttpContext
+            var result = await controller.Edit("1") as ActionResult;
+
+            Assert.That(result, Is.Not.Null);
+        }
+        [Test]
+        public async Task Edit_Get_ReturnsGeneralError()
+        {
+            controller.TempData = new TempDataDictionary(mockControllerContext.HttpContext, Mock.Of<ITempDataProvider>());
+            mockBlogService.Setup(x => x.IsUserOwnerOfArticle("1", "1")).Throws<Exception>();
+
+            var result = await controller.Edit("1");
+
+            Assert.That(result, Is.InstanceOf<NotFoundResult>());
+        }
+
+        [Test]
+        public async Task Edit_Get_InvalidId_ReturnsNotFound()
+        {
+            this.user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
             {
-                User = user,
+                new Claim(ClaimTypes.Name, "guest"),
+                new Claim(ClaimTypes.NameIdentifier, "1")
+            }, "mock"));
+            mockControllerContext = new MockControllerContext(this.user);
+            this.controller.ControllerContext = mockControllerContext;
+
+            var result = await this.controller.Edit("1") as NotFoundResult;
+
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.StatusCode, Is.EqualTo(404));
+        }
+
+        [Test]
+        public async Task Edit_Post_WhenUserIsOwner_ReturnsView()
+        {
+            mockBlogService.Setup(x => x.GetUsernameByArticleIdAsync("1")).ReturnsAsync("1");
+            CreateArticleViewModel model = this.articles.First(x => x.Id == "1");
+            controller.TempData = new TempDataDictionary(mockControllerContext.HttpContext, Mock.Of<ITempDataProvider>());
+            var result = await controller.Edit(model) as RedirectToActionResult;
+
+            Assert.That(result, Is.Not.Null);
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.ActionName, Is.EqualTo("All")); ;
+                Assert.That(controller.TempData["SuccessMessage"], Is.EqualTo("Article was edited successfuly!"));
+            });
+        }
+        [Test]
+        public async Task Edit_Post_WhenUserIsNotOwnerAndNotAdmin_ReturnsNotFound()
+        {
+            this.user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+             {
+                new Claim(ClaimTypes.Name, "guest"),
+                new Claim(ClaimTypes.NameIdentifier, "1")
+             }, "mock"));
+            mockBlogService.Setup(x => x.IsUserOwnerOfArticle("2", "1")).Returns(false);
+            CreateArticleViewModel model = this.articles.First(x => x.Id == "1");
+
+            var result = await controller.Edit(model);
+
+            Assert.That(result, Is.InstanceOf<NotFoundResult>());
+        }
+
+        [Test]
+        public async Task Edit_Post_ReturnsGeneralError()
+        {
+            var model = new CreateArticleViewModel();
+            controller.TempData = new TempDataDictionary(mockControllerContext.HttpContext, Mock.Of<ITempDataProvider>());
+            mockBlogService.Setup(x => x.GetUsernameByArticleIdAsync(model.Id)).Throws<Exception>();
+
+            var result = await controller.Edit(model);
+            Assert.Multiple(() =>
+            {
+                Assert.That(result, Is.InstanceOf<RedirectToActionResult>());
+                Assert.That(((RedirectToActionResult)result).ActionName, Is.EqualTo("Index"));
+            });
+        }
+
+        [Test]
+        public async Task Edit_Post_InvalidModelState()
+        {
+            CreateArticleViewModel model = this.articles.First(x => x.Id == "1");
+            controller.ModelState.AddModelError("Title", "1");
+
+            var result = await controller.Edit(model);
+
+            Assert.That(result, Is.InstanceOf<ViewResult>());
+        }
+
+        [Test]
+        public async Task Details_WhenArticleExists_ReturnsView()
+        {
+            string articleId = "123";
+            ArticleViewModel expectedModel = new();
+            mockBlogService.Setup(x => x.GetArticleViewModelByIdAsync(articleId)).ReturnsAsync(expectedModel);
+
+            var result = await controller.Details(articleId);
+            Assert.Multiple(() =>
+            {
+                Assert.That(result, Is.InstanceOf<ViewResult>());
+                Assert.That(((ViewResult)result).Model, Is.EqualTo(expectedModel));
+            });
+        }
+
+        [Test]
+        public async Task Details_WhenArticleDoesNotExist_ReturnsNotFound()
+        {
+            string articleId = "123";
+            mockBlogService.Setup(x => x.GetArticleViewModelByIdAsync(articleId)).ReturnsAsync((ArticleViewModel)null);
+
+            var result = await controller.Details(articleId);
+
+            Assert.That(result, Is.InstanceOf<ViewResult>());
+        }
+
+        [Test]
+        public async Task Details_ExceptionThrown_ReturnsNotFound()
+        {
+            string articleId = "123";
+            mockBlogService.Setup(x => x.GetArticleViewModelByIdAsync(articleId)).Throws<Exception>();
+
+            var result = await controller.Details(articleId);
+
+            Assert.That(result, Is.InstanceOf<NotFoundResult>());
+        }
+
+        [Test]
+        public async Task All_WhenArticlesExist_ReturnsView()
+        {
+            string userName = "testuser";
+            List<ArticleViewModel> expectedArticles = new List<ArticleViewModel>()
+            {
+                new ArticleViewModel { Id = "1", Title = "Article 1" },
+                new ArticleViewModel { Id = "2", Title = "Article 2" }
             };
-        }
-    }
-    public class TestableBlogController : BlogController
-    {
-        private readonly string _userId;
+            mockBlogService.Setup(x => x.GetAllArticlesByUserNameAsync(userName)).ReturnsAsync(expectedArticles);
 
-        public TestableBlogController(IBlogService service, string userId)
-            : base(service)
-        {
-            _userId = userId;
+            var result = await controller.All(userName);
+
+            Assert.That(result, Is.InstanceOf<ViewResult>());
+            var viewResult = (ViewResult)result;
+            Assert.That(viewResult.Model, Is.InstanceOf<AllArticlesViewModel>());
+            var model = (AllArticlesViewModel)viewResult.Model;
+            Assert.Multiple(() =>
+            {
+                Assert.That(model.UserName, Is.EqualTo(userName));
+                Assert.That(model.Articles, Is.EqualTo(expectedArticles));
+            });
         }
 
-        // Override the GetCurrentUserId() method to return the custom user ID
-        protected override string GetCurrentUserId()
+        [Test]
+        public async Task All_WhenNoArticlesExist_ReturnsView()
         {
-            return _userId;
+            string userName = "testuser";
+            List<ArticleViewModel> expectedArticles = new List<ArticleViewModel>();
+            mockBlogService.Setup(x => x.GetAllArticlesByUserNameAsync(userName)).ReturnsAsync(expectedArticles);
+
+            var result = await controller.All(userName);
+
+            Assert.That(result, Is.InstanceOf<ViewResult>());
+            var viewResult = (ViewResult)result;
+            Assert.That(viewResult.Model, Is.InstanceOf<AllArticlesViewModel>());
+            var model = (AllArticlesViewModel)viewResult.Model;
+            Assert.Multiple(() =>
+            {
+                Assert.That(model.UserName, Is.EqualTo(userName));
+                Assert.That(model.Articles, Is.EqualTo(expectedArticles));
+            });
+        }
+
+        [Test]
+        public async Task All_ExceptionThrown_RedirectsToIndexAction()
+        {
+            string userName = "testuser";
+            mockBlogService.Setup(x => x.GetAllArticlesByUserNameAsync(userName)).Throws<Exception>();
+
+            var result = await controller.All(userName);
+
+            // Assert
+            Assert.That(result, Is.InstanceOf<RedirectToActionResult>());
+            var redirectResult = (RedirectToActionResult)result;
+            Assert.Multiple(() =>
+            {
+                Assert.That(redirectResult.ActionName, Is.EqualTo("Index"));
+                Assert.That(redirectResult.ControllerName, Is.EqualTo("Home"));
+            });
+        }
+
+        [Test]
+        public async Task Delete_WithValidArticleId()
+        {
+            mockBlogService.Setup(x => x.IsUserOwnerOfArticle("1", "1")).Returns(true);
+            var model = mockBlogService.Setup(x => x.GetArticleViewModelByIdAsync("1"))
+                .ReturnsAsync(new ArticleViewModel()
+                {
+                    Id = "1",
+                    Title = "Title",
+                    ApplicationUserName = "guest"
+                });
+
+            controller.TempData = new TempDataDictionary(mockControllerContext.HttpContext, Mock.Of<ITempDataProvider>());
+            var result = await controller.Delete("1");
+
+            Assert.That(result, Is.InstanceOf<RedirectToActionResult>());
+            var redirectResult = (RedirectToActionResult)result;
+            Assert.Multiple(() =>
+            {
+                Assert.That(redirectResult.ActionName, Is.EqualTo("Details"));
+                Assert.That(redirectResult.ControllerName, Is.EqualTo("Portfolio"));
+            });
         }
     }
 }

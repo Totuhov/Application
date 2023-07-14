@@ -18,7 +18,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Application.Common\Application.Common.csproj" />
+    <ProjectReference Include="..\Application.Data.Models\Application.Data.Models.csproj" />
     <ProjectReference Include="..\Application.Services\Application.Services.csproj" />
+    <ProjectReference Include="..\Application.Web.ViewModels\Application.Web.ViewModels.csproj" />
     <ProjectReference Include="..\Application.Web\Application.Web.csproj" />
   </ItemGroup>
 

@@ -30,6 +30,8 @@ public class BlogController : BaseController
                     ApplicationUserId = GetCurrentUserId()
                 };
 
+                var result = View(model);
+
                 return View(model);
             }
 
@@ -93,13 +95,13 @@ public class BlogController : BaseController
 
         try
         {
-            await _blogService.SavePostAsync(model);
             string userName = await _blogService.GetUsernameByArticleIdAsync(model.Id);
 
             if (userName == null)
             {
                 return NotFound();
             }
+            await _blogService.SavePostAsync(model);
             this.TempData[SuccessMessage] = "Article was edited successfuly!";
             return RedirectToAction("All", new { id = userName });
         }
