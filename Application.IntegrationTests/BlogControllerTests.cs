@@ -1,14 +1,10 @@
 ﻿
-
-using Microsoft.AspNetCore.Mvc;
-
 namespace Application.IntegrationTests
 {
     [TestFixture]
     public class BlogControllerTests
     {
         private Mock<IBlogService> mockBlogService;
-        private Mock<HttpContext> mockHttpContext;
         private MockControllerContext mockControllerContext;
         private BlogController controller;
         private ClaimsPrincipal user;
@@ -19,7 +15,6 @@ namespace Application.IntegrationTests
         public void Initialize()
         {
             this.mockBlogService = new Mock<IBlogService>();
-            this.mockHttpContext = new Mock<HttpContext>();
             this.controller = new BlogController(mockBlogService.Object);
 
             this.user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
@@ -343,6 +338,37 @@ namespace Application.IntegrationTests
             {
                 Assert.That(redirectResult.ActionName, Is.EqualTo("Details"));
                 Assert.That(redirectResult.ControllerName, Is.EqualTo("Portfolio"));
+            });
+        }
+
+        [Test]
+        public async Task Delete_WithInvalidValidArticleIdAndUserIsNotAdmin()
+        {
+            this.user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                new Claim(ClaimTypes.Name, "guest"),
+                new Claim(ClaimTypes.NameIdentifier, "2")
+            }, "mock"));
+            mockControllerContext = new MockControllerContext(this.user);
+            mockBlogService.Setup(x => x.IsUserOwnerOfArticle("notFound", "2")).Returns(false);
+            this.controller.ControllerContext = mockControllerContext;
+
+            var result = await this.controller.Delete("notFound") as NotFoundResult;
+
+            Assert.That(result, Is.InstanceOf<NotFoundResult>());
+        }
+
+        [Test]
+        public async Task Delete_ReturnsGeneralError()
+        {            
+            controller.TempData = new TempDataDictionary(mockControllerContext.HttpContext, Mock.Of<ITempDataProvider>());
+            mockBlogService.Setup(x => x.IsUserOwnerOfArticle("1", "1")).Throws<Exception>();
+
+            var result = await controller.Delete("1");
+            Assert.Multiple(() =>
+            {
+                Assert.That(result, Is.InstanceOf<RedirectToActionResult>());
+                Assert.That(((RedirectToActionResult)result).ActionName, Is.EqualTo("Index"));
             });
         }
     }

@@ -17,7 +17,6 @@ public class ImageController : BaseController
         this._imageService = imageService;
     }
 
-
     [HttpGet]
     public async Task<IActionResult> All(string id)
     {
@@ -54,7 +53,7 @@ public class ImageController : BaseController
             if (model.File != null && model.File.Length > 0)
             {
                 await _imageService.SaveImageInDatabaseAsync(model, GetCurrentUserId());
-                this.TempData[SuccessMessage] = "Image added successfily!";
+                this.TempData[SuccessMessage] = "Image added successfully!";
             }
 
             return RedirectToAction("All", new { id = GetCurrentUserName() });
@@ -97,7 +96,7 @@ public class ImageController : BaseController
         try
         {
             await _imageService.DeleteImageByIdAsync(id);
-            this.TempData[SuccessMessage] = "Image deleted successfily!";
+            this.TempData[SuccessMessage] = "Image deleted successfully!";
             return RedirectToAction("All", new { id = GetCurrentUserName() });
         }
         catch (Exception)
@@ -112,7 +111,7 @@ public class ImageController : BaseController
         try
         {
             await _imageService.UseImageAsProfilAsync(id, GetCurrentUserId());
-            this.TempData[SuccessMessage] = "Profile image change successfily!";
+            this.TempData[SuccessMessage] = "Profile image changed successfully!";
 
             return RedirectToAction("Details", "Portfolio", new { id = GetCurrentUserName() });
         }
