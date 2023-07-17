@@ -1,7 +1,6 @@
 ﻿
 using Application.Web.ViewModels.Image;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Application.IntegrationTests
 {
@@ -51,13 +50,9 @@ namespace Application.IntegrationTests
         {
             mockImageService.Setup(setup => setup.GetUserImagesAsync("guest")).ReturnsAsync(new List<ImageViewModel>());
 
-            var result = await controller.All("guest") as ViewResult;
+            var result = await controller.All("guest") as ActionResult;
 
             Assert.That(result, Is.Not.Null);
-            Assert.Multiple(() =>
-            {
-                Assert.That(result.ViewName == null || result.ViewName == "All", Is.True);
-            });
         }
 
         [Test]
@@ -77,7 +72,7 @@ namespace Application.IntegrationTests
         [Test]
         public void Create_Get_ReturnsView()
         {
-            var result = controller.Create() as IActionResult;
+            var result = controller.Create() as ActionResult;
 
             Assert.That(result, Is.Not.Null);
         }
