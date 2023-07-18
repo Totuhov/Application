@@ -135,7 +135,7 @@ namespace Application.IntegrationTests
             var result = await controller.All(expression) as RedirectToActionResult;
 
             Assert.NotNull(result);
-            Assert.AreEqual("Index", result.ActionName);
+            Assert.That(result.ActionName, Is.EqualTo("Index"));
         }
 
         [Test]

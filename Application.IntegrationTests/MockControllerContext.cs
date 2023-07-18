@@ -1,4 +1,7 @@
-﻿namespace Application.IntegrationTests
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Data.SqlClient.Server;
+
+namespace Application.IntegrationTests
 {
     public class MockControllerContext : ControllerContext
     {
@@ -6,7 +9,7 @@
         {
             HttpContext = new DefaultHttpContext
             {
-                User = user,
+                User = user                
             };
         }
     }
