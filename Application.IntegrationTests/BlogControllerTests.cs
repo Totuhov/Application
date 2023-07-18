@@ -237,7 +237,6 @@ namespace Application.IntegrationTests
         public async Task Details_WhenArticleDoesNotExist_ReturnsNotFound()
         {
             string articleId = "123";
-            mockBlogService.Setup(x => x.GetArticleViewModelByIdAsync(articleId)).ReturnsAsync((ArticleViewModel)null);
 
             var result = await controller.Details(articleId);
 

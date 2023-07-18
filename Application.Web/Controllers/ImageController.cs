@@ -47,7 +47,6 @@ public class ImageController : BaseController
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create([FromForm] CreateImageViewModel model)
     {
-
         try
         {
             if (model.File != null && model.File.Length > 0)
@@ -55,7 +54,6 @@ public class ImageController : BaseController
                 await _imageService.SaveImageInDatabaseAsync(model, GetCurrentUserId());
                 this.TempData[SuccessMessage] = "Image added successfully!";
             }
-
             return RedirectToAction("All", new { id = GetCurrentUserName() });
         }
         catch (Exception)
@@ -73,7 +71,6 @@ public class ImageController : BaseController
             {
                 return NotFound();
             }
-
             var model = await _imageService.GetImageByIdAsync(id);
 
             if (model.ImageId == null)
@@ -103,7 +100,6 @@ public class ImageController : BaseController
         {
             return GeneralError();
         }
-
     }
 
     public async Task<IActionResult> UseAsProfile(string id)

@@ -20,7 +20,7 @@ public class BaseController : Controller
     }
 
     [AllowAnonymous]
-    protected IActionResult GeneralError()
+    public IActionResult GeneralError()
     {
         this.TempData[ErrorMessage] =
             "Unexpected error occurred! Please try again later or contact administrator";

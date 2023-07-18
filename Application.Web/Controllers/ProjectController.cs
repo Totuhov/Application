@@ -92,7 +92,7 @@ public class ProjectController : BaseController
     public async Task<IActionResult> ChangeImage(string id)
     {
         try
-        {
+        {            
             ChangeProjectImageViewModel model = new()
             {
                 ProjectId = id,
@@ -144,7 +144,6 @@ public class ProjectController : BaseController
         }
         catch (Exception)
         {
-
             return GeneralError();
         }
     }
