@@ -1,5 +1,8 @@
 ﻿
 using Application.Web.ViewModels.ContactForm;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.Extensions.Primitives;
 
 namespace Application.IntegrationTests
 {
@@ -152,7 +155,7 @@ namespace Application.IntegrationTests
 
         [Test]
         public async Task EditDescription_InvalidId()
-        {            
+        {
             var result = await controller.EditDescription("1");
 
             Assert.That(result, Is.InstanceOf<NotFoundResult>());
@@ -289,7 +292,7 @@ namespace Application.IntegrationTests
 
         [Test]
         public async Task SendEmail_WithValidId()
-        {            
+        {
             this.mockUserService.Setup(service => service.IsUserExists("1"))
                 .ReturnsAsync(true);
 
@@ -338,7 +341,7 @@ namespace Application.IntegrationTests
 
             Assert.That(result, Is.Not.Null);
             Assert.That(result.Model, Is.Not.Null);
-        }        
+        }
 
         [Test]
         public void SendEmail_Post_ThrowsException()
@@ -352,6 +355,60 @@ namespace Application.IntegrationTests
             {
                 Assert.That(result.ActionName, Is.EqualTo("GeneralError"));
             });
+        }
+
+        [Test]
+        public void SendEmail_ModelIsValid_Success()
+        {
+            // Arrange
+            var model = new ContactFormViewModel
+            {
+                SenderName = "John Doe",
+                SenderEmail = "john@example.com",
+                Text = "Hello, this is a test email!",
+                RecieverEmail = "receiver@example.com"
+            };
+            string id = "some_id";
+
+            // Set up the ControllerContext with the POST data
+            controller.ControllerContext = CreateControllerContextWithFormData(model);
+
+            // Act
+            var result = controller.SendEmail(model, id) as RedirectToActionResult;
+
+            // Assert
+            mockMessageService.Verify(m => m.SendEmail(
+                It.IsAny<string>(),
+                It.IsAny<string>(),
+                It.IsAny<string>(),
+                It.IsAny<string>()
+            ), Times.Once);
+
+            Assert.That(result.ActionName, Is.EqualTo("Details"));
+            Assert.That(result.RouteValues["id"], Is.EqualTo(id));
+        }
+
+        /// <summary>
+        /// Special for the last test (needed new ControllerContext)
+        /// </summary>
+        /// <param name="formData"></param>
+        /// <returns></returns>
+        private static ControllerContext CreateControllerContextWithFormData(ContactFormViewModel formData)
+        {
+            var formCollection = new FormCollection(new Dictionary<string, StringValues>
+            {
+                { "senderName", formData.SenderName },
+                { "senderEmail", formData.SenderEmail },
+                { "text", formData.Text },
+                { "recieverEmail", formData.RecieverEmail }
+            });
+
+            var httpContext = new DefaultHttpContext { Request = { Form = formCollection } };
+
+            return new ControllerContext()
+            {
+                HttpContext = httpContext
+            };
         }
     }
 }

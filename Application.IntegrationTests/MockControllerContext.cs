@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Data.SqlClient.Server;
+using Microsoft.Extensions.Primitives;
 
 namespace Application.IntegrationTests
 {
