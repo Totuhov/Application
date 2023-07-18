@@ -27,18 +27,24 @@ public class ProjectController : BaseController
     [HttpGet]
     public async Task<IActionResult> All(string id)
     {
-        if (await _userService.IsUserExists(id))
+        try
         {
-            AllProjectsViewModel model = new()
+            if (await _userService.IsUserExists(id))
             {
-                UserName = id,
-                Projects = await _projectService.GetAllProjectsFromUserByUsernameAsync(id)
+                AllProjectsViewModel model = new()
+                {
+                    UserName = id,
+                    Projects = await _projectService.GetAllProjectsFromUserByUsernameAsync(id)
 
-            };
-            return View(model);
+                };
+                return View(model);
+            }
+            return NotFound();
         }
-
-        return GeneralError();
+        catch (Exception)
+        {
+            return GeneralError();
+        }
     }
 
     [HttpGet]
@@ -54,7 +60,7 @@ public class ProjectController : BaseController
                 };
                 return View(model);
             }
-            return GeneralError();
+            return NotFound();
         }
         catch (Exception)
         {
@@ -132,8 +138,8 @@ public class ProjectController : BaseController
             if (model.File != null && model.File.Length > 0)
             {
                 await _imageService.SaveImageInDatabaseAsync(model, GetCurrentUserId());
-            }         
-            
+            }
+
             return RedirectToAction("All", new { id = GetCurrentUserName() });
         }
         catch (Exception)

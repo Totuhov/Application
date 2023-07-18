@@ -9,12 +9,12 @@ namespace Application.Web.Controllers;
 [Authorize]
 public class BaseController : Controller
 {
-    protected virtual string GetCurrentUserName()
+    public virtual string GetCurrentUserName()
     {
         return User.FindFirstValue(ClaimTypes.Name);
     }
 
-    protected virtual string GetCurrentUserId()
+    public virtual string GetCurrentUserId()
     {
         return User.FindFirstValue(ClaimTypes.NameIdentifier);
     }

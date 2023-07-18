@@ -1,9 +1,4 @@
 ﻿
-using Application.Web.ViewModels.ContactForm;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.Extensions.Primitives;
-
 namespace Application.IntegrationTests
 {
     public class PortfolioControllerTests
