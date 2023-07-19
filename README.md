@@ -33,7 +33,7 @@ This is a user-friendly ASP.NET web application that allows individuals to creat
 - enables visitors to send direct messages to the owner of a portfolio. This functionality facilitates communication between potential clients, employers, or collaborators and the portfolio owner, fostering meaningful interactions and opportunities
 
 ## License
-free license
+Open source
 
 ## Contact
 nikolaytotuhov@gmail.com
