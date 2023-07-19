@@ -33,6 +33,7 @@ public class PortfolioService : IPortfolioService
         {
             user.Portfolio ??= new();
             user.Portfolio.Image = await _context.Images.FirstAsync(i => i.Characteristic == DefaultProfileImageCharacteristic);
+            //user.Portfolio.SocialMedia = new SocialMedia();
 
             await _context.SaveChangesAsync();
         }

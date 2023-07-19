@@ -32,4 +32,8 @@ public class Portfolio
 
     public virtual ApplicationUser ApplicationUser { get; set; } = null!;
 
+    //public string SocialMediaId { get; set; } = null!;
+
+    //[ForeignKey(nameof(SocialMediaId))]
+    //public SocialMedia SocialMedia { get; set; } = null!;
 }

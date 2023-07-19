@@ -29,13 +29,21 @@
         <div class="w-50">
             <h2 class="text-center">@Model.Description</h2>
         </div>
+    </div>   
+    <div class="d-flex flex-column align-items-center justify-content-center m-4">
+        <div class="d-flex justify-content-center flex-wrap col-12 col-sm-8 col-md-6">
+            <div class="col-3 d-flex justify-content-center"><img src="/images/icons/icons8-facebook-48.png" alt="Icon 1"></div>
+            <div class="col-3 d-flex justify-content-center"><img src="/images/icons/icons8-instagram-48.png" alt="Icon 2"></div>
+            <div class="col-3 d-flex justify-content-center"><img src="/images/icons/icons8-linkedin-48.png" alt="Icon 3"></div>
+            <div class="col-3 d-flex justify-content-center"><img src="/images/icons/icons8-twitter-48.png" alt="Icon 4"></div>
+        </div>
     </div>
     @if (User?.Identity?.Name == Model.UserName)
     {
         <div class="justify-content-center d-flex">
             <a asp-controller="Portfolio" asp-action="EditDescription" asp-route-id="@User?.Identity?.Name" class="btn btn-outline-dark">Edit Description</a>
         </div>
-    }
+    }    
     <div class="justify-content-center d-flex border-top mt-3">
         <h1 class="display-4 ">About</h1>
     </div>
@@ -152,7 +160,15 @@
     <div class="justify-content-center d-flex border-top mt-3">
         <h1 class="display-4">Contact</h1>
     </div>
-    <div class="d-flex flex-column align-items-center justify-content-center" id="Contact">
+    <div class="d-flex flex-column align-items-center justify-content-center m-4">
+        <div class="d-flex justify-content-center flex-wrap col-12 col-sm-8 col-md-6">
+            <div class="col-3 d-flex justify-content-center"><img src="/images/icons/icons8-facebook-48.png" alt="Icon 1"></div>
+            <div class="col-3 d-flex justify-content-center"><img src="/images/icons/icons8-instagram-48.png" alt="Icon 2"></div>
+            <div class="col-3 d-flex justify-content-center"><img src="/images/icons/icons8-linkedin-48.png" alt="Icon 3"></div>
+            <div class="col-3 d-flex justify-content-center"><img src="/images/icons/icons8-twitter-48.png" alt="Icon 4"></div>
+        </div>
+    </div>    
+    <div class="d-flex flex-column align-items-center justify-content-center" id="Contact">        
         <p>email: @Model.Email</p>
         <a asp-action="SendEmail" asp-route-id="@Model.UserName" class="btn btn-outline-dark">Send Message</a>
     </div>
