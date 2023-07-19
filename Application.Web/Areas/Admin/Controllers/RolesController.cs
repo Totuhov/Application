@@ -16,7 +16,6 @@ public class RolesController : BaseController
     private readonly RoleManager<IdentityRole> _roleManager;
     private readonly UserManager<ApplicationUser> _userManager;
 
-    // Both parameters are added with dependency injection in Program.cs
     public RolesController(RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager)
     {
         _roleManager = roleManager;

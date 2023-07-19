@@ -355,7 +355,6 @@ namespace Application.IntegrationTests
         [Test]
         public void SendEmail_ModelIsValid_Success()
         {
-            // Arrange
             var model = new ContactFormViewModel
             {
                 SenderName = "John Doe",
@@ -365,13 +364,10 @@ namespace Application.IntegrationTests
             };
             string id = "some_id";
 
-            // Set up the ControllerContext with the POST data
             controller.ControllerContext = CreateControllerContextWithFormData(model);
 
-            // Act
             var result = controller.SendEmail(model, id) as RedirectToActionResult;
 
-            // Assert
             mockMessageService.Verify(m => m.SendEmail(
                 It.IsAny<string>(),
                 It.IsAny<string>(),

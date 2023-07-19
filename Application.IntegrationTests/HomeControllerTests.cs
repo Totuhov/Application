@@ -72,6 +72,7 @@ namespace Application.IntegrationTests
                 Assert.That(result.ControllerName, Is.EqualTo("Portfolio"));
             });
         }
+
         [Test]
         public void Index_UserNotAuthenticated_ReturnsViewResult()
         {
@@ -93,22 +94,22 @@ namespace Application.IntegrationTests
         [Test]
         public void Privacy_ReturnsViewResult()
         {
-            // Act
             var result = controller.Privacy() as ViewResult;
 
-            // Assert
             Assert.That(result, Is.Not.Null);
         }
 
         [Test]
         public async Task All_EmptyExpression_RedirectToIndex()
         {
-
             var result = await controller.All(null) as RedirectToActionResult;
 
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.ActionName, Is.EqualTo("Index"));
-            Assert.That(result.ControllerName, Is.Null);
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.ActionName, Is.EqualTo("Index"));
+                Assert.That(result.ControllerName, Is.Null);
+            });
         }
 
         [Test]
@@ -134,7 +135,7 @@ namespace Application.IntegrationTests
             
             var result = await controller.All(expression) as RedirectToActionResult;
 
-            Assert.NotNull(result);
+            Assert.That(result, Is.Not.Null);
             Assert.That(result.ActionName, Is.EqualTo("Index"));
         }
 

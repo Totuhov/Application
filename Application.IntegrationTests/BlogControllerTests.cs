@@ -27,6 +27,8 @@ namespace Application.IntegrationTests
             mockControllerContext = new MockControllerContext(this.user);
 
             this.controller.ControllerContext = mockControllerContext;
+            controller.TempData = 
+                new TempDataDictionary(mockControllerContext.HttpContext, Mock.Of<ITempDataProvider>());
 
             this.username = "guest";
 
@@ -81,8 +83,7 @@ namespace Application.IntegrationTests
             {
                 ApplicationUserId = "guest"
             };
-            controller.TempData = new TempDataDictionary(mockControllerContext.HttpContext, Mock.Of<ITempDataProvider>());
-
+            
             var result = await controller.Create(model) as RedirectToActionResult;
 
             Assert.That(result, Is.Not.Null);
@@ -118,7 +119,6 @@ namespace Application.IntegrationTests
         {
             var model = new CreateArticleViewModel();
 
-            controller.TempData = new TempDataDictionary(mockControllerContext.HttpContext, Mock.Of<ITempDataProvider>());
             mockBlogService.Setup(service => service.CreatePostAsync(It.IsAny<CreateArticleViewModel>())).ThrowsAsync(new Exception("Some error message"));
 
             var result = await controller.Create(model) as IActionResult;
@@ -136,7 +136,6 @@ namespace Application.IntegrationTests
         [Test]
         public async Task Edit_Get_ReturnsGeneralError()
         {
-            controller.TempData = new TempDataDictionary(mockControllerContext.HttpContext, Mock.Of<ITempDataProvider>());
             mockBlogService.Setup(x => x.IsUserOwnerOfArticle("1", "1")).Throws<Exception>();
 
             var result = await controller.Edit("1");
@@ -166,7 +165,7 @@ namespace Application.IntegrationTests
         {
             mockBlogService.Setup(x => x.GetUsernameByArticleIdAsync("1")).ReturnsAsync("1");
             CreateArticleViewModel model = this.articles.First(x => x.Id == "1");
-            controller.TempData = new TempDataDictionary(mockControllerContext.HttpContext, Mock.Of<ITempDataProvider>());
+            
             var result = await controller.Edit(model) as RedirectToActionResult;
 
             Assert.That(result, Is.Not.Null);
@@ -196,7 +195,6 @@ namespace Application.IntegrationTests
         public async Task Edit_Post_ReturnsGeneralError()
         {
             var model = new CreateArticleViewModel();
-            controller.TempData = new TempDataDictionary(mockControllerContext.HttpContext, Mock.Of<ITempDataProvider>());
             mockBlogService.Setup(x => x.GetUsernameByArticleIdAsync(model.Id)).Throws<Exception>();
 
             var result = await controller.Edit(model);
@@ -306,7 +304,6 @@ namespace Application.IntegrationTests
 
             var result = await controller.All(userName);
 
-            // Assert
             Assert.That(result, Is.InstanceOf<RedirectToActionResult>());
             var redirectResult = (RedirectToActionResult)result;
             Assert.Multiple(() =>
@@ -328,7 +325,6 @@ namespace Application.IntegrationTests
                     ApplicationUserName = "guest"
                 });
 
-            controller.TempData = new TempDataDictionary(mockControllerContext.HttpContext, Mock.Of<ITempDataProvider>());
             var result = await controller.Delete("1");
 
             Assert.That(result, Is.InstanceOf<RedirectToActionResult>());
@@ -360,7 +356,6 @@ namespace Application.IntegrationTests
         [Test]
         public async Task Delete_ReturnsGeneralError()
         {            
-            controller.TempData = new TempDataDictionary(mockControllerContext.HttpContext, Mock.Of<ITempDataProvider>());
             mockBlogService.Setup(x => x.IsUserOwnerOfArticle("1", "1")).Throws<Exception>();
 
             var result = await controller.Delete("1");

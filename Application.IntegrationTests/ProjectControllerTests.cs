@@ -244,8 +244,11 @@ namespace Application.IntegrationTests
             var result = await controller.CreateImage(this.imageModel) as RedirectToActionResult;
 
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.ActionName, Is.EqualTo("Index"));
-            Assert.That(result.ControllerName, Is.EqualTo("Home"));
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.ActionName, Is.EqualTo("Index"));
+                Assert.That(result.ControllerName, Is.EqualTo("Home"));
+            });
         }
 
         [Test]

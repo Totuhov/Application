@@ -214,6 +214,8 @@ namespace Application.IntegrationTests
                 .Returns(Task.CompletedTask);
             
             var result = await controller.UseAsProfile(id) as RedirectToActionResult;
+
+            Assert.That(result, Is.Not.Null);
             Assert.Multiple(() =>
             {
                 Assert.That(result.ActionName, Is.EqualTo("Details"));
@@ -233,7 +235,7 @@ namespace Application.IntegrationTests
             Assert.Multiple(() =>
             {
                 Assert.That(result, Is.InstanceOf<RedirectToActionResult>());
-                Assert.That(result?.ActionName, Is.EqualTo("Index"));
+                Assert.That(result.ActionName, Is.EqualTo("Index"));
             });
         }
 
