@@ -76,8 +76,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .IsRequired(false)
             .OnDelete(DeleteBehavior.NoAction);
 
-        var seeder = new DataSeeder(_env);
-        seeder.Seed(builder);
+        //var seeder = new DataSeeder(_env);
+        //seeder.Seed(builder);
 
         base.OnModelCreating(builder);
     }
