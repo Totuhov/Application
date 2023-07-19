@@ -7,6 +7,9 @@ using Microsoft.EntityFrameworkCore;
 using Application.Data.Models;
 
 using static Application.Common.ModelConstants;
+using System;
+using Microsoft.AspNetCore.Identity;
+using System.Reflection.Emit;
 
 public class DataSeeder
 {
@@ -24,6 +27,42 @@ public class DataSeeder
 
         // Seed images
         SeedImages(modelBuilder);
+        SeedRoles(modelBuilder);
+        SeedUsers(modelBuilder);
+    }
+
+    private void SeedUsers(ModelBuilder modelBuilder)
+    {
+        var hasher = new PasswordHasher<IdentityUser>();
+
+
+        //Seeding the User to AspNetUsers table
+        modelBuilder.Entity<ApplicationUser>().HasData(
+            new IdentityUser
+            {
+                Id = "8e445865-a24d-4543-a6c6-9443d048cdb9", // primary key
+                UserName = "Administrator",
+                NormalizedUserName = "ADMINISTRATOR",
+                PasswordHash = hasher.HashPassword(null, "Aa1234!")
+            }
+        );
+
+
+        //Seeding the relation between our user and role to AspNetUserRoles table
+        modelBuilder.Entity<IdentityUserRole<string>>().HasData(
+            new IdentityUserRole<string>
+            {
+                RoleId = "2c5e174e-3b0e-446f-86af-483d56fd7210",
+                UserId = "8e445865-a24d-4543-a6c6-9443d048cdb9"
+            }
+        );
+    }
+
+    private void SeedRoles(ModelBuilder modelBuilder)
+    {
+        //Seeding a  'Administrator' role to AspNetRoles table
+        modelBuilder.Entity<IdentityRole>().
+            HasData(new IdentityRole { Id = "2c5e174e-3b0e-446f-86af-483d56fd7210", Name = "Admin", NormalizedName = "ADMIN".ToUpper() });
     }
 
     private void SeedImages(ModelBuilder modelBuilder)
