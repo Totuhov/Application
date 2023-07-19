@@ -14,6 +14,8 @@ This is my project with which I try to show what I have learned so far in web ap
 var seeder = new DataSeeder(_env); <br />
 seeder.Seed(builder);
 - this method is just for database seeding and must be excluded again after creating of the database is done
+- for some functions is needed running Application.Api
+- the files in namespace Application.Data.Migrations are excluded from the Visual Studio's code coverage analysis
 
 ## Description
 
@@ -31,6 +33,7 @@ This is a user-friendly ASP.NET web application that allows individuals to creat
 - enables visitors to send direct messages to the owner of a portfolio. This functionality facilitates communication between potential clients, employers, or collaborators and the portfolio owner, fostering meaningful interactions and opportunities
 
 ## License
+free license
 
 ## Contact
 nikolaytotuhov@gmail.com
