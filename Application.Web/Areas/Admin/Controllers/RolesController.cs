@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
+using static Application.Common.NotificationMessagesConstants;
+
 [Area("Admin")]
 [Authorize(Roles = "Admin")]
 public class RolesController : BaseController
@@ -42,11 +44,20 @@ public class RolesController : BaseController
     [HttpPost]
     public async Task<IActionResult> Create([Required] string name)
     {
+        if (await _roleManager.RoleExistsAsync(name))
+        {
+            this.TempData[ErrorMessage] = $"Role with name {name} allready exists.";
+            return RedirectToAction("Index");
+        }
         if (ModelState.IsValid)
         {
+
             IdentityResult result = await _roleManager.CreateAsync(new IdentityRole(name));
             if (result.Succeeded)
+            {
+                this.TempData[SuccessMessage] = $"Role {name} was created successfully.";
                 return RedirectToAction("Index");
+            }
             else
                 Errors(result);
         }

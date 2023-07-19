@@ -4,6 +4,20 @@
     ViewData["Title"] = "Roles";
 }
 
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success" role="alert">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
 <h1 class="text-center">All Roles</h1>
 
 <div class="mt-5 mb-2">
