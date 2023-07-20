@@ -4,9 +4,8 @@ namespace Application.Web.Controllers;
 using Microsoft.AspNetCore.Mvc;
 
 using Application.Services;
-using Application.Web.ViewModels.SocialMedia;
-
 using Application.Services.Interfaces;
+using Application.Web.ViewModels.SocialMedia;
 
 using static Application.Common.NotificationMessagesConstants;
 public class SocialMediaController : BaseController
@@ -21,6 +20,11 @@ public class SocialMediaController : BaseController
     [HttpGet]
     public async Task<IActionResult> Edit(string username)
     {
+        if (username != GetCurrentUserName())
+        {
+            return NotFound();
+        }
+
         EditSocialMediasViewModel model = await _socialMediaService.GetEditModelByIdAsync(GetCurrentUserId());
 
         return View(model);
