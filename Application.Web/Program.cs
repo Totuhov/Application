@@ -32,6 +32,7 @@ builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<IPortfolioService, PortfolioService>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<IMessageService, MessageService>();
+builder.Services.AddScoped<ISocialMediaService, SocialMediaService>();
 
 var app = builder.Build();
 

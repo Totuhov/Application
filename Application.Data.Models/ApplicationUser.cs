@@ -12,4 +12,6 @@ public class ApplicationUser : IdentityUser
     public virtual ICollection<Project> Projects { get; set; } = new List<Project>();
 
     public virtual ICollection<Article> Articles { get; set;} = new List<Article>();
+
+    public virtual SocialMedia SocialMedia { get; set; } = null!;
 }

@@ -1,0 +1,51 @@
+﻿@model EditSocialMediasViewModel
+
+@{
+    ViewData["Title"] = "Add Links to your profiles";
+}
+<div class="row d-flex align-items-center justify-content-center mt-5">
+    <div class="col-6 border rounded">
+        <h1 class="text-center">@ViewData["Title"]</h1>
+        <section class="mb-2 mt-1">
+            <form asp-action="Edit" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="ApplicationUserId" />
+                <div class="mb-3 col-6 w-100">
+                    <label asp-for="FacebookUrl" class="control-label"></label>
+                    <input asp-for="@Model.FacebookUrl" class="form-control" />
+                    <span asp-validation-for="FacebookUrl" class="text-danger"></span>
+                </div>
+                <div class="mb-3 col-6 w-100">
+                    <label asp-for="InstagramUrl" class="control-label"></label>
+                    <input asp-for="@Model.InstagramUrl" class="form-control" rows="5" aria-required="true">
+                    <span asp-validation-for="InstagramUrl" class="text-danger"></span>
+                </div>
+                <div class="mb-3 col-6 w-100">
+                    <label asp-for="LinkedInUrl" class="control-label"></label>
+                    <input asp-for="@Model.LinkedInUrl" class="form-control" />
+                    <span asp-validation-for="LinkedInUrl" class="text-danger"></span>
+                </div>
+                <div class="mb-3 col-6 w-100">
+                    <label asp-for="TwiterUrl" class="control-label"></label>
+                    <input asp-for="@Model.TwiterUrl" class="form-control" />
+                    <span asp-validation-for="TwiterUrl" class="text-danger"></span>
+                </div>
+                <div class="row mt-5">
+                    <div class="col-4">
+                        <a asp-controller="Portfolio" asp-action="Index" class=" btn btn-dark mb-2">Back</a>
+                    </div>
+                    <div class="col-8 d-flex align-items-center justify-content-end">
+                        <input type="submit" value="Save" class="btn btn-dark col-6" />
+                    </div>
+                </div>
+            </form>
+        </section>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }

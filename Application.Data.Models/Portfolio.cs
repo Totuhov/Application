@@ -30,10 +30,6 @@ public class Portfolio
 
     public string ApplicationUserId { get; set; } = null!;
 
+    [ForeignKey(nameof(ApplicationUserId))]
     public virtual ApplicationUser ApplicationUser { get; set; } = null!;
-
-    //public string SocialMediaId { get; set; } = null!;
-
-    //[ForeignKey(nameof(SocialMediaId))]
-    //public SocialMedia SocialMedia { get; set; } = null!;
 }

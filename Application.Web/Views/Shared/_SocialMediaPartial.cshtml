@@ -1,0 +1,38 @@
+﻿@model EditSocialMediasViewModel
+
+<div class="d-flex flex-column align-items-center justify-content-center m-4">
+    <div class="d-flex justify-content-center flex-wrap col-12 col-sm-8 col-md-6">
+        @if (Model.FacebookUrl != null)
+        {
+            <div class="col-3 d-flex justify-content-center">
+                <a href="@Model.FacebookUrl">
+                    <img src="/images/icons/icons8-facebook-48.png" alt="Icon 1">
+                </a>
+            </div>
+        }
+        @if (Model.InstagramUrl != null)
+        {
+            <div class="col-3 d-flex justify-content-center">
+                <a href="@Model.InstagramUrl">
+                    <img src="/images/icons/icons8-instagram-48.png" alt="Icon 2">
+                </a>
+            </div>
+        }
+        @if (Model.LinkedInUrl != null)
+        {
+            <div class="col-3 d-flex justify-content-center">
+                <a href="@Model.LinkedInUrl">
+                    <img src="/images/icons/icons8-linkedin-48.png" alt="Icon 3">
+                </a>
+            </div>
+        }
+        @if (Model.TwiterUrl != null)
+        {
+            <div class="col-3 d-flex justify-content-center">
+                <a href="@Model.TwiterUrl">
+                    <img src="/images/icons/icons8-twitter-48.png" alt="Icon 4">
+                </a>
+            </div>
+        }
+    </div>
+</div>

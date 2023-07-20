@@ -8,6 +8,7 @@ using Application.Web.ViewModels.Article;
 using Application.Web.ViewModels.Image;
 using Application.Web.ViewModels.Portfolio;
 using Application.Web.ViewModels.Project;
+using Application.Web.ViewModels.SocialMedia;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Reflection.Metadata.Ecma335;
@@ -33,7 +34,7 @@ public class PortfolioService : IPortfolioService
         {
             user.Portfolio ??= new();
             user.Portfolio.Image = await _context.Images.FirstAsync(i => i.Characteristic == DefaultProfileImageCharacteristic);
-            //user.Portfolio.SocialMedia = new SocialMedia();
+            user.SocialMedia = new SocialMedia();
 
             await _context.SaveChangesAsync();
         }
@@ -119,7 +120,15 @@ public class PortfolioService : IPortfolioService
                     ContentType = p.Image.FileExtension
                 }
             })
-            .ToListAsync()
+            .ToListAsync(),
+            SocialMedia = new EditSocialMediasViewModel()
+            {
+                Id = user.SocialMedia.Id,
+                FacebookUrl = user.SocialMedia.FacebookUrl,
+                InstagramUrl = user.SocialMedia.InstagramUrl,
+                LinkedInUrl = user.SocialMedia.LinkedInUrl,
+                TwiterUrl = user.SocialMedia.TwiterUrl,
+            }
         };
         return model;
 

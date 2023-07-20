@@ -29,6 +29,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 
     public DbSet<Article> Articles { get; set; } = null!;
 
+    public DbSet<SocialMedia> SocialMedias { get; set; } = null!;
+
 
 
     protected override void OnModelCreating(ModelBuilder builder)
@@ -58,6 +60,13 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .HasMany(e => e.Projects)
             .WithOne(e => e.ApplicationUser)
             .HasForeignKey(e => e.ApplicationUserId)
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<ApplicationUser>()
+            .HasOne(e => e.SocialMedia)
+            .WithOne(e => e.ApplicationUser)
+            .HasForeignKey<SocialMedia>(e => e.ApplicationUserId)
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
 

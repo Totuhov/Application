@@ -1,4 +1,6 @@
 ﻿
+using Application.Data.Models;
+
 namespace Application.UnitTests;
 
 [TestFixture]
@@ -23,8 +25,9 @@ public class PortfolioServiceTests
                     UserDisplayName = "User's display name",
                     About = "About user",
                     ImageId = "111",
-                    ApplicationUserId = "1"                       
-                }
+                    ApplicationUserId = "1"                    
+                },
+                SocialMedia = new()
             },
             new ApplicationUser()
             {
@@ -39,7 +42,8 @@ public class PortfolioServiceTests
                     About = "About user",
                     ImageId = "113",
                     ApplicationUserId = "3"
-                }
+                },
+                SocialMedia = new()
             },
             new ApplicationUser()
             {

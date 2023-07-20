@@ -7,6 +7,7 @@ using Application.Web.ViewModels.Article;
 using Application.Web.ViewModels.ContactForm;
 using Application.Web.ViewModels.Image;
 using Application.Web.ViewModels.Project;
+using Application.Web.ViewModels.SocialMedia;
 
 public class PortfolioViewModel
 {
@@ -32,4 +33,6 @@ public class PortfolioViewModel
     public ICollection<ArticleViewModel> Blog { get; set; } = new List<ArticleViewModel>();
 
     public ContactFormViewModel ContactForm = new ();
+
+    public EditSocialMediasViewModel SocialMedia { get; set; } = new();
 }

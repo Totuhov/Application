@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,9 +12,6 @@ namespace Application.Data.Models
     {
         [Key]
         public string Id { get; set; } = Guid.NewGuid().ToString();
-
-        [Required]
-        public Portfolio Portfolio { get; set; } = null!;
 
         [MaxLength(2048)]
         public string? FacebookUrl { get; set; }
@@ -26,5 +24,10 @@ namespace Application.Data.Models
 
         [MaxLength(2048)]
         public string? TwiterUrl { get; set; }
+
+        public string ApplicationUserId { get; set; } = null!;
+
+        [ForeignKey(nameof(ApplicationUserId))]
+        public virtual ApplicationUser ApplicationUser { get; set; } = null!;
     }
 }
