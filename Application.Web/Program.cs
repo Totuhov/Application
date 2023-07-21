@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using Application.Data;
 using Application.Data.Seeding;
 using Application.Web.ViewModels;
-using Application.Services.Mapping;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
