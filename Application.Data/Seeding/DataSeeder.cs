@@ -3,12 +3,11 @@ namespace Application.Data.Seeding;
 
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 using Application.Data.Models;
 
 using static Application.Common.ModelConstants;
-using System;
-using Microsoft.AspNetCore.Identity;
 
 public class DataSeeder
 {
@@ -70,7 +69,6 @@ public class DataSeeder
 
         foreach (string imagePath in profileImageFiles)
         {
-
             // Convert image file to byte array
             byte[] imageData = File.ReadAllBytes(imagePath);
 
@@ -85,11 +83,8 @@ public class DataSeeder
         }
         foreach (string imagePath in projectImageFiles)
         {
-
-            // Convert image file to byte array
             byte[] imageData = File.ReadAllBytes(imagePath);
 
-            // Create an Image entity and add it to the model
             modelBuilder.Entity<Image>().HasData(new Image
             {
                 Bytes = imageData,
