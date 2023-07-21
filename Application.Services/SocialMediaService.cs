@@ -26,7 +26,8 @@ namespace Application.Services
                 ApplicationUserId = userId,
                 FacebookUrl = media.FacebookUrl,
                 LinkedInUrl = media.LinkedInUrl,
-                InstagramUrl = media.InstagramUrl
+                InstagramUrl = media.InstagramUrl,
+                TwiterUrl = media.TwiterUrl
             };
         }
 
