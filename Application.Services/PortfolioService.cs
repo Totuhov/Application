@@ -9,6 +9,7 @@ using Application.Web.ViewModels.Image;
 using Application.Web.ViewModels.Portfolio;
 using Application.Web.ViewModels.Project;
 using Application.Web.ViewModels.SocialMedia;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Reflection.Metadata.Ecma335;
@@ -145,9 +146,12 @@ public class PortfolioService : IPortfolioService
     {
         ApplicationUser user = await _context.Users.FirstAsync(u => u.Id == userId);
 
-        user.Portfolio.GreetingsMessage = model.GreetingsMessage;
-        user.Portfolio.UserDisplayName = model.UserDisplayName;
-        user.Portfolio.Description = model.Description;
+        if (user.Portfolio != null)
+        {
+            user.Portfolio.GreetingsMessage = model.GreetingsMessage;
+            user.Portfolio.UserDisplayName = model.UserDisplayName;
+            user.Portfolio.Description = model.Description;
+        }
 
         await _context.SaveChangesAsync();
     }
@@ -156,9 +160,12 @@ public class PortfolioService : IPortfolioService
     {
         ApplicationUser user = await _context.Users.FirstAsync(u => u.Id == userId);
 
-        user.Portfolio.About = model.About;
+        if (user.Portfolio != null)
+        {
+            user.Portfolio.About = model.About;
 
-        await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
+        }
     }
 
     public async Task<List<PreviewPortfolioViewModel>> GetAllUsersByRegexAsync(string expression)

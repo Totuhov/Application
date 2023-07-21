@@ -1,5 +1,4 @@
-﻿
-using Application.Data.Models;
+﻿using Application.Data.Models;
 
 namespace Application.UnitTests;
 

@@ -1,11 +1,10 @@
-
-using Application.Data;
 using Application.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using Application.Services.Interfaces;
 using Application.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Application.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +32,11 @@ builder.Services.AddScoped<IPortfolioService, PortfolioService>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<IMessageService, MessageService>();
 builder.Services.AddScoped<ISocialMediaService, SocialMediaService>();
+
+//builder.Services.ConfigureApplicationCookie(cfg =>
+//{
+//    cfg.LoginPath = "/User/Login";
+//});
 
 var app = builder.Build();
 

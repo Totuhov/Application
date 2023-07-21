@@ -376,7 +376,7 @@ namespace Application.IntegrationTests
             ), Times.Once);
 
             Assert.That(result.ActionName, Is.EqualTo("Details"));
-            Assert.That(result.RouteValues["id"], Is.EqualTo(id));
+            Assert.That(result?.RouteValues?["id"], Is.EqualTo(id));
         }
 
         /// <summary>

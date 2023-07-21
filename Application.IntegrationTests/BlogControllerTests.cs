@@ -269,6 +269,8 @@ namespace Application.IntegrationTests
             var viewResult = (ViewResult)result;
             Assert.That(viewResult.Model, Is.InstanceOf<AllArticlesViewModel>());
             var model = (AllArticlesViewModel)viewResult.Model;
+
+            Assert.That(model, Is.Not.Null);
             Assert.Multiple(() =>
             {
                 Assert.That(model.UserName, Is.EqualTo(userName));
@@ -291,8 +293,8 @@ namespace Application.IntegrationTests
             var model = (AllArticlesViewModel)viewResult.Model;
             Assert.Multiple(() =>
             {
-                Assert.That(model.UserName, Is.EqualTo(userName));
-                Assert.That(model.Articles, Is.EqualTo(expectedArticles));
+                Assert.That(model?.UserName, Is.EqualTo(userName));
+                Assert.That(model?.Articles, Is.EqualTo(expectedArticles));
             });
         }
 

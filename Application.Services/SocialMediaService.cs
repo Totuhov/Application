@@ -1,5 +1,4 @@
-﻿
-using Application.Data;
+﻿using Application.Data;
 using Application.Data.Models;
 using Application.Services.Interfaces;
 using Application.Web.ViewModels.SocialMedia;

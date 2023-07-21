@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 using Application.Services.Interfaces;
 using Application.Web.ViewModels.Image;
-using Application.Data;
 using Application.Data.Models;
 using static Application.Common.ModelConstants;
+using Application.Data;
 
 public class ImageService : IImageService
 {

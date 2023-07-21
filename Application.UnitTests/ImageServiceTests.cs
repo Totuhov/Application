@@ -1,6 +1,4 @@
-﻿
-
-namespace Application.UnitTests
+﻿namespace Application.UnitTests
 {
     [TestFixture]
     public class ImageServiceTests
@@ -30,23 +28,20 @@ namespace Application.UnitTests
                     ImageId = "1",
                     ApplicationUserId = "1",
                     FileExtension = ".png",
-                    Bytes = new byte[] { 137, 80, 78, 71, 13, 10, 26, 10, 0, 0, 0, 13, 73, 72, 68, 82,
-                        0, 0, 2, 0, 0, 0, 2, 0, 8, 2, 0, 0, 0, 123, 26, 67, 173, 0, 0, 0}
+                    Bytes = new byte[] {137, 80, 78 }
                 },
                 new Image()
                 {
                     ImageId = "4",
                     FileExtension = ".png",
-                    Bytes = new byte[] { 137, 80, 78, 71, 13, 10, 26, 10, 0, 0, 0, 13, 73, 72, 68, 82,
-                        0, 0, 2, 0, 0, 0, 2, 0, 8, 2, 0, 0, 0, 123, 26, 67, 173, 0, 0, 0},
+                    Bytes = new byte[] {137, 80, 78 },
                     Characteristic = "defaultProjectImage"
                 },
                 new Image()
                 {
                     ImageId = "3",
                     FileExtension = ".png",
-                    Bytes = new byte[] { 137, 80, 78, 71, 13, 10, 26, 10, 0, 0, 0, 13, 73, 72, 68, 82,
-                        0, 0, 2, 0, 0, 0, 2, 0, 8, 2, 0, 0, 0, 123, 26, 67, 173, 0, 0, 0},
+                    Bytes = new byte[] { 137, 80, 78},
                     Characteristic = "defaultProfileImage"
                 }
             };
@@ -79,8 +74,7 @@ namespace Application.UnitTests
                         ImageId = "2",
                         ApplicationUserId = "1",
                         FileExtension = ".png",
-                        Bytes = new byte[] { 137, 80, 78, 71, 13, 10, 26, 10, 0, 0, 0, 13, 73, 72,
-                            68, 82, 0, 0, 2, 0, 0, 0, 2, 0, 8, 2, 0, 0, 0, 123, 26, 67, 173, 0, 0, 0}
+                        Bytes = new byte[] { 137, 80, 78}
                     },
                     ApplicationUserId= "1",
                 }

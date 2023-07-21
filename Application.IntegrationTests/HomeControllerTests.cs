@@ -102,7 +102,7 @@ namespace Application.IntegrationTests
         [Test]
         public async Task All_EmptyExpression_RedirectToIndex()
         {
-            var result = await controller.All(null) as RedirectToActionResult;
+            var result = await controller.All("") as RedirectToActionResult;
 
             Assert.That(result, Is.Not.Null);
             Assert.Multiple(() =>

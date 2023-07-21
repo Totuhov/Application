@@ -72,6 +72,21 @@ namespace Application.IntegrationTests
         }
 
         [Test]
+        public async Task Create_Post_ExistingRoleNAme_RedirectsToIndex()
+        {
+            var roleName = "Admin";
+
+            roleManagerMock
+                .Setup(m => m.RoleExistsAsync(roleName))
+                .ReturnsAsync(true);
+
+            var result = await controller.Create(roleName) as RedirectToActionResult;
+
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.ActionName, Is.EqualTo("Index"));
+        }
+
+        [Test]
         public async Task Create_InvalidModel_ReturnsView()
         {
             var roleName = "";
@@ -129,10 +144,10 @@ namespace Application.IntegrationTests
             Assert.That(result, Is.Not.Null);
             Assert.Multiple(() =>
             {
-                Assert.That(result.Model, Is.Not.Null); // Check if the model is not null
-                Assert.That(controller.ModelState.IsValid, Is.False); // Check if the ModelState is invalid
-                Assert.That(controller.ModelState.ContainsKey(""), Is.True); // Check if there is an error associated with the model
-                Assert.That(controller.ModelState[""].Errors[0].ErrorMessage, Is.EqualTo("No role found")); // Check the error message
+                Assert.That(result.Model, Is.Not.Null);
+                Assert.That(controller.ModelState.IsValid, Is.False);
+                Assert.That(controller.ModelState.ContainsKey(""), Is.True);
+                Assert.That(controller?.ModelState[""].Errors[0].ErrorMessage, Is.EqualTo("No role found"));
             });
         }
 
@@ -198,7 +213,6 @@ namespace Application.IntegrationTests
         [Test]
         public async Task Update_WithValidModel_RedirectsToIndex()
         {
-            // Arrange
             var model = new ModificationRoleModel
             {
                 RoleName = "RoleName",
@@ -224,21 +238,18 @@ namespace Application.IntegrationTests
             userManagerMock.Setup(um => um.RemoveFromRoleAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>()))
                 .ReturnsAsync(IdentityResult.Success);
 
-            // Act
             var result = await controller.Update(model) as RedirectToActionResult;
 
-            // Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual("Index", result.ActionName);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.ActionName, Is.EqualTo("Index"));
         }
 
         [Test]
         public async Task Update_WithInvalidModel_ReturnsViewWithError()
         {
-            // Arrange
             var model = new ModificationRoleModel
             {
-                RoleName = null, // Invalid model state
+                RoleName = null,
                 RoleId = "someRoleId",
                 AddIds = new string[] { "userId1", "userId2" },
                 DeleteIds = new string[] { "userId3", "userId4" }

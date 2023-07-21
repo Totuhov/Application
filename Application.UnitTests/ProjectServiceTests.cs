@@ -1,5 +1,4 @@
-﻿
-namespace Application.UnitTests;
+﻿namespace Application.UnitTests;
 
 [TestFixture]
 public class ProjectServiceTests
