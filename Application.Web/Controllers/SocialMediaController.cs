@@ -19,15 +19,15 @@ public class SocialMediaController : BaseController
 
     [HttpGet]
     public async Task<IActionResult> Edit(string username)
-    {
-        if (username != GetCurrentUserName())
-        {
-            return NotFound();
-        }
+    {        
+            if (username != GetCurrentUserName())
+            {
+                return NotFound();
+            }
 
-        EditSocialMediasViewModel model = await _socialMediaService.GetEditModelByIdAsync(GetCurrentUserId());
+            EditSocialMediasViewModel model = await _socialMediaService.GetEditModelByIdAsync(GetCurrentUserId());
 
-        return View(model);
+            return View(model);        
     }
 
     [HttpPost]
@@ -42,7 +42,7 @@ public class SocialMediaController : BaseController
 
             await _socialMediaService.SaveChangesToModelAsync(model);
             this.TempData[SuccessMessage] = "Links' changes was saved";
-            return RedirectToAction("Details", "Portfolio", new {id = GetCurrentUserName()});
+            return RedirectToAction("Details", "Portfolio", new { id = GetCurrentUserName() });
         }
         catch (Exception)
         {
