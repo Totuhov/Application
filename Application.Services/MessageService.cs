@@ -1,6 +1,8 @@
 ﻿
 namespace Application.Services;
 
+using Microsoft.Extensions.Configuration;
+
 using System.Net;
 using System.Net.Mail;
 using System;
@@ -9,6 +11,13 @@ using Application.Services.Interfaces;
 
 public class MessageService : IMessageService
 {
+    private readonly IConfiguration _configuration;
+
+    public MessageService(IConfiguration configuration)
+    {
+        this._configuration = configuration;
+    }
+
     public bool SendEmail(string recieverEmail, string senderName, string senderEmail, string text)
     {
         try
@@ -22,11 +31,15 @@ public class MessageService : IMessageService
                 Body = text
             };
 
+            string host = _configuration["MailHostName"];
+            string username = _configuration["MailServerUsername"];
+            string password = _configuration["MailServerPassword"];
+
             SmtpClient smtp = new()
             {
-                Host = "smtp-relay.brevo.com",
+                Host = host,
                 Port = 587,
-                Credentials = new NetworkCredential("nikolaytotuhov@gmail.com", "LCrJMFvS2aAPR34q"),
+                Credentials = new NetworkCredential(username, password),
                 DeliveryMethod = SmtpDeliveryMethod.Network,
                 EnableSsl = true
             };
@@ -47,6 +60,10 @@ public class MessageService : IMessageService
     {
         try
         {
+            string host = _configuration["MailHostName"];
+            string username = _configuration["MailServerUsername"];
+            string password = _configuration["MailServerPassword"];
+
             MailAddress to = new(reciever);
             MailAddress from = new("noreplay@portfolio.confirm");
 
@@ -59,9 +76,9 @@ public class MessageService : IMessageService
 
             SmtpClient smtp = new()
             {
-                Host = "smtp-relay.brevo.com",
+                Host = host,
                 Port = 587,
-                Credentials = new NetworkCredential("nikolaytotuhov@gmail.com", "LCrJMFvS2aAPR34q"),
+                Credentials = new NetworkCredential(username, password),
                 DeliveryMethod = SmtpDeliveryMethod.Network,
                 EnableSsl = true
             };

@@ -1,14 +1,17 @@
 ﻿
+namespace Application.Web.ViewModels.Role;
+
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Web.ViewModels.Role;
+using static Application.Common.ModelConstants.RoleConstants;
 
 public class ModificationRoleModel
 {
     [Required]
-    public string RoleName { get; set; }
+    [StringLength(RoleNameMaxLength, MinimumLength = RoleNameMinLength)]
+    public string RoleName { get; set; } = null!;
 
-    public string RoleId { get; set; }
+    public string RoleId { get; set; } = null!;
 
     public string[]? AddIds { get; set; }
 

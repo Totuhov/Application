@@ -1,30 +1,31 @@
 ﻿
+namespace Application.Web.ViewModels.SocialMedia;
+
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Web.ViewModels.SocialMedia
+using static Application.Common.ModelConstants.SocialMediaConstants;
+
+public class EditSocialMediasViewModel
 {
-    public class EditSocialMediasViewModel
-    {
-        public string Id { get; set; } = null!;
+    public string Id { get; set; } = null!;
 
-        [MaxLength(2048)]
-        [DisplayName("Facebook")]
-        public string? FacebookUrl { get; set; }
+    [MaxLength(UrlMaxLength)]
+    [DisplayName(FacebookDisplayName)]
+    public string? FacebookUrl { get; set; }
 
-        [MaxLength(2048)]
-        [DisplayName("Instagram")]
-        public string? InstagramUrl { get; set; }
+    [MaxLength(UrlMaxLength)]
+    [DisplayName(InstagramDisplayName)]
+    public string? InstagramUrl { get; set; }
 
-        [MaxLength(2048)]
-        [DisplayName("LinkedIn")]
-        public string? LinkedInUrl { get; set; }
+    [MaxLength(UrlMaxLength)]
+    [DisplayName(LinkedInDisplayName)]
+    public string? LinkedInUrl { get; set; }
 
-        [MaxLength(2048)]
-        [DisplayName("Twitter")]
-        public string? TwiterUrl { get; set; }
+    [MaxLength(UrlMaxLength)]
+    [DisplayName(TwitterDisplayName)]
+    public string? TwiterUrl { get; set; }
 
-        [Required]
-        public string ApplicationUserId { get; set; } = null!;
-    }
+    [Required]
+    public string ApplicationUserId { get; set; } = null!;
 }

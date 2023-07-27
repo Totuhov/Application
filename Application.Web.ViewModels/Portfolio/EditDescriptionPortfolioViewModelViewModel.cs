@@ -1,16 +1,18 @@
 ﻿
+namespace Application.Web.ViewModels.Portfolio;
+
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Web.ViewModels.Portfolio;
+using static Application.Common.ModelConstants.PortfolioConstants;
 
 public class EditDescriptionPortfolioViewModelViewModel
 {
-    [MaxLength(150)]
+    [MaxLength(GreetingsMessageMaxLength)]
     public string? GreetingsMessage { get; set; }
 
-    [MaxLength(100)]
+    [MaxLength(UserDisplayNameMaxLength)]
     public string? UserDisplayName { get; set; }
 
-    [MaxLength(1000)]
+    [MaxLength(DescriptionMaxLength)]
     public string? Description { get; set; }
 }

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Identity;
 
 public class EditRoleModel
 {
-    public IdentityRole Role { get; set; }
-    public IEnumerable<ApplicationUser> Members { get; set; }
-    public IEnumerable<ApplicationUser> NonMembers { get; set; }
+    public IdentityRole Role { get; set; } = null!;
+    public IEnumerable<ApplicationUser> Members { get; set; } = null!;
+    public IEnumerable<ApplicationUser> NonMembers { get; set; } = null!; 
 }

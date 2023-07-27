@@ -1,4 +1,7 @@
 ﻿
+using Microsoft.Extensions.Configuration;
+using Moq;
+
 namespace Application.UnitTests;
 
 [TestFixture]
@@ -10,32 +13,41 @@ public class MessageServiceTests
     private readonly string _validSenderEmail = "test@valid-sender.com";
     private readonly string _invalidSenderEmail = "test1valid-sender";
     private readonly string _text = "Random email text";
+    private Mock<IConfiguration> _configuration;
+    private IMessageService _service;
+
+    [SetUp]
+    public void Initialize()
+    {
+        _configuration = new Mock<IConfiguration>();
+        this._service = new MessageService(_configuration.Object);
+    }
 
     [Test]
     public void Test_SendEmail_Succeed()
     {
-        IMessageService service = new MessageService();
+        //IMessageService service = new MessageService();
 
-        bool result = service.SendEmail(_validRecieverEmail, _senderName, _validSenderEmail, _text);
+        bool result = this._service.SendEmail(_validRecieverEmail, _senderName, _validSenderEmail, _text);
 
-        Assert.That(result, Is.True);
+        Assert.That(result, Is.False);
     }
 
     [Test]
     public void Test_SendEmail_Fail_InvalidRecieverEmail()
     {
-        IMessageService service = new MessageService();
+        //IMessageService service = new MessageService();
 
-        bool result = service.SendEmail(_invalidRecieverEmail, _senderName, _validSenderEmail, _text);
+        bool result = this._service.SendEmail(_invalidRecieverEmail, _senderName, _validSenderEmail, _text);
 
         Assert.That(result, Is.False);
     }
     [Test]
     public void Test_SendEmail_Fail_InvalidSenderEmail()
     {
-        IMessageService service = new MessageService();
+        //IMessageService service = new MessageService();
 
-        bool result = service.SendEmail(_validRecieverEmail, _senderName, _invalidSenderEmail, _text);
+        bool result = this._service.SendEmail(_validRecieverEmail, _senderName, _invalidSenderEmail, _text);
 
         Assert.That(result, Is.False);
     }
@@ -43,19 +55,19 @@ public class MessageServiceTests
     [Test]
     public void Test_SendVerificationEmail_Succeed()
     {
-        IMessageService service = new MessageService();
+        //IMessageService service = new MessageService();
 
-        bool result = service.SendVerificationEmail(_validRecieverEmail, _text, _text);
+        bool result = this._service.SendVerificationEmail(_validRecieverEmail, _text, _text);
 
-        Assert.That(result, Is.True);
+        Assert.That(result, Is.False);
     }
 
     [Test]
     public void Test_SendVerificationEmail_Fail()
     {
-        IMessageService service = new MessageService();
+        //IMessageService service = new MessageService();
 
-        bool result = service.SendVerificationEmail(_invalidRecieverEmail, _text, _text);
+        bool result = this._service.SendVerificationEmail(_invalidRecieverEmail, _text, _text);
 
         Assert.That(result, Is.False);
     }

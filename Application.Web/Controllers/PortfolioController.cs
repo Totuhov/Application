@@ -70,6 +70,7 @@ public class PortfolioController : BaseController
         }
     }
 
+    [Authorize(Roles = "User")]
     public async Task<IActionResult> Create(string id)
     {
         try

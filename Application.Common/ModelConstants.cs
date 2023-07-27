@@ -37,7 +37,30 @@ public static class ModelConstants
     public static class ProjectConstants
     {
         public const int NameMaxLength = 100;
+        public const int NameMinLength = 1;
         public const int DescriptionMaxLength = 500;
         public const int UrlMaxLength = 2048;
+    }
+    public static class ContactFormConstants
+    {
+        public const int SenderNameMaxLength = 100;
+        public const int SenderNameMinLength = 2;
+        public const int SenderEmailMaxLength = 150;
+        public const int TextMaxLength = 5000;
+    }
+    public static class RoleConstants
+    {
+        public const int RoleNameMaxLength = 50;
+        public const int RoleNameMinLength = 2;
+    }
+    public static class SocialMediaConstants
+    {
+        public const string FacebookDisplayName = "Facebook";
+        public const string InstagramDisplayName = "Instagram";
+        public const string LinkedInDisplayName = "LinkedIn";
+        public const string TwitterDisplayName = "Twitter";
+
+
+        public const int UrlMaxLength = 2048;        
     }
 }

@@ -8,7 +8,7 @@ public class EditProjectViewModel
 {
     public string Id { get; set; } = null!;
 
-    [MaxLength(NameMaxLength)]
+    [StringLength(NameMaxLength, MinimumLength = NameMinLength)]
     public string? Name { get; set; }
 
     [MaxLength(DescriptionMaxLength)]
