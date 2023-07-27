@@ -26,7 +26,6 @@ public class MessageServiceTests
     [Test]
     public void Test_SendEmail_Succeed()
     {
-        //IMessageService service = new MessageService();
 
         bool result = this._service.SendEmail(_validRecieverEmail, _senderName, _validSenderEmail, _text);
 
@@ -36,7 +35,6 @@ public class MessageServiceTests
     [Test]
     public void Test_SendEmail_Fail_InvalidRecieverEmail()
     {
-        //IMessageService service = new MessageService();
 
         bool result = this._service.SendEmail(_invalidRecieverEmail, _senderName, _validSenderEmail, _text);
 
@@ -45,7 +43,6 @@ public class MessageServiceTests
     [Test]
     public void Test_SendEmail_Fail_InvalidSenderEmail()
     {
-        //IMessageService service = new MessageService();
 
         bool result = this._service.SendEmail(_validRecieverEmail, _senderName, _invalidSenderEmail, _text);
 
@@ -55,7 +52,6 @@ public class MessageServiceTests
     [Test]
     public void Test_SendVerificationEmail_Succeed()
     {
-        //IMessageService service = new MessageService();
 
         bool result = this._service.SendVerificationEmail(_validRecieverEmail, _text, _text);
 
@@ -65,7 +61,6 @@ public class MessageServiceTests
     [Test]
     public void Test_SendVerificationEmail_Fail()
     {
-        //IMessageService service = new MessageService();
 
         bool result = this._service.SendVerificationEmail(_invalidRecieverEmail, _text, _text);
 
