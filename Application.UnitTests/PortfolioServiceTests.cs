@@ -6,6 +6,7 @@ namespace Application.UnitTests;
 public class PortfolioServiceTests
 {
     private ApplicationDbContext _context;
+    private IPortfolioService _portfolioService;
 
     [OneTimeSetUp]
     public void TestInitialize()
@@ -117,17 +118,18 @@ public class PortfolioServiceTests
         this._context.Images.AddRange(images);
         this._context.Articles.Add(article);
         this._context.SaveChanges();
+
+        this._portfolioService = new PortfolioService(this._context);
     }
 
     [Test]
     public async Task Test_CreateFirstPortfolioAsync_Succeed()
     {
         string userId = "2"; // This user still have not Portfolio
-        IPortfolioService service = new PortfolioService(_context);
 
         ApplicationUser? user = await _context.Users.FindAsync(userId);
 
-        await service.CreateFirstPortfolioAsync(userId);
+        await this._portfolioService.CreateFirstPortfolioAsync(userId);
         Assert.Multiple(() =>
         {
             Assert.That(user?.Portfolio, Is.Not.EqualTo(null));
@@ -142,7 +144,8 @@ public class PortfolioServiceTests
         string userId = "1";
         IPortfolioService service = new PortfolioService(_context);
 
-        EditDescriptionPortfolioViewModelViewModel? model = await service.GetEditDescriptionViewModelAsync(userId);
+        EditDescriptionPortfolioViewModelViewModel? model = await this._portfolioService
+            .GetEditDescriptionViewModelAsync(userId);
 
         Assert.Multiple(() =>
         {
@@ -157,9 +160,8 @@ public class PortfolioServiceTests
     public async Task Test_GetEditAboutViewModelAsync_Succeed()
     {
         string userId = "1";
-        IPortfolioService service = new PortfolioService(_context);
 
-        EditAboutPortfolioViewModelViewModel? model = await service.GetEditAboutViewModelAsync(userId);
+        EditAboutPortfolioViewModelViewModel? model = await this._portfolioService.GetEditAboutViewModelAsync(userId);
 
         Assert.Multiple(() =>
         {
@@ -173,9 +175,8 @@ public class PortfolioServiceTests
     public async Task Test_GetPortfolioFromRouteAsync_Succeed()
     {
         string username = "guest";
-        IPortfolioService service = new PortfolioService(_context);
 
-        PortfolioViewModel? testModel = await service.GetPortfolioFromRouteAsync(username);
+        PortfolioViewModel? testModel = await this._portfolioService.GetPortfolioFromRouteAsync(username);
 
         Assert.That(testModel, Is.Not.EqualTo(null));
         Assert.Multiple(() =>
@@ -189,9 +190,8 @@ public class PortfolioServiceTests
     public async Task Test_LogedInUserHasPortfolio_Succeed()
     {
         string userId = "1";
-        IPortfolioService service = new PortfolioService(_context);
 
-        bool testResult = await service.LogedInUserHasPortfolio(userId);
+        bool testResult = await this._portfolioService.LogedInUserHasPortfolio(userId);
 
         Assert.That(testResult, Is.EqualTo(true));
     }
@@ -201,9 +201,8 @@ public class PortfolioServiceTests
     public async Task Test_LogedInUserHasPortfolio_Fail()
     {
         string userId = "2"; // user with id 2 has not portfolio
-        IPortfolioService service = new PortfolioService(_context);
 
-        bool testResult = await service.LogedInUserHasPortfolio(userId);
+        bool testResult = await this._portfolioService.LogedInUserHasPortfolio(userId);
 
         Assert.That(testResult, Is.EqualTo(false));
     }
@@ -213,14 +212,13 @@ public class PortfolioServiceTests
     {
         string userId = "1";
         string userName = "guest";
-        IPortfolioService service = new PortfolioService(_context);
         EditDescriptionPortfolioViewModelViewModel model = 
-            await service.GetEditDescriptionViewModelAsync(userId);
+            await this._portfolioService.GetEditDescriptionViewModelAsync(userId);
 
         model.Description = "new description";
-        await service.SaveDescriptionAsync(model, userId);
+        await this._portfolioService.SaveDescriptionAsync(model, userId);
 
-        PortfolioViewModel portfolioModel = await service.GetPortfolioFromRouteAsync(userName);
+        PortfolioViewModel portfolioModel = await this._portfolioService.GetPortfolioFromRouteAsync(userName);
 
         Assert.That(portfolioModel, Is.Not.Null);
         Assert.That(portfolioModel.Description, Is.EqualTo("new description"));
@@ -231,14 +229,13 @@ public class PortfolioServiceTests
     {
         string userId = "1";
         string userName = "guest";
-        IPortfolioService service = new PortfolioService(_context);
         EditAboutPortfolioViewModelViewModel? model =
-            await service.GetEditAboutViewModelAsync(userId);
+            await this._portfolioService.GetEditAboutViewModelAsync(userId);
         model.About = "new about";
 
-        await service.SaveAboutAsync(model, userId);
+        await this._portfolioService.SaveAboutAsync(model, userId);
 
-        PortfolioViewModel? portfolioModel = await service.GetPortfolioFromRouteAsync(userName);
+        PortfolioViewModel? portfolioModel = await this._portfolioService.GetPortfolioFromRouteAsync(userName);
 
         Assert.That(portfolioModel, Is.Not.Null);
         Assert.That(portfolioModel.About, Is.EqualTo("new about"));
@@ -248,9 +245,8 @@ public class PortfolioServiceTests
     public async Task Test_GetAllUsersByRegexAsync_SucceedWithResult()
     {
         string expression = "v";
-        IPortfolioService service = new PortfolioService(_context);
 
-        List<PreviewPortfolioViewModel> ports = await service.GetAllUsersByRegexAsync(expression);
+        List<PreviewPortfolioViewModel> ports = await this._portfolioService.GetAllUsersByRegexAsync(expression);
 
         Assert.That(ports, Is.Not.Empty);
     }
@@ -259,9 +255,8 @@ public class PortfolioServiceTests
     public async Task Test_GetAllUsersByRegexAsync_SucceedWithoutResult()
     {
         string expression = "ww";
-        IPortfolioService service = new PortfolioService(_context);
 
-        List<PreviewPortfolioViewModel> ports = await service.GetAllUsersByRegexAsync(expression);
+        List<PreviewPortfolioViewModel> ports = await this._portfolioService.GetAllUsersByRegexAsync(expression);
 
         Assert.That(ports, Is.Empty);
     }

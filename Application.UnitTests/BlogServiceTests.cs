@@ -5,6 +5,7 @@
     {
         private IEnumerable<Article> _articles;
         private IEnumerable<ApplicationUser> _users;
+        private IBlogService _blogService;
 
         private ApplicationDbContext _context;
 
@@ -74,6 +75,9 @@
             this._context.Articles.AddRange(this._articles);
             this._context.Users.AddRange(this._users);
             this._context.SaveChanges();
+
+
+            this._blogService = new BlogService(this._context);
         }
 
         [Test]
@@ -82,8 +86,7 @@
             string articleId = "1";
             string userId = "2";
 
-            IBlogService service = new BlogService(this._context);
-            CreateArticleViewModel? testModel = await service.GetCreateArticleViewModelByIdAsync(articleId, userId);
+            CreateArticleViewModel? testModel = await this._blogService.GetCreateArticleViewModelByIdAsync(articleId, userId);
             Assert.Multiple(() =>
             {
                 Assert.That(testModel, Is.Not.EqualTo(null));
@@ -100,7 +103,6 @@
         [Test]
         public async Task Test_CreatePostAsync()
         {
-            IBlogService service = new BlogService(this._context);
 
             var article = new CreateArticleViewModel()
             {
@@ -113,7 +115,7 @@
                 IsDeleted = false
             };
 
-            await service.CreatePostAsync(article);
+            await this._blogService.CreatePostAsync(article);
 
             Assert.That(_context.Articles.Count(), Is.EqualTo(4));
         }
@@ -121,18 +123,17 @@
         [Test]
         public async Task Test_SavePostAsync()
         {
-            IBlogService service = new BlogService(this._context);
 
             string articleId = "2";
             string userId = "1";
 
-            CreateArticleViewModel? testModel = await service.GetCreateArticleViewModelByIdAsync(articleId, userId);
+            CreateArticleViewModel? testModel = await this._blogService.GetCreateArticleViewModelByIdAsync(articleId, userId);
 
             testModel.Title = "Edited Second Article";
 
-            await service.SavePostAsync(testModel);
+            await this._blogService.SavePostAsync(testModel);
 
-            testModel = await service.GetCreateArticleViewModelByIdAsync(articleId, userId);
+            testModel = await this._blogService.GetCreateArticleViewModelByIdAsync(articleId, userId);
 
             Assert.That(testModel.Title, Is.EqualTo("Edited Second Article"));
         }
@@ -141,19 +142,18 @@
         public async Task Test_GetAllArticlesByUserNameAsync()
         {
             string username = "guest";
-            IBlogService service = new BlogService(this._context);
-            List<ArticleViewModel> testModels = await service.GetAllArticlesByUserNameAsync(username);
 
-            Assert.That(testModels.Count, Is.EqualTo(2));
+            List<ArticleViewModel> testModels = await this._blogService.GetAllArticlesByUserNameAsync(username);
+
+            Assert.That(testModels, Has.Count.EqualTo(2));
         }
 
         [Test]
         public async Task Test_GetArticleViewModelByIdAsync_ReturnsArticleViewModel()
         {
-            IBlogService service = new BlogService(this._context);
             string articleId = "3";
 
-            ArticleViewModel tesModel = await service.GetArticleViewModelByIdAsync(articleId);
+            ArticleViewModel tesModel = await this._blogService.GetArticleViewModelByIdAsync(articleId);
 
             Assert.That(tesModel, Is.Not.EqualTo(null));
         }
@@ -161,16 +161,47 @@
         [Test]
         public async Task Test_DeleteArteicleAsync()
         {
-            IBlogService service = new BlogService(this._context);
             string articleId = "3";
 
-            ArticleViewModel testModel = await service.GetArticleViewModelByIdAsync(articleId);
+            ArticleViewModel testModel = await this._blogService.GetArticleViewModelByIdAsync(articleId);
 
-            await service.DeleteArticleAsync(testModel);
+            await this._blogService.DeleteArticleAsync(testModel);
 
-            testModel = await service.GetArticleViewModelByIdAsync(articleId);
+            testModel = await this._blogService.GetArticleViewModelByIdAsync(articleId);
 
             Assert.That(testModel.IsDeleted, Is.EqualTo(true));
+        }
+
+        [Test]
+        public void Test_IsUserOwnerOfArticle_True()
+        {
+            string articleId = "2";
+            string applicationUserId = "1";
+
+            var result = this._blogService.IsUserOwnerOfArticle(articleId, applicationUserId);            
+
+            Assert.That(result, Is.EqualTo(true));
+        }
+
+        [Test]
+        public void Test_IsUserOwnerOfArticle_False()
+        {
+            string articleId = "1";
+            string applicationUserId = "1";
+
+            var result = this._blogService.IsUserOwnerOfArticle(articleId, applicationUserId);
+
+            Assert.That(result, Is.EqualTo(false));
+        }
+
+        [Test]
+        public async Task Test_GetUsernameByArticleIdAsync()
+        {
+            string articleId = "2";
+
+            var result = await this._blogService.GetUsernameByArticleIdAsync(articleId);
+
+            Assert.That(result, Is.EqualTo("guest"));
         }
     }
 }

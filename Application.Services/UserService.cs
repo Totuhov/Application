@@ -16,6 +16,7 @@ public class UserService : IUserService
     {
         _context = context;
     }    
+
     public async Task<bool> IsUserExists(string userName)
     {
         return await _context.Users.AnyAsync(u => u.UserName == userName);
