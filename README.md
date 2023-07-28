@@ -16,7 +16,7 @@ var seeder = new DataSeeder(_env); <br />
 seeder.Seed(builder);
 - this method is just for database seeding and must be excluded again after creating of the migration is done
 - for some functionalities is needed running Application.Api
-- a custom administrator user is created by creating the database.
+- a custom administrator user is created by creating the database with username of "Administrator" and password "Aa1234!".
 - the application sends emails for registration confirmation and from user's contact form but the credentials needed for this are hidden with user secret manager of Visual Studio
 - the method used to send the verification message is excluded for exam purposes
 - the files in namespace Application.Data.Migrations are excluded from the Visual Studio's code coverage analysis
