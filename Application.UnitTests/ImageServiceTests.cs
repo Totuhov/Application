@@ -8,6 +8,7 @@
         private IEnumerable<Portfolio> _portfolios;
 
         private ApplicationDbContext _context;
+        private IImageService _imageService;
 
         [OneTimeSetUp]
         public void TestInitialize()
@@ -90,28 +91,53 @@
             this._context.Projects.AddRange(projects);
             this._context.Portfolios.AddRange(this._portfolios);
             this._context.SaveChanges();
+
+            this._imageService = new ImageService(this._context);
         }
 
         [Test]
         [Order(1)]
         public async Task Test_GetUserImagesAsync()
         {
-            IImageService service = new ImageService(this._context);
-
-            List<ImageViewModel> testModels = await service.GetUserImagesAsync("1");
+            List<ImageViewModel> testModels = await this._imageService.GetUserImagesAsync("1");
 
             Assert.That(testModels, Has.Count.EqualTo(2));
         }
 
         [Test]
         [Order(2)]
-        public void Test_GetContentType()
+        public void Test_GetContentType1()
         {
-            IImageService service = new ImageService(this._context);
-
-            string contentType = service.GetContentType(".jpg");
+            string contentType = this._imageService.GetContentType(".jpg");
 
             Assert.That(contentType, Is.EqualTo("image/jpeg"));
+        }
+
+        [Test]
+        [Order(2)]
+        public void Test_GetContentType2()
+        {
+            string contentType = this._imageService.GetContentType(".png");
+
+            Assert.That(contentType, Is.EqualTo("image/png"));
+        }
+
+        [Test]
+        [Order(2)]
+        public void Test_GetContentType3()
+        {
+            string contentType = this._imageService.GetContentType(".gif");
+
+            Assert.That(contentType, Is.EqualTo("image/gif"));
+        }
+
+        [Test]
+        [Order(2)]
+        public void Test_GetContentType_Default()
+        {
+            string contentType = this._imageService.GetContentType(".");
+
+            Assert.That(contentType, Is.EqualTo("application/octet-stream"));
         }
 
 
@@ -119,10 +145,9 @@
         [Order(3)]
         public async Task Test_GetImageByIdAsync_Succeed()
         {
-            IImageService service = new ImageService(this._context);
             string imageId = "1";
 
-            ImageViewModel testModel = await service.GetImageByIdAsync(imageId);
+            ImageViewModel testModel = await this._imageService.GetImageByIdAsync(imageId);
 
             Assert.Multiple(() =>
             {
@@ -136,13 +161,12 @@
         [Order(4)]
         public async Task Test_UseImageAsProfilAsync_Succeed()
         {
-            IImageService service = new ImageService(this._context);
             string imageId = "1";
             string userId = "1";
 
             ApplicationUser user = await this._context.Users.FirstAsync(u => u.Id == "1");
 
-            await service.UseImageAsProfilAsync(imageId, userId);
+            await this._imageService.UseImageAsProfilAsync(imageId, userId);
 
             Assert.That(user?.Portfolio?.ImageId, Is.EqualTo(imageId));
         }
@@ -151,10 +175,9 @@
         [Order(5)]
         public async Task Test_DeleteImageByIdAsync()
         {
-            IImageService service = new ImageService(this._context);
             string imageId = "1";
 
-            await service.DeleteImageByIdAsync(imageId);
+            await this._imageService.DeleteImageByIdAsync(imageId);
 
             Assert.That(await _context.Images.FirstOrDefaultAsync(i => i.ImageId == imageId), Is.EqualTo(null));
         }

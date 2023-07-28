@@ -7,30 +7,36 @@
 
 <div class="row justify-content-center">
     <div class="col-md-8 col-lg-6">
-    <form asp-action="EditDescription" method="post">
-        <div class="mb-3 col-6 w-100">
-            <label asp-for="@Model.GreetingsMessage" class="form-label-add-edit mb-2 fw-bold">Greetings Mesage</label>
-            <input asp-for="@Model.GreetingsMessage" class="form-control" aria-required="true">
-            <span asp-validation-for="@Model.GreetingsMessage" class="text-danger"></span>
-        </div>
-        <div class="mb-3 col-6 w-100">
-            <label asp-for="@Model.UserDisplayName" class="form-label-add-edit mb-2 fw-bold">Your display name</label>
-            <input asp-for="@Model.UserDisplayName" class="form-control" aria-required="true">
-            <span asp-validation-for="@Model.UserDisplayName" class="text-danger"></span>
-        </div>
-        <div class="mb-3 col-6 w-100">
-            <label asp-for="@Model.Description" class="form-label-add-edit mb-2 fw-bold">Your profil description should be with a maximum length of 250 symbols</label>
-            <textarea asp-for="@Model.Description" class="form-control" rows="7" aria-required="true"></textarea>
-            <span asp-validation-for="@Model.Description" class="text-danger"></span>
-        </div>
-        <div class="row mt-5">
-            <div class="col-6 d-flex align-items-center justify-content-start">
-                <a asp-controller="Portfolio" asp-action="Index" class="btn btn-dark mb-2 shadow-none">Back</a>
+        <form asp-action="EditDescription" method="post">
+            <div class="mb-3 col-6 w-100">
+                <label asp-for="@Model.GreetingsMessage" class="form-label-add-edit mb-2 fw-bold">Greetings Mesage</label>
+                <input asp-for="@Model.GreetingsMessage" class="form-control" aria-required="true">
+                <span asp-validation-for="@Model.GreetingsMessage" class="text-danger"></span>
             </div>
-            <div class="col-6 d-flex align-items-center justify-content-end">
-                <input class="btn btn-dark mb-2 shadow-none w-75" type="submit" value="Save" />
+            <div class="mb-3 col-6 w-100">
+                <label asp-for="@Model.UserDisplayName" class="form-label-add-edit mb-2 fw-bold">Your display name</label>
+                <input asp-for="@Model.UserDisplayName" class="form-control" aria-required="true">
+                <span asp-validation-for="@Model.UserDisplayName" class="text-danger"></span>
             </div>
-        </div>
-    </form>
+            <div class="mb-3 col-6 w-100">
+                <label asp-for="@Model.Description" class="form-label-add-edit mb-2 fw-bold">Your profil description should be with a maximum length of 250 symbols</label>
+                <textarea asp-for="@Model.Description" class="form-control" rows="7" aria-required="true"></textarea>
+                <span asp-validation-for="@Model.Description" class="text-danger"></span>
+            </div>
+            <div class="row mt-5">
+                <div class="col-6 d-flex align-items-center justify-content-start">
+                    <a asp-controller="Portfolio" asp-action="Index" class="btn btn-dark mb-2 shadow-none">Back</a>
+                </div>
+                <div class="col-6 d-flex align-items-center justify-content-end">
+                    <input class="btn btn-dark mb-2 shadow-none w-75" type="submit" value="Save" />
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
-</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }

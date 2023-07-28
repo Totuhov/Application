@@ -26,8 +26,8 @@ public static class ModelConstants
     {
         public const string GreetingsMessageDefaultText  = "Hallo ";
         public const string UserDisplayNameDefaultText = "friend";
-        public const string DescriptionDefaultText = "Hier you can write somethig to describe you...";
-        public const string AboutDefaultText = "here you can describe your work, competences or just a short autobiography";
+        public const string DescriptionDefaultText = "Hier you can write somethig to describe you or your business";
+        public const string AboutDefaultText = "Here, you can describe your work, competences, or just a short autobiography.";
 
         public const int GreetingsMessageMaxLength = 50;
         public const int UserDisplayNameMaxLength = 100;

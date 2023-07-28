@@ -43,6 +43,7 @@ public class MessageService : IMessageService
                 DeliveryMethod = SmtpDeliveryMethod.Network,
                 EnableSsl = true
             };
+
             smtp.Send(email);
 
             return true;
