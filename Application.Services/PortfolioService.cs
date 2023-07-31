@@ -1,19 +1,18 @@
 ﻿
 namespace Application.Services;
 
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
 using Application.Data;
 using Application.Data.Models;
 using Application.Services.Interfaces;
-using Application.Web.ViewModels.Article;
 using Application.Web.ViewModels.Image;
-using Application.Web.ViewModels.Portfolio;
+using Application.Web.ViewModels.Article;
 using Application.Web.ViewModels.Project;
+using Application.Web.ViewModels.Portfolio;
 using Application.Web.ViewModels.SocialMedia;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Reflection.Metadata.Ecma335;
-using System.Threading.Tasks;
 
 using static Application.Common.ModelConstants;
 

@@ -30,12 +30,14 @@
             <h2 class="text-center">@Model.Description</h2>
         </div>
     </div>
+
     @if (User?.Identity?.Name == Model.UserName)
     {
         <div class="justify-content-center d-flex">
             <a asp-controller="Portfolio" asp-action="EditDescription" asp-route-id="@User?.Identity?.Name" class="btn btn-outline-dark">Edit Description</a>
         </div>
     }
+
     @await Html.PartialAsync("_SocialMediaPartial", Model.SocialMedia)
 
     @if (User?.Identity?.Name == Model.UserName)
@@ -86,6 +88,14 @@
     else
     {
         @await Html.PartialAsync("_ProjectPartial", Model.Projects)
+
+        <div class="text-center mt-3">
+            <a asp-controller="Project" asp-action="All" asp-route-id="@Model.UserName" class="btn btn-outline-dark">View All</a>
+            @if (@User?.Identity?.Name == Model.UserName)
+            {
+                <a asp-controller="Project" asp-action="Create" asp-route-id="@Model.UserName" class="btn btn-outline-dark">Add New Project</a>
+            }
+        </div>
     }
 
     <div class="justify-content-center d-flex border-top mt-3">

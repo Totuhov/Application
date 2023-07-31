@@ -52,8 +52,7 @@ public class ProjectService : IProjectService
                     ImageData = Convert.ToBase64String(p.Image.Bytes),
                     ContentType = p.Image.FileExtension
                 },
-                ApplicationUserId = p.ApplicationUserId,
-                UserName = p.ApplicationUser.UserName
+                ApplicationUserId = p.ApplicationUserId
             })
             .OrderBy(p => p.Name)
             .ToListAsync();
