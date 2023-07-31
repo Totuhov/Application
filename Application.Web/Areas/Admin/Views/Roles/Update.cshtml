@@ -46,6 +46,10 @@
                 {
                     @foreach (ApplicationUser user in Model.Members)
                     {
+                        if (user.UserName == "Administrator")
+                        {
+                            continue;
+                        }
                         <tr>
                             <td>@user.UserName</td>
                             <td>
