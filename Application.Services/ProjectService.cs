@@ -53,6 +53,7 @@ public class ProjectService : IProjectService
                     ContentType = p.Image.FileExtension
                 },
                 ApplicationUserId = p.ApplicationUserId,
+                UserName = p.ApplicationUser.UserName
             })
             .OrderBy(p => p.Name)
             .ToListAsync();

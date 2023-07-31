@@ -18,4 +18,6 @@ public class ProjectViewModel
     public string? Url { get; set; }
 
     public string ApplicationUserId { get; set; } = null!;
+
+    public string UserName { get; set; } = null!;
 }

@@ -82,9 +82,13 @@
             </div>
         }
     }
+
+
     else
     {
-        <div class="justify-content-center col-11 col-md-9 mx-auto">
+    @await Html.PartialAsync("_ProjectPartial", Model.Projects)
+
+        @*<div class="justify-content-center col-11 col-md-9 mx-auto">
             <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner rounded-3">
                     <div class="carousel-item active">
@@ -129,7 +133,7 @@
             {
                 <a asp-controller="Project" asp-action="Create" asp-route-id="@Model.UserName" class="btn btn-outline-dark">Add New Project</a>
             }
-        </div> @*Projects*@
+        </div> *@
     }
 
     <div class="justify-content-center d-flex border-top mt-3">
