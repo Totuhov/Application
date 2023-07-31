@@ -1,7 +1,10 @@
 ﻿
 namespace Application.Web.ViewModels.Article;
 
-public class AllArticlesViewModel
+using Application.Data.Models;
+using Application.Services.Mapping;
+
+public class AllArticlesViewModel : IMapFrom<Article>
 {
     public string? UserName { get; set; }
 

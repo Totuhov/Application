@@ -34,7 +34,6 @@ public class ImageService : IImageService
 
     public async Task SaveImageInDatabaseAsync(CreateImageViewModel model, string userId)
     {
-        // Read the image file as bytes
         using var memoryStream = new MemoryStream();
         await model.File.CopyToAsync(memoryStream);
         byte[] imageData = memoryStream.ToArray();

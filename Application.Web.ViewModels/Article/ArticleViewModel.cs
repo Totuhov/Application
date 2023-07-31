@@ -1,8 +1,10 @@
 ﻿
 namespace Application.Web.ViewModels.Article;
 
+using Data.Models;
+using Services.Mapping;
 
-public class ArticleViewModel
+public class ArticleViewModel : IMapFrom<Article>
 {
     public string Id { get; set; } = null!;
 

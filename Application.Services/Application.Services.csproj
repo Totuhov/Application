@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Application.Data\Application.Data.csproj" />
+    <ProjectReference Include="..\Application.Services.Mapping\Application.Services.Mapping.csproj" />
     <ProjectReference Include="..\Application.Services.Models\Application.Services.Models.csproj" />
     <ProjectReference Include="..\Application.Web.ViewModels\Application.Web.ViewModels.csproj" />
   </ItemGroup>

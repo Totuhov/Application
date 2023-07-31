@@ -5,10 +5,13 @@ using Application.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Application.Data;
+using Application.Web.Infrastructure.Extensions;
+using Application.Services.Mapping;
+using Application.Web.ViewModels;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 //var connectionString = builder.Configuration["ConnectionString"];
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -34,22 +37,18 @@ builder.Services.AddControllersWithViews()
         options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
     });
 
-// Dependencies
+// Dependencies registrator made by Christian Ivanov, Softuni Bulgaria
 
-builder.Services.AddScoped<IBlogService, BlogService>();
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IImageService, ImageService>();
-builder.Services.AddScoped<IPortfolioService, PortfolioService>();
-builder.Services.AddScoped<IProjectService, ProjectService>();
-builder.Services.AddScoped<IMessageService, MessageService>();
-builder.Services.AddScoped<ISocialMediaService, SocialMediaService>();
+builder.Services.AddApplicationServices(typeof(IPortfolioService));
 
-//builder.Services.ConfigureApplicationCookie(cfg =>
-//{
-//    cfg.LoginPath = "/User/Login";
-//});
+builder.Services.ConfigureApplicationCookie(cfg =>
+{
+    cfg.LoginPath = "/User/Login";
+});
 
 var app = builder.Build();
+
+AutoMapperConfig.RegisterMappings(typeof(ErrorViewModel).GetTypeInfo().Assembly);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

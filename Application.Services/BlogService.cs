@@ -1,11 +1,12 @@
 ﻿
 namespace Application.Services;
 
-using Application.Data;
-using Application.Data.Models;
-using Application.Services.Interfaces;
-using Application.Web.ViewModels.Article;
 using Microsoft.EntityFrameworkCore;
+
+using Data;
+using Data.Models;
+using Services.Interfaces;
+using Web.ViewModels.Article;
 
 public class BlogService : IBlogService
 {

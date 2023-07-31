@@ -56,8 +56,5 @@ public class ContextBuilderSettings
             .HasForeignKey(e => e.ImageId)
             .IsRequired(false)
             .OnDelete(DeleteBehavior.NoAction);
-
-        //var seeder = new DataSeeder(_env);
-        //seeder.Seed(builder);
     }
 }
