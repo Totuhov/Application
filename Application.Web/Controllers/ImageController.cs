@@ -44,8 +44,7 @@ public class ImageController : BaseController
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([FromForm] CreateImageViewModel model)
+    public async Task<IActionResult> Create(CreateImageViewModel model)
     {
         try
         {

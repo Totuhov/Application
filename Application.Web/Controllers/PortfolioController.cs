@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 
 using Application.Services.Interfaces;
 using Application.Web.ViewModels.Portfolio;
+using Application.Web.ViewModels.ContactForm;
 
 using static Application.Common.NotificationMessagesConstants;
-using Application.Web.ViewModels.ContactForm;
 
 public class PortfolioController : BaseController
 {
@@ -17,7 +17,9 @@ public class PortfolioController : BaseController
     private readonly IUserService _userService;
     private readonly IMessageService _messageService;
 
-    public PortfolioController(IPortfolioService portfolioService, IUserService userService, IMessageService messageService)
+    public PortfolioController(IPortfolioService portfolioService, 
+        IUserService userService, 
+        IMessageService messageService)
     {
         _portfolioService = portfolioService;
         _userService = userService;

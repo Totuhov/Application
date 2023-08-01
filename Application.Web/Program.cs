@@ -1,7 +1,6 @@
 using Application.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using Application.Services.Interfaces;
-using Application.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Application.Data;
@@ -40,6 +39,8 @@ builder.Services.AddControllersWithViews()
 // Dependencies registrator made by Christian Ivanov, Softuni Bulgaria
 
 builder.Services.AddApplicationServices(typeof(IPortfolioService));
+
+builder.Services.AddMemoryCache(); 
 
 builder.Services.ConfigureApplicationCookie(cfg =>
 {

@@ -3,9 +3,6 @@ namespace Application.Common;
 
 public static class ModelConstants
 {
-    public const string DefaultProfileImageCharacteristic = "defaultProfileImage";
-    public const string DefaultProjectImageCharacteristic = "defaultProjectImage";
-
     public static class ApplicationUserConstants
     {
 
@@ -21,12 +18,15 @@ public static class ModelConstants
     {
         public const int FileExtensionMaxLength = 10;
         public const int CharacteristicMaxLength = 20;
+
+        public const string DefaultProfileImageCharacteristic = "defaultProfileImage";
+        public const string DefaultProjectImageCharacteristic = "defaultProjectImage";
     }
     public static class PortfolioConstants
     {
         public const string GreetingsMessageDefaultText  = "Hallo ";
         public const string UserDisplayNameDefaultText = "friend";
-        public const string DescriptionDefaultText = "Hier you can write somethig to describe you or your business";
+        public const string DescriptionDefaultText = "Here you can write something to describe you or your business";
         public const string AboutDefaultText = "Here, you can describe your work, competences, or just a short autobiography.";
 
         public const int GreetingsMessageMaxLength = 50;

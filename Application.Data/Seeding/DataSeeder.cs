@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Identity;
 
 using Application.Data.Models;
 
-using static Application.Common.ModelConstants;
+using static Application.Common.ModelConstants.ImageConstants;
 
 public class DataSeeder
 {
@@ -69,10 +69,9 @@ public class DataSeeder
 
         foreach (string imagePath in profileImageFiles)
         {
-            // Convert image file to byte array
+
             byte[] imageData = File.ReadAllBytes(imagePath);
 
-            // Create an Image entity and add it to the model
             modelBuilder.Entity<Image>().HasData(new Image
             {
                 Bytes = imageData,

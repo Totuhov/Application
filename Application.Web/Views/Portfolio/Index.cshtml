@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Welcome!";
 }
-@if (!User.IsInRole("Admin"))
+@if (User.IsInRole("User"))
 {
     <div class="justify-content-center d-flex">
     <a asp-controller="Portfolio" asp-action="Create" asp-route-id="@User?.Identity?.Name" class="btn btn-dark">Hi @Model.UserName! Create your Own Portfolio</a>

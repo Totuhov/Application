@@ -120,7 +120,7 @@ public class RolesController : BaseController
         IdentityResult result;
         if (ModelState.IsValid)
         {
-            foreach (string userId in model.AddIds ?? new string[] { })
+            foreach (string userId in model.AddIds ?? Array.Empty<string>())
             {
                 ApplicationUser user = await _userManager.FindByIdAsync(userId);
                 if (user != null)
@@ -130,7 +130,7 @@ public class RolesController : BaseController
                         Errors(result);
                 }
             }
-            foreach (string userId in model.DeleteIds ?? new string[] { })
+            foreach (string userId in model.DeleteIds ?? Array.Empty<string>())
             {
                 ApplicationUser user = await _userManager.FindByIdAsync(userId);
                 if (user != null)
