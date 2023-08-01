@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-using static Application.Common.ModelConstants;
+using static Application.Common.ModelConstants.ImageConstants;
 
 public class ProjectService : IProjectService
 {

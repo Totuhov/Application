@@ -14,7 +14,7 @@ using Application.Web.ViewModels.Project;
 using Application.Web.ViewModels.Portfolio;
 using Application.Web.ViewModels.SocialMedia;
 
-using static Application.Common.ModelConstants;
+using static Application.Common.ModelConstants.ImageConstants;
 
 public class PortfolioService : IPortfolioService
 {
