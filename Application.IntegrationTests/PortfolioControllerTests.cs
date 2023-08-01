@@ -140,7 +140,7 @@ namespace Application.IntegrationTests
         public async Task EditDescription_ValidId()
         {
             this.mockPortfolioService.Setup(service => service.GetEditDescriptionViewModelAsync("1"))
-                .ReturnsAsync(new EditDescriptionPortfolioViewModelViewModel());
+                .ReturnsAsync(new EditDescriptionPortfolioViewModel());
 
             var result = await controller.EditDescription("guest") as ViewResult;
 
@@ -175,7 +175,7 @@ namespace Application.IntegrationTests
         [Test]
         public async Task EditDescription_Post_WithValidModel()
         {
-            EditDescriptionPortfolioViewModelViewModel model = new();
+            EditDescriptionPortfolioViewModel model = new();
 
             var result = await controller.EditDescription(model) as RedirectToActionResult;
 
@@ -186,7 +186,7 @@ namespace Application.IntegrationTests
         [Test]
         public async Task EditDescription_Post_WithInvalidModel()
         {
-            EditDescriptionPortfolioViewModelViewModel model = new();
+            EditDescriptionPortfolioViewModel model = new();
             controller.ModelState.AddModelError("Title", "1");
             var result = await controller.EditDescription(model) as ViewResult;
 
@@ -197,7 +197,7 @@ namespace Application.IntegrationTests
         [Test]
         public async Task EditDescription_Post_ThrowsError()
         {
-            EditDescriptionPortfolioViewModelViewModel model = new();
+            EditDescriptionPortfolioViewModel model = new();
             this.mockPortfolioService.Setup(service => service.SaveDescriptionAsync(model, "1"))
                 .Throws<Exception>();
 

@@ -256,10 +256,8 @@ namespace Application.IntegrationTests
             };
             controller.ModelState.AddModelError("roleName", "");
 
-            // Act
             var result = await controller.Update(model) as ViewResult;
 
-            // Assert
             Assert.IsNotNull(result);
         }
     }

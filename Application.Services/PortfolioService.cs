@@ -40,11 +40,11 @@ public class PortfolioService : IPortfolioService
         }
     }
 
-    public async Task<EditDescriptionPortfolioViewModelViewModel> GetEditDescriptionViewModelAsync(string userId)
+    public async Task<EditDescriptionPortfolioViewModel> GetEditDescriptionViewModelAsync(string userId)
     {
         Portfolio portfolio = await _context.Portfolios.FirstAsync(p => p.ApplicationUserId == userId);
 
-        EditDescriptionPortfolioViewModelViewModel model = new()
+        EditDescriptionPortfolioViewModel model = new()
         {
             GreetingsMessage = portfolio.GreetingsMessage,
             UserDisplayName = portfolio.UserDisplayName,
@@ -141,7 +141,7 @@ public class PortfolioService : IPortfolioService
 
     }
 
-    public async Task SaveDescriptionAsync(EditDescriptionPortfolioViewModelViewModel model, string userId)
+    public async Task SaveDescriptionAsync(EditDescriptionPortfolioViewModel model, string userId)
     {
         ApplicationUser user = await _context.Users.FirstAsync(u => u.Id == userId);
 

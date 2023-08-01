@@ -100,7 +100,7 @@ public class PortfolioController : BaseController
                 return NotFound();
             }
 
-            EditDescriptionPortfolioViewModelViewModel? model = await _portfolioService.GetEditDescriptionViewModelAsync(GetCurrentUserId());
+            EditDescriptionPortfolioViewModel? model = await _portfolioService.GetEditDescriptionViewModelAsync(GetCurrentUserId());
             return View(model);
         }
         catch (Exception)
@@ -110,7 +110,7 @@ public class PortfolioController : BaseController
     }
 
     [HttpPost]
-    public async Task<IActionResult> EditDescription(EditDescriptionPortfolioViewModelViewModel model)
+    public async Task<IActionResult> EditDescription(EditDescriptionPortfolioViewModel model)
     {
         if (!ModelState.IsValid)
         {
