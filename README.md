@@ -3,14 +3,17 @@
 Hello!
 This is my project with which I try to show what I have learned so far in web application development with c# at the Softuni academy!
 
-- [Run Information](#runinformation)
 - [Description](#description)
+- [Run Information](#runinformation)
 - [Features](#features)
 - [License](#license)
 - [Contact](#contact)
 
-## Run Information
 
+## Description
+This is a user-friendly ASP.NET web application that allows individuals to create and showcase their personalized portfolios online. The application's main function is to provide users with a platform to display their skills, experiences, and projects in a professional and visually appealing manner.
+
+## Run Information
 - if new initial migration is needed you must to uncomment the dataseeder in ApplicationDbContext - OnModelCreating() method <br />
 var seeder = new DataSeeder(_env); <br />
 seeder.Seed(builder);
@@ -20,13 +23,8 @@ seeder.Seed(builder);
 - the application sends emails for registration confirmation and from user's contact form but the credentials needed for this are hidden with user secret manager of Visual Studio
 - the method used to send the verification message is excluded for exam purposes
 - the files in namespace Application.Data.Migrations are excluded from the Visual Studio's code coverage analysis
-
-## Description
-
-This is a user-friendly ASP.NET web application that allows individuals to create and showcase their personalized portfolios online. The application's main function is to provide users with a platform to display their skills, experiences, and projects in a professional and visually appealing manner.
-
+  
 ## Features
-
 - User Registration and Authentication: New users can create an account by registering with a unique username and password.
 - Portfolio Creation: Once logged in, users can easily create their portfolios.
 - Project Showcase: Users can add projects they have worked on, along with descriptions, images, or links to external sources to showcase their work and skills effectively.
