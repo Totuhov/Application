@@ -11,6 +11,7 @@ public class EditDescriptionPortfolioViewModel
     public string? GreetingsMessage { get; set; }
 
     [MaxLength(UserDisplayNameMaxLength)]
+    [Display(Name = "Your Name")]
     public string? UserDisplayName { get; set; }
 
     [MaxLength(DescriptionMaxLength)]

@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 using static Application.Common.ModelConstants.PortfolioConstants;
 
-public class EditAboutPortfolioViewModelViewModel
+public class EditAboutPortfolioViewModel
 {
     [MaxLength(AboutMaxLength)]
     public string? About { get; set; }

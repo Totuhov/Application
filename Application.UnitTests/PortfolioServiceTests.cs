@@ -161,7 +161,7 @@ public class PortfolioServiceTests
     {
         string userId = "1";
 
-        EditAboutPortfolioViewModelViewModel? model = await this._portfolioService.GetEditAboutViewModelAsync(userId);
+        EditAboutPortfolioViewModel? model = await this._portfolioService.GetEditAboutViewModelAsync(userId);
 
         Assert.Multiple(() =>
         {
@@ -229,7 +229,7 @@ public class PortfolioServiceTests
     {
         string userId = "1";
         string userName = "guest";
-        EditAboutPortfolioViewModelViewModel? model =
+        EditAboutPortfolioViewModel? model =
             await this._portfolioService.GetEditAboutViewModelAsync(userId);
         model.About = "new about";
 

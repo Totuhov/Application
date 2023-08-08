@@ -1,8 +1,9 @@
 ﻿
 namespace Application.Common
 {
-    public class GlobalConstants
+    public static class GlobalConstants
     {
         public const string PortfolioCacheKey = "PortfolioCache";
+        public const int PortfolioCachDurationMinutes = 5;
     }
 }

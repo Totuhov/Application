@@ -18,8 +18,7 @@ public class PortfolioViewModel
     public string Email { get; set; } = null!;
 
     public string? GreetingsMessage { get; set; }
-
-    [Display(Name = "Your Name")]
+        
     public string? UserDisplayName { get; set; }
 
     public string? Description { get; set; }
@@ -32,7 +31,7 @@ public class PortfolioViewModel
 
     public ICollection<ArticleViewModel> Blog { get; set; } = new List<ArticleViewModel>();
 
-    public ContactFormViewModel ContactForm = new ();
+    public ContactFormViewModel? ContactForm { get; set; } = new();
 
-    public EditSocialMediasViewModel SocialMedia { get; set; } = new();
+    public EditSocialMediasViewModel? SocialMedia { get; set; } = new();
 }

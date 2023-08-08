@@ -9,6 +9,8 @@ using Application.Web.ViewModels.Portfolio;
 using Application.Web.ViewModels.ContactForm;
 
 using static Application.Common.NotificationMessagesConstants;
+using static Application.Common.GlobalConstants;
+using Microsoft.Extensions.Caching.Memory;
 
 public class PortfolioController : BaseController
 {
@@ -16,14 +18,17 @@ public class PortfolioController : BaseController
     private readonly IPortfolioService _portfolioService;
     private readonly IUserService _userService;
     private readonly IMessageService _messageService;
+    private readonly IMemoryCache _memoryCache;
 
-    public PortfolioController(IPortfolioService portfolioService, 
-        IUserService userService, 
-        IMessageService messageService)
+    public PortfolioController(IPortfolioService portfolioService,
+        IUserService userService,
+        IMessageService messageService,
+        IMemoryCache memoryCache)
     {
         _portfolioService = portfolioService;
         _userService = userService;
         _messageService = messageService;
+        _memoryCache = memoryCache;
     }
 
 
@@ -58,9 +63,18 @@ public class PortfolioController : BaseController
         {
             if (await _userService.IsUserExists(id))
             {
-                PortfolioViewModel model = await _portfolioService.GetPortfolioFromRouteAsync(id);
 
-                return View(model);
+                PortfolioViewModel cacheModel = this._memoryCache.Get<PortfolioViewModel>(PortfolioCacheKey);
+
+                cacheModel ??= await _portfolioService.GetPortfolioFromRouteAsync(id);
+
+                MemoryCacheEntryOptions options = new MemoryCacheEntryOptions()
+                    .SetAbsoluteExpiration(TimeSpan
+                        .FromMinutes(PortfolioCachDurationMinutes));
+
+                this._memoryCache.Set(PortfolioCacheKey, cacheModel, options);
+
+                return View(cacheModel);
             }
 
             return NotFound();
@@ -139,7 +153,7 @@ public class PortfolioController : BaseController
                 return NotFound();
             }
 
-            EditAboutPortfolioViewModelViewModel model = await _portfolioService.GetEditAboutViewModelAsync(GetCurrentUserId());
+            EditAboutPortfolioViewModel model = await _portfolioService.GetEditAboutViewModelAsync(GetCurrentUserId());
             return View(model);
         }
         catch (Exception)
@@ -149,7 +163,7 @@ public class PortfolioController : BaseController
     }
 
     [HttpPost]
-    public async Task<IActionResult> EditAbout(EditAboutPortfolioViewModelViewModel model)
+    public async Task<IActionResult> EditAbout(EditAboutPortfolioViewModel model)
     {
         if (!ModelState.IsValid)
         {

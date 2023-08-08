@@ -54,11 +54,11 @@ public class PortfolioService : IPortfolioService
         return model;
     }
 
-    public async Task<EditAboutPortfolioViewModelViewModel> GetEditAboutViewModelAsync(string userId)
+    public async Task<EditAboutPortfolioViewModel> GetEditAboutViewModelAsync(string userId)
     {
         Portfolio portfolio = await _context.Portfolios.FirstAsync(p => p.ApplicationUserId == userId);
 
-        EditAboutPortfolioViewModelViewModel model = new()
+        EditAboutPortfolioViewModel model = new()
         {
             About = portfolio.About
         };
@@ -155,7 +155,7 @@ public class PortfolioService : IPortfolioService
         await _context.SaveChangesAsync();
     }
 
-    public async Task SaveAboutAsync(EditAboutPortfolioViewModelViewModel model, string userId)
+    public async Task SaveAboutAsync(EditAboutPortfolioViewModel model, string userId)
     {
         ApplicationUser user = await _context.Users.FirstAsync(u => u.Id == userId);
 
