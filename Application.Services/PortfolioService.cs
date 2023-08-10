@@ -99,7 +99,7 @@ public class PortfolioService : IPortfolioService
                 ApplicationUserName = a.ApplicationUser.UserName,
             })
             .OrderByDescending(a => a.EditedOn)
-            .Take(6)
+            .Take(4)
             .ToListAsync(),
             Projects = await _context
             .Projects

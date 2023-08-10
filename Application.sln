@@ -33,9 +33,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.WebApi", "Appli
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.Services.Models", "Application.Services.Models\Application.Services.Models.csproj", "{B8144005-97FD-49EA-8008-F78172AB4344}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application.Web.Infrastructure", "Application.Web.Infrastructure\Application.Web.Infrastructure.csproj", "{AC0D35E4-3252-40CB-BEF4-4363060B0222}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.Web.Infrastructure", "Application.Web.Infrastructure\Application.Web.Infrastructure.csproj", "{AC0D35E4-3252-40CB-BEF4-4363060B0222}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application.Services.Mapping", "Application.Services.Mapping\Application.Services.Mapping.csproj", "{978A460E-9096-4A82-B05E-75F0F5CE871A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.Services.Mapping", "Application.Services.Mapping\Application.Services.Mapping.csproj", "{978A460E-9096-4A82-B05E-75F0F5CE871A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -8,7 +8,10 @@
                 <div class="carousel-caption">
                     <h5 class="text-black bg-light bg-opacity-75 rounded-2">@Model.First().Description</h5>
                     <div class="bg-light bg-opacity-75 rounded-2 w-25 mx-auto">
-                        <a class="text-black" href="@Model.First().Url"><p>Visit site</p></a>
+                        @if (!String.IsNullOrEmpty(Model.First().Url))
+                        {
+                            <a class="text-black bg-light" href="@Model.First().Url" target="_blank"> <p>Visit site</p></a>
+                        }
                     </div>
                 </div>
             </div>
@@ -23,7 +26,10 @@
                     <div class="carousel-caption justify-content-center">
                         <h5 class="text-black bg-light bg-opacity-75 rounded-2">@item.Description</h5>
                         <div class="bg-light bg-opacity-75 rounded-2 w-25 mx-auto">
-                            <a class="text-black bg-light" href="@item.Url"> <p>Visit site</p></a>
+                            @if (!String.IsNullOrEmpty(item.Url))
+                            {
+                                <a class="text-black bg-light" href="@item.Url" target="_blank"> <p>Visit site</p></a>
+                            }                                
                         </div>
                     </div>
                 </div>

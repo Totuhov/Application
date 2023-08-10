@@ -70,7 +70,7 @@ public class PortfolioController : BaseController
 
                 MemoryCacheEntryOptions options = new MemoryCacheEntryOptions()
                     .SetAbsoluteExpiration(TimeSpan
-                        .FromMinutes(PortfolioCachDurationMinutes));
+                        .FromSeconds(PortfolioCachDurationMinutes));
 
                 this._memoryCache.Set(PortfolioCacheKey, cacheModel, options);
 

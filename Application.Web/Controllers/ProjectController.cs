@@ -140,7 +140,7 @@ public class ProjectController : BaseController
                 await _imageService.SaveImageInDatabaseAsync(model, GetCurrentUserId());
             }
 
-            return RedirectToAction("All", new { id = GetCurrentUserName() });
+            return RedirectToAction("ChangeImage", new { id = GetCurrentUserName() });
         }
         catch (Exception)
         {
@@ -187,7 +187,7 @@ public class ProjectController : BaseController
         try
         {
             await _imageService.UseImageAsProfilAsync(id, GetCurrentUserId());
-            return RedirectToAction("Details", "Portfolio", new { id = GetCurrentUserName() });
+            return RedirectToAction("All", new { id = GetCurrentUserName() });
         }
         catch (Exception)
         {

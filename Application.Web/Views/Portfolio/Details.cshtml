@@ -107,7 +107,10 @@
             @await Html.PartialAsync("_BlogPartial", Model.Blog)
 
             <div class="text-center mt-3">
-                <a asp-controller="Blog" asp-action="All" asp-route-id="@Model.UserName" class="btn btn-outline-dark">View All Posts</a>
+                @if (Model.Blog.Count() > 0)
+                {
+                    <a asp-controller="Blog" asp-action="All" asp-route-id="@Model.UserName" class="btn btn-outline-dark">View All Posts</a>
+                }
                 @if (@User?.Identity?.Name == Model.UserName)
                 {
                     <a asp-controller="Blog" asp-action="Create" asp-route-id="@Model.UserName" class="btn btn-outline-dark">Add Post</a>
