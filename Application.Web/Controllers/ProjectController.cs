@@ -140,7 +140,7 @@ public class ProjectController : BaseController
                 await _imageService.SaveImageInDatabaseAsync(model, GetCurrentUserId());
             }
 
-            return RedirectToAction("ChangeImage", new { id = GetCurrentUserName() });
+            return RedirectToAction("All", new { id = GetCurrentUserName() });
         }
         catch (Exception)
         {

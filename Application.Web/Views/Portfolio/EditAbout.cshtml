@@ -10,7 +10,7 @@
     <div class="col-md-8 col-lg-6">
         <form asp-action="EditAbout" method="post">
             <div class="mb-3 col-6 w-100">
-                @*<label asp-for="@Model.About" class="form-label-add-edit mb-2 fw-bold">About</label>*@
+                <label asp-for="@Model.About" class="form-label-add-edit mb-2 fw-bold">(max length 1000 symbols)</label>
                 <textarea asp-for="@Model.About" class="form-control" rows="15" aria-required="true"></textarea>
                 <span asp-validation-for="@Model.About" class="text-danger"></span>
             </div>

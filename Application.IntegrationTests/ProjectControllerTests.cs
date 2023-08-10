@@ -217,7 +217,7 @@ namespace Application.IntegrationTests
             Assert.That(result, Is.Not.Null);
             Assert.Multiple(() =>
             {
-                Assert.That(result.ActionName, Is.EqualTo("ChangeImage"));
+                Assert.That(result.ActionName, Is.EqualTo("All"));
                 Assert.That(result?.RouteValues?["id"], Is.EqualTo("guest"));
             });
         }
@@ -231,7 +231,7 @@ namespace Application.IntegrationTests
             Assert.That(result, Is.Not.Null);
             Assert.Multiple(() =>
             {
-                Assert.That(result.ActionName, Is.EqualTo("ChangeImage"));
+                Assert.That(result.ActionName, Is.EqualTo("All"));
                 Assert.That(result?.RouteValues?["id"], Is.EqualTo("guest"));
             });
         }
