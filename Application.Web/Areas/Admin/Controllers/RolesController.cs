@@ -69,15 +69,20 @@ public class RolesController : BaseController
     /// </summary>
     /// <param name="id"></param>
     /// <returns>RedirectToAction("Index") if result.Succeeded else View("Index", _roleManager.Roles) with ModelState Error "No role found"</returns>
-    [HttpPost]
+    [HttpGet]
     public async Task<IActionResult> Delete(string id)
     {
         IdentityRole role = await _roleManager.FindByIdAsync(id);
         if (role != null)
         {
+            string rolename = role.Name;
+
             IdentityResult result = await _roleManager.DeleteAsync(role);
             if (result.Succeeded)
+            {
+                this.TempData[SuccessMessage] = $"Role {rolename} was deleted successfuly!";
                 return RedirectToAction("Index");
+            }
             else
                 Errors(result);
         }
