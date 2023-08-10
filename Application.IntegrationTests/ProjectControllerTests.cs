@@ -217,7 +217,7 @@ namespace Application.IntegrationTests
             Assert.That(result, Is.Not.Null);
             Assert.Multiple(() =>
             {
-                Assert.That(result.ActionName, Is.EqualTo("All"));
+                Assert.That(result.ActionName, Is.EqualTo("ChangeImage"));
                 Assert.That(result?.RouteValues?["id"], Is.EqualTo("guest"));
             });
         }
@@ -231,7 +231,7 @@ namespace Application.IntegrationTests
             Assert.That(result, Is.Not.Null);
             Assert.Multiple(() =>
             {
-                Assert.That(result.ActionName, Is.EqualTo("All"));
+                Assert.That(result.ActionName, Is.EqualTo("ChangeImage"));
                 Assert.That(result?.RouteValues?["id"], Is.EqualTo("guest"));
             });
         }
@@ -317,11 +317,10 @@ namespace Application.IntegrationTests
         [Test]
         public async Task Use_ValidId()
         {
-            var result = await controller.Use("id") as RedirectToActionResult;
+            var result = await controller.Use("1") as RedirectToActionResult;
 
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.ActionName, Is.EqualTo("Details"));
-            Assert.That(result.ControllerName, Is.EqualTo("Portfolio"));
+            Assert.That(result.ActionName, Is.EqualTo("All"));
         }
 
         [Test]

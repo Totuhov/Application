@@ -148,9 +148,9 @@ public class RegisterModel : PageModel
                     values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
                     protocol: Request.Scheme);
 
-                // this is modified method
-               //_messageService.SendVerificationEmail(Input.Email, "Confirm your email",
-               //     $"Almost done. Please confirm your Portfolio.project account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                //this is modified method
+               _messageService.SendVerificationEmail(Input.Email, "Confirm your email",
+                    $"Almost done. Please confirm your Portfolio.project account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
                 if (_userManager.Options.SignIn.RequireConfirmedAccount)
                 {

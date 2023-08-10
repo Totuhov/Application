@@ -37,7 +37,8 @@ public class DataSeeder
                 Id = "8e445865-a24d-4543-a6c6-9443d048cdb9",
                 UserName = "Administrator",
                 NormalizedUserName = "ADMINISTRATOR",
-                PasswordHash = hasher.HashPassword(null, "Aa1234!")
+                PasswordHash = hasher.HashPassword(null, "Aa1234!"),
+                EmailConfirmed = true
             }
         );
 

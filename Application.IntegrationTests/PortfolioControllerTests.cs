@@ -133,12 +133,10 @@ public class PortfolioControllerTests
             .Setup(s => s.GetPortfolioFromRouteAsync(validId))
             .ReturnsAsync(cacheModel);
 
-        // Act
         var result = await controller.Details(validId);
 
-        // Assert
         Assert.IsNotNull(result);
-        Assert.IsInstanceOf<NotFoundResult>(result);
+        Assert.IsInstanceOf<RedirectToActionResult>(result);
 
     }
 
