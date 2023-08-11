@@ -49,6 +49,7 @@ builder.Services.ConfigureApplicationCookie(cfg =>
 
 var app = builder.Build();
 
+// This Application use AutoMapper made by Nikolay Kostov https://github.com/NikolayIT
 AutoMapperConfig.RegisterMappings(typeof(ErrorViewModel).GetTypeInfo().Assembly);
 
 // Configure the HTTP request pipeline.
@@ -73,12 +74,7 @@ app.UseAuthorization();
 
 // adding areas
 app.UseEndpoints(endpoints =>
-{
-    //endpoints.MapAreaControllerRoute(
-    //  name: "areas",
-    //  areaName:"Admin",
-    //  pattern: "Admin/{controller=Role}/{action=Index}"
-    //);
+{    
     endpoints.MapControllerRoute(
     name: "Areas",
     pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
