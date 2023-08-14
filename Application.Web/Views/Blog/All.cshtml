@@ -23,10 +23,10 @@
     <div class="container mt-5 mb-2 text-center">
         <h1>Blog</h1>
     </div>
-    <div class="col d-flex flex-column align-items-center justify-content-center">
+    <div class="row justify-content-center">
         @foreach (var item in Model.Articles)
         {
-            <div class="col-6 card border-0 border-bottom">
+            <div class="col-md-8 col-lg-6">
                 <div class="card-body">
                     <h5 class="card-title">@item.Title</h5>
                     <p class="card-text">@(item.Content.Substring(0, 149))...</p>
@@ -60,7 +60,7 @@
                 </div>
             </div>
         }
-        <div class="container col-6">
+        <div class="d-flex align-items-center justify-content-start">
             <a asp-controller="Portfolio" asp-action="Details" asp-route-id="@Model.UserName" class=" btn btn-dark m-2">Back</a>
         </div>
     </div>
