@@ -13,6 +13,11 @@ This is my project with which I try to show what I have learned so far in web ap
 ## Description
 This is a user-friendly ASP.NET web application that allows individuals to create and showcase their personalized portfolios online. The application's main function is to provide users with a platform to display their skills, experiences, and projects in a professional and visually appealing manner.
 
+## Needed Ressources
+- ASP.NET Core
+- EF Core (Entity Framework Core)
+- SQL Server
+
 ## Run Information
 - if new initial migration is needed you must to uncomment the dataseeder in ApplicationDbContext - OnModelCreating() method <br />
 var seeder = new DataSeeder(_env); <br />
