@@ -56,6 +56,7 @@ public class PortfolioController : BaseController
             return GeneralError();
         }
     }
+
     [AllowAnonymous]
     public async Task<IActionResult> Details(string id)
     {
@@ -86,6 +87,7 @@ public class PortfolioController : BaseController
         }
     }
 
+    [HttpGet]
     [Authorize(Roles = "User")]
     public async Task<IActionResult> Create(string id)
     {

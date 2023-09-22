@@ -25,7 +25,7 @@
                 <input asp-for="@Model.IsDeleted" type="hidden" class="form-control" />
                 <div class="row mt-5">
                     <div class="col-4">
-                        <a asp-controller="Portfolio" asp-action="Index" class=" btn btn-dark mb-2">Back</a>
+                        <a asp-controller="Portfolio" asp-action="Index" class=" btn btn-dark mb-2" id="custom-back-button">Back</a>
                     </div>
                     <div class="col-8 d-flex align-items-center justify-content-end">
                         <input type="submit" value="Save" class="btn btn-dark col-6" />
@@ -38,6 +38,7 @@
 
 
 @section Scripts {
+        
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }

@@ -8,21 +8,19 @@
     <div class="col-6 border rounded">
         <h1 class="text-center">@Model.Title</h1>
         <div class="w-100">
-            <h6 class="mb-4">@Model.EditedOn.ToString("dd-MMM-yyyy/ddd")</h6>
+            <h6 class="mb-4">@Model.EditedOn.ToString("ddd - dd MMM yyyy")</h6>
         </div>
         <section class="mb-2 mt-1">
             <p>&emsp; @Model.Content</p>
             <div class="col-4">
-                <a asp-controller="Portfolio" asp-action="Details" asp-route-id="@Model.ApplicationUserName"  class=" btn btn-dark mb-2">Back</a>
+                <a asp-controller="Portfolio" asp-action="Details" asp-route-id="@Model.ApplicationUserName" class=" btn btn-dark mb-2">Back</a>
             </div>
         </section>
-    </div> 
-    
+    </div>     
 </div>
 
-
 @section Scripts {
-    @{
+    @{        
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }

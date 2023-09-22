@@ -38,7 +38,7 @@ public class MessageService : IMessageService
             SmtpClient smtp = new()
             {
                 Host = host,
-                Port = 587,
+                Port = int.Parse(_configuration["Port"]),
                 Credentials = new NetworkCredential(username, password),
                 DeliveryMethod = SmtpDeliveryMethod.Network,
                 EnableSsl = true
