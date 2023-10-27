@@ -1,6 +1,5 @@
 ﻿using Application.Data.Configuration;
 using Application.Data.Models;
-using Application.Data.Seeding;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
