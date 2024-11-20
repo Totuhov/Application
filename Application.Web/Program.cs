@@ -11,7 +11,7 @@ using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//var connectionString = builder.Configuration["ConnectionString"];
+//var connectionStrin1 = builder.Configuration["ConnectionString"];
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
